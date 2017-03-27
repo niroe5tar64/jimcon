@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.niro.jimcon.data.DepartmentDao;
+
 public class SQLManager {
 	
 	public Connection getConnection(String driver, String url, String user, String password) throws SQLException{
@@ -104,5 +106,58 @@ public class SQLManager {
 		if(sql != null){
 			sql.close();
 		}
+	}
+	
+	public static void main(String[] args){
+		SQLManager m = new SQLManager();
+		
+		String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/jimcondb";
+		String user = "fromclient";
+		String password  = "motpL@26";
+		String query = "SELECT m000_department_code, "
+						+ "m000_department_name, "
+						+ "m000_postcode, "
+						+ "m000_address, "
+						+ "m000_tel_number, "
+						+ "m000_fax_number " 
+						+ "FROM jimcondb.m000_departments;";
+		
+		SQL sql = null;
+		
+		try {
+			sql = new SQL(ConnectionFactory.getConnection(
+					driver, 
+					url, 
+					user, 
+					password));
+			
+			sql.preparedStatement(query);
+			sql.executeQuery();
+			
+			DepartmentDao dao = null;
+			List<DepartmentDao> daoList = new ArrayList<>();
+ 			while (sql.next()){
+ 				dao = new DepartmentDao();
+ 				dao.setDepartmentCode(sql.getResultSet().getInt(1));
+ 				dao.setDepartmentName(sql.getResultSet().getString(2));
+ 				dao.setPostcode(sql.getResultSet().getString(3));
+ 				dao.setAddress(sql.getResultSet().getString(4));
+ 				dao.setTelNumber(sql.getResultSet().getString(5));
+ 				dao.setFaxNumber(sql.getResultSet().getString(6));
+ 				daoList.add(dao);	
+			}
+			
+ 			System.out.println(daoList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (sql != null){
+			sql.close();
+		}
+		
+		
 	}
 }
