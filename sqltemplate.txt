@@ -1,0 +1,482 @@
+SELECT `m000_departments`.`m000_department_code`,
+    `m000_departments`.`m000_department_name`,
+    `m000_departments`.`m000_postcode`,
+    `m000_departments`.`m000_address`,
+    `m000_departments`.`m000_tel_number`,
+    `m000_departments`.`m000_fax_number`
+FROM `niro`.`m000_departments`;
+
+`departmentName`,
+`postcode`,
+`address`,
+`telNumber`,
+`faxNumber`
+
+
+SELECT `m100_customers`.`m100_customer_code`,
+    `m100_customers`.`m100_customer_name`,
+    `m100_customers`.`m100_postcode`,
+    `m100_customers`.`m100_address`,
+    `m100_customers`.`m100_building_et_al`,
+    `m100_customers`.`m100_printing_name_1`,
+    `m100_customers`.`m100_printing_name_2`,
+    `m100_customers`.`m100_tel_number`,
+    `m100_customers`.`m100_fax_number`,
+    `m100_customers`.`m100_invoice_code`,
+    `m100_customers`.`m100_bank_information`,
+    `m100_customers`.`m100_bank_transfer_name`,
+    `m100_customers`.`m100_president`,
+    `m100_customers`.`m100_remarks`,
+    `m100_customers`.`m100_is_deleted`,
+    `m100_customers`.`m100_previous_billing`,
+    `m100_customers`.`m100_sales_proceed`,
+    `m100_customers`.`m100_consumption_tax`,
+    `m100_customers`.`m100_pay_in_amount`,
+    `m100_customers`.`m100_pay_in_discount`,
+    `m100_customers`.`m100_carryforward`,
+    `m100_customers`.`m100_this_maonth_billing`,
+    `m100_customers`.`m100_fix_this_maonth_billing`,
+    `m100_customers`.`m100_last_update`
+FROM `niro`.`m100_customers`;
+
+
+customerName`,
+postcode`,
+address`,
+buildingEtAl`,
+printingName1`,
+printingName2`,
+telNumber`,
+faxNumber`,
+invoice_code`,
+bankInformation`,
+bankTransferName`,
+president`,
+remarks`,
+isDeleted`,
+previousBilling`,
+salesProceed`,
+consumptionTax`,
+payInAmount`,
+payInDiscount`,
+carryforward`,
+thisMaonthBilling`,
+fixThisMaonthBilling`,
+lastUpdate`
+
+SELECT `m101_fieldsites`.`m101_fieldsite_code`,
+    `m101_fieldsites`.`m101_fieldsite_name`,
+    `m101_fieldsites`.`m101_customer_code`,
+    `m101_fieldsites`.`m101_person_in_charge`,
+    `m101_fieldsites`.`m101_remarks`,
+    `m101_fieldsites`.`m101_is_deleted`,
+    `m101_fieldsites`.`m101_last_update`
+FROM `niro`.`m101_fieldsites`;
+
+fieldsiteName`,
+customerCode`,
+person_inCharge`,
+remarks`,
+isDeleted`,
+lastUpdate`
+
+SELECT `m102_contract_unitprices`.`m102_contract_unitprice_code`,
+    `m102_contract_unitprices`.`m102_product_code`,
+    `m102_contract_unitprices`.`m102_customer_code`,
+    `m102_contract_unitprices`.`m102_contract_unitprice`,
+    `m102_contract_unitprices`.`m102_last_update`
+FROM `niro`.`m102_contract_unitprices`;
+
+productCode`,
+customerCode`,
+contractUnitPrice`,
+lastUpdate`
+
+SELECT `m200_suppliers`.`m200_supplier_code`,
+    `m200_suppliers`.`m200_supplier_name`,
+    `m200_suppliers`.`m200_postcode`,
+    `m200_suppliers`.`m200_address`,
+    `m200_suppliers`.`m200_building_et_al`,
+    `m200_suppliers`.`m200_printing_name_1`,
+    `m200_suppliers`.`m200_printing_name_2`,
+    `m200_suppliers`.`m200_tel_number`,
+    `m200_suppliers`.`m200_fax_number`,
+    `m200_suppliers`.`m200_invoice_code`,
+    `m200_suppliers`.`m200_bank_information`,
+    `m200_suppliers`.`m200_bank_transfer_name`,
+    `m200_suppliers`.`m200_remarks`,
+    `m200_suppliers`.`m200_is_deleted`,
+    `m200_suppliers`.`m200_previous_billing`,
+    `m200_suppliers`.`m200_purchase_amount`,
+    `m200_suppliers`.`m200_consumption_tax`,
+    `m200_suppliers`.`m200_pay_out_amount`,
+    `m200_suppliers`.`m200_pay_out_discount`,
+    `m200_suppliers`.`m200_carryforward`,
+    `m200_suppliers`.`m200_this_maonth_billing`,
+    `m200_suppliers`.`m200_fix_this_maonth_billing`,
+    `m200_suppliers`.`m200_last_update`
+FROM `niro`.`m200_suppliers`;
+
+supplierName`,
+postcode`,
+address`,
+buildingEtAl`,
+printingName1`,
+printingName2`,
+telNumber`,
+faxNumber`,
+invoiceCode`,
+bankInformation`,
+bankTransferName`,
+remarks`,
+isDeleted`,
+previousBilling`,
+purchaseAmount`,
+consumptionTax`,
+payOutAmount`,
+payOutDiscount`,
+carryforward`,
+thisMaonthBilling`,
+fixThis_maonthBilling`,
+lastUpdate`
+
+SELECT `m300_products`.`m300_product_code`,
+    `m300_products`.`m300_product_name`,
+    `m300_products`.`m300_size_color`,
+    `m300_products`.`m300_model_number`,
+    `m300_products`.`m300_another_name`,
+    `m300_products`.`m300_searcher`,
+    `m300_products`.`m300_catalog_price`,
+    `m300_products`.`m300_unit_code`,
+    `m300_products`.`m300_standard_unitprice`,
+    `m300_products`.`m300_stock_quantity`,
+    `m300_products`.`m300_cutting_constant`,
+    `m300_products`.`m300_function_constant`,
+    `m300_products`.`m300_memo`,
+    `m300_products`.`m300_is_processed`,
+    `m300_products`.`m300_is_deleted`,
+    `m300_products`.`m300_last_update`
+FROM `niro`.`m300_products`;
+
+productName`,
+sizeColor`,
+modelNumber`,
+anotherName`,
+searcher`,
+catalogPrice`,
+unitCode`,
+standardUnitprice`,
+stock_quantity`,
+cuttingConstant`,
+functionConstant`,
+memo`,
+isProcessed`,
+isDeleted`,
+lastUpdate`
+
+SELECT `m301_units`.`m301_unit_code`,
+    `m301_units`.`m301_unit_name`
+FROM `niro`.`m301_units`;
+
+unitName`
+
+SELECT `m400_payment_categories`.`m400_payment_category_code`,
+    `m400_payment_categories`.`m400_payment_category_name`,
+    `m400_payment_categories`.`m400_pay_in_type_code`,
+    `m400_payment_categories`.`m400_pay_out_type_code`
+FROM `niro`.`m400_payment_categories`;
+
+paymentCategoryName`,
+payInTypeCode`,
+payOutTypeCode`
+
+SELECT `m401_pay_in_types`.`m401_pay_in_type_code`,
+    `m401_pay_in_types`.`m401_pay_in_type_name`
+FROM `niro`.`m401_pay_in_types`;
+
+payInTypeName`
+
+SELECT `m402_pay_out_types`.`m402_pay_out_type_code`,
+    `m402_pay_out_types`.`m402_pay_out_type_name`
+FROM `niro`.`m402_pay_out_types`;
+
+pay_out_type_name`
+
+SELECT `m403_detail_categories`.`m403_detail_category_code`,
+    `m403_detail_categories`.`m403_detail_category_name`
+FROM `niro`.`m403_detail_categories`;
+
+detailCategoryName`
+
+SELECT `m500_invoice_categories`.`m500_invoice_code`,
+    `m500_invoice_categories`.`m500_invoice_name`,
+    `m500_invoice_categories`.`m500_cutoff_date`
+FROM `niro`.`m500_invoice_categories`;
+
+invoiceName`,
+cutoffDate`
+
+SELECT `m501_envelope_sizes`.`m501_envelope_size_code`,
+    `m501_envelope_sizes`.`m501_envelope_size_name`,
+    `m501_envelope_sizes`.`m501_remarks`
+FROM `niro`.`m501_envelope_sizes`;
+
+
+envelopeSizeName`,
+remarks`
+
+SELECT `m502_enclosed_papers`.`m502_enclosed_paper_code`,
+    `m502_enclosed_papers`.`m502_enclosed_paper_name`,
+    `m502_enclosed_papers`.`m502_printing_name`
+FROM `niro`.`m502_enclosed_papers`;
+
+enclosedPaperName`,
+printingName`
+
+SELECT `m900_consumption_tax`.`m900_initiation_date`,
+    `m900_consumption_tax`.`m900_consumption_tax_rate`
+FROM `niro`.`m900_consumption_tax`;
+
+consumptionTaxRate`
+
+SELECT `t100_sales`.`t100_sales_id`,
+    `t100_sales`.`t100_slip_number`,
+    `t100_sales`.`t100_issue_date`,
+    `t100_sales`.`t100_customer_code`,
+    `t100_sales`.`t100_fieldsite_code`,
+    `t100_sales`.`t100_is_printed`,
+    `t100_sales`.`t100_is_locked`,
+    `t100_sales`.`t100_last_update`
+FROM `niro`.`t100_sales`;
+
+slipNumber`,
+issueDate`,
+customerCode`,
+fieldsiteCode`,
+isPrinted`,
+isLocked`,
+lastUpdate`
+
+SELECT `t101_sales_details`.`t101_sales_detail_id`,
+    `t101_sales_details`.`t101_sales_id`,
+    `t101_sales_details`.`t101_product_code`,
+    `t101_sales_details`.`t101_product_name`,
+    `t101_sales_details`.`t101_size_color`,
+    `t101_sales_details`.`t101_model_number`,
+    `t101_sales_details`.`t101_another_name`,
+    `t101_sales_details`.`t101_searcher`,
+    `t101_sales_details`.`t101_catalog_price`,
+    `t101_sales_details`.`t101_sales_amount`,
+    `t101_sales_details`.`t101_sales_unitprice`,
+    `t101_sales_details`.`t101_subtotal`,
+    `t101_sales_details`.`t101_remarks`,
+    `t101_sales_details`.`t101_is_pending`,
+    `t101_sales_details`.`t101_last_update`
+FROM `niro`.`t101_sales_details`;
+
+salesId`,
+productCode`,
+productName`,
+sizeColor`,
+modelNumber`,
+anotherName`,
+searcher`,
+catalogPrice`,
+salesAmount`,
+salesUnitprice`,
+subtotal`,
+remarks`,
+isPending`,
+lastUpdate`
+
+SELECT `t102_processing_details`.`t102_processing_detail_id`,
+    `t102_processing_details`.`t102_sales_detail_id`,
+    `t102_processing_details`.`t102_processing_length`,
+    `t102_processing_details`.`t102_processing_unit_code`,
+    `t102_processing_details`.`t102_processing_amount`,
+    `t102_processing_details`.`t102_processing_display`,
+    `t102_processing_details`.`t102_last_update`
+FROM `niro`.`t102_processing_details`;
+
+salesDetailId`,
+processingLength`,
+processingUnitCode`,
+processingAmount`,
+processingDisplay`,
+lastUpdate`
+
+SELECT `t110_pay_in`.`t110_pay_in_id`,
+    `t110_pay_in`.`t110_pay_in_date`,
+    `t110_pay_in`.`t110_customer_code`,
+    `t110_pay_in`.`t110_is_printed`,
+    `t110_pay_in`.`t110_is_locked`,
+    `t110_pay_in`.`t110_last_update`
+FROM `niro`.`t110_pay_in`;
+
+payInDate`,
+customerCode`,
+isPrinted`,
+isLocked`,
+lastUpdate`
+
+SELECT `t111_pay_in_details`.`t111_pay_in_detail_id`,
+    `t111_pay_in_details`.`t111_pay_in_id`,
+    `t111_pay_in_details`.`t111_fieldsite_code`,
+    `t111_pay_in_details`.`t111_payment_category_code`,
+    `t111_pay_in_details`.`t111_payment_category_name`,
+    `t111_pay_in_details`.`t111_pay_in_type_code`,
+    `t111_pay_in_details`.`t111_pay_in_amount`,
+    `t111_pay_in_details`.`t111_remarks`,
+    `t111_pay_in_details`.`t111_last_update`
+FROM `niro`.`t111_pay_in_details`;
+
+payInId`,
+fieldsiteCode`,
+paymentCategoryCode`,
+paymentCategoryName`,
+payInType_code`,
+payInAmount`,
+remarks`,
+lastUpdate`
+
+SELECT `t120_sales_consumption_tax`.`t120_sales_consumption_tax_id`,
+    `t120_sales_consumption_tax`.`t120_date`,
+    `t120_sales_consumption_tax`.`t120_customer_code`,
+    `t120_sales_consumption_tax`.`t120_fieldsite_code`,
+    `t120_sales_consumption_tax`.`t120_consumption_tax`,
+    `t120_sales_consumption_tax`.`t120_last_update`
+FROM `niro`.`t120_sales_consumption_tax`;
+
+date`,
+customerCode`,
+fieldsiteCode`,
+consumptionTax`,
+lastUpdate`
+
+SELECT `t200_purchases`.`t200_purchase_id`,
+    `t200_purchases`.`t200_issue_date`,
+    `t200_purchases`.`t200_supplier_code`,
+    `t200_purchases`.`t200_is_printed`,
+    `t200_purchases`.`t200_is_locked`,
+    `t200_purchases`.`t200_last_update`
+FROM `niro`.`t200_purchases`;
+
+issueDate`,
+supplierCode`,
+isPrinted`,
+isLocked`,
+lastUpdate`
+
+SELECT `t201_purchase_details`.`t201_purchase_detail_id`,
+    `t201_purchase_details`.`t201_purchase_id`,
+    `t201_purchase_details`.`t201_product_code`,
+    `t201_purchase_details`.`t201_product_name`,
+    `t201_purchase_details`.`t201_size_color`,
+    `t201_purchase_details`.`t201_model_number`,
+    `t201_purchase_details`.`t201_another_name`,
+    `t201_purchase_details`.`t201_searcher`,
+    `t201_purchase_details`.`t201_catalog_price`,
+    `t201_purchase_details`.`t201_purchase_amount`,
+    `t201_purchase_details`.`t201_purchase_unitprice`,
+    `t201_purchase_details`.`t201_subtotal`,
+    `t201_purchase_details`.`t201_remarks`,
+    `t201_purchase_details`.`t201_is_pending`,
+    `t201_purchase_details`.`t201_last_update`
+FROM `niro`.`t201_purchase_details`;
+
+purchaseId`,
+productCode`,
+productName`,
+size_color`,
+modelNumber`,
+anotherName`,
+searcher`,
+catalogPrice`,
+purchaseAmount`,
+purchaseUnitprice`,
+subtotal`,
+remarks`,
+isPending`,
+lastUpdate`
+
+SELECT `t210_pay_out`.`t210_pay_out_id`,
+    `t210_pay_out`.`t210_pay_out_date`,
+    `t210_pay_out`.`t210_supplier_code`,
+    `t210_pay_out`.`t210_is_printed`,
+    `t210_pay_out`.`t210_is_locked`,
+    `t210_pay_out`.`t210_last_update`
+FROM `niro`.`t210_pay_out`;
+
+payOutDate`,
+supplierCode`,
+isPrinted`,
+isLocked`,
+lastUpdate`
+
+SELECT `t211_pay_out_details`.`t211_pay_out_detail_id`,
+    `t211_pay_out_details`.`t211_pay_out_id`,
+    `t211_pay_out_details`.`t211_payment_category_code`,
+    `t211_pay_out_details`.`t211_payment_category_name`,
+    `t211_pay_out_details`.`t211_pay_out_type_code`,
+    `t211_pay_out_details`.`t211_pay_out_amount`,
+    `t211_pay_out_details`.`t211_remarks`,
+    `t211_pay_out_details`.`t211_last_update`
+FROM `niro`.`t211_pay_out_details`;
+
+payOutId`,
+paymentCategoryCode`,
+paymentCategoryName`,
+payOutType_code`,
+payOutAmount`,
+remarks`,
+lastUpdate`
+
+SELECT `t220_purchase_consumption_tax`.`t220_purchase_consumption_tax_id`,
+    `t220_purchase_consumption_tax`.`t220_date`,
+    `t220_purchase_consumption_tax`.`t220_supplier_code`,
+    `t220_purchase_consumption_tax`.`t220_consumption_tax`,
+    `t220_purchase_consumption_tax`.`t220_last_update`
+FROM `niro`.`t220_purchase_consumption_tax`;
+
+date`,
+supplier_code`,
+consumption_tax`,
+last_update`
+
+SELECT `t400_estimations`.`t400_estimation_id`,
+    `t400_estimations`.`t400_estimation_date`,
+    `t400_estimations`.`t400_customer_code`,
+    `t400_estimations`.`t400_customer_name`,
+    `t400_estimations`.`t400_notes`,
+    `t400_estimations`.`t400_last_update`
+FROM `niro`.`t400_estimations`;
+
+estimationDate`,
+customerCode`,
+customerName`,
+notes`,
+lastUpdate`
+
+SELECT `t401_estimation_details`.`t401_estimation_detail_id`,
+    `t401_estimation_details`.`t401_estimation_id`,
+    `t401_estimation_details`.`t401_product_code`,
+    `t401_estimation_details`.`t401_product_name`,
+    `t401_estimation_details`.`t401_size_color`,
+    `t401_estimation_details`.`t401_model_number`,
+    `t401_estimation_details`.`t401_sales_amount`,
+    `t401_estimation_details`.`t401_sales_unitprice`,
+    `t401_estimation_details`.`t401_subtotal`,
+    `t401_estimation_details`.`t401_remarks`,
+    `t401_estimation_details`.`t401_last_update`
+FROM `niro`.`t401_estimation_details`;
+
+estimationId`,
+productCode`,
+productName`,
+sizeColor`,
+modelNumber`,
+salesAmount`,
+salesUnitprice`,
+subtotal`,
+remarks`,
+last_update`
