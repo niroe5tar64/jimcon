@@ -4,6 +4,8 @@ import javafx.beans.property.*;
 
 import java.time.LocalDate;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 /**
  * Created by niro on 2017/03/29.
  */
@@ -88,6 +90,7 @@ public class Person {
     }
 
     // The getter and setter of "birthday"
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     public LocalDate getBirthday(){
         return birthday.get();
     }
