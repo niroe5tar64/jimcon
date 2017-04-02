@@ -65,6 +65,11 @@ public class PersonEditDialogController {
         }
     }
 
+    @FXML
+    private void handleCancel() {
+        dialogStage.close();
+    }
+
 
     private boolean isInputValid() {
         StringBuilder errorMessage = new StringBuilder();
