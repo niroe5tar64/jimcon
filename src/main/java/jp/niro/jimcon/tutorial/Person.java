@@ -2,9 +2,8 @@ package jp.niro.jimcon.tutorial;
 
 import javafx.beans.property.*;
 
-import java.time.LocalDate;
-
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.time.LocalDate;
 
 /**
  * Created by niro on 2017/03/29.

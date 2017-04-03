@@ -10,6 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jp.niro.jimcon.sql.ConnectionFactory;
+import jp.niro.jimcon.sql.SQL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -17,6 +19,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
+import java.sql.Date;
 
 public class MainApp extends Application {
 
@@ -127,7 +130,7 @@ public class MainApp extends Application {
             dialogStage.showAndWait();
 
             return controller.isOkClicked();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
@@ -135,7 +138,7 @@ public class MainApp extends Application {
 
     public File getPersonFilePath() {
         Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
-        String filePath = prefs.get("filePath",null);
+        String filePath = prefs.get("filePath", null);
         if (filePath != null) {
             return new File(filePath);
         } else {
@@ -160,7 +163,7 @@ public class MainApp extends Application {
     }
 
     public void loadPersonDataFormFile(File file) {
-        try{
+        try {
             JAXBContext context = JAXBContext.newInstance(PersonListWrapper.class);
             Unmarshaller um = context.createUnmarshaller();
 
@@ -184,7 +187,56 @@ public class MainApp extends Application {
         }
     }
 
-    public void savePersonDataToFile(File file){
+    public void loadPersonDataFromDataBase() {
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/jimcondb";
+        String user = "fromclient";
+        String password = "motpL@26";
+        String query = new StringBuilder()
+                .append("SELECT )")
+                .append("`tutorial_person`.`firstName`, ")
+                .append("`tutorial_person`.`lastName`, ")
+                .append("`tutorial_person`.`street`, ")
+                .append("`tutorial_person`.`postalCode`, ")
+                .append("`tutorial_person`.`city`, ")
+                .append("`tutorial_person`.`birthday` ")
+                .append("FROM ")
+                .append("`jimcondb`.`tutorial_person`;")
+                .toString();
+
+        SQL sql = null;
+
+        try {
+            sql = new SQL(ConnectionFactory.getConnection(
+                    driver,
+                    url,
+                    user,
+                    password));
+
+            sql.preparedStatement(query);
+            sql.executeQuery();
+
+            while (sql.next()) {
+                Person person = new Person();
+                person.setFirstName(sql.getResultSet().getString(1));
+                person.setLastName(sql.getResultSet().getString(2));
+                person.setStreet(sql.getResultSet().getString(3));
+                person.setPostalCode(sql.getResultSet().getInt(4));
+                person.setCity(sql.getResultSet().getString(5));
+                person.setBirthday(sql.getResultSet().getDate(6).toLocalDate());
+                personData.add(person);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (sql != null) {
+            sql.close();
+        }
+    }
+
+    public void savePersonDataToFile(File file) {
         try {
             JAXBContext context = JAXBContext.newInstance(PersonListWrapper.class);
             Marshaller m = context.createMarshaller();
@@ -199,7 +251,7 @@ public class MainApp extends Application {
 
             // Save the file path to the registry.
             setPersonFilePath(file);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Could not save data");
@@ -208,6 +260,64 @@ public class MainApp extends Application {
             alert.showAndWait();
         }
     }
+
+    public void savePersonDataToDataBase() {
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/jimcondb";
+        String user = "fromclient";
+        String password = "motpL@26";
+        String query = new StringBuilder()
+                .append("INSERT INTO ")
+                .append("`jimcondb`.`tutorial_person` (")
+                .append("`tutorial_person`.`firstName`, ")
+                .append("`tutorial_person`.`lastName`, ")
+                .append("`tutorial_person`.`street`, ")
+                .append("`tutorial_person`.`postalCode`, ")
+                .append("`tutorial_person`.`city`, ")
+                .append("`tutorial_person`.`birthday`)")
+                .append("VALUES ")
+                .append("?, ?, ?, ?, ?, ?;")
+                .toString();
+
+        SQL sql = null;
+
+        try {
+            sql = new SQL(ConnectionFactory.getConnection(
+                    driver,
+                    url,
+                    user,
+                    password));
+
+            // Clear Data.
+            sql.preparedStatement("TRUNCATE `jimcondb`.`tutorial_person`;");
+            sql.executeQuery();
+
+            // Save the DataBase.
+            sql.preparedStatement(query);
+            sql.executeQuery();
+            int index = 1;
+            while (sql.next()) {
+                sql.getPreparedStatement().setString(1, personData.get(index).getFirstName());
+                sql.getPreparedStatement().setString(2, personData.get(index).getLastName());
+                sql.getPreparedStatement().setString(3, personData.get(index).getStreet());
+                sql.getPreparedStatement().setInt(4, personData.get(index).getPostalCode());
+                sql.getPreparedStatement().setString(5, personData.get(index).getCity());
+                sql.getPreparedStatement().setDate(6, new Date(personData.get(index).getBirthday().toEpochDay()));
+                index++;
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (sql != null) {
+            sql.close();
+        }
+    }
+
+
 
     public Stage getPrimaryStage() {
         return primaryStage;

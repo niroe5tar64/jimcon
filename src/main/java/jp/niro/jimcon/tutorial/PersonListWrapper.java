@@ -20,4 +20,5 @@ public class PersonListWrapper {
     public void setPersons(List<Person> persons) {
         this.persons = persons;
     }
+
 }
