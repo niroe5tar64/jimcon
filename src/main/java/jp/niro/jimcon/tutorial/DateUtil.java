@@ -3,6 +3,7 @@ package jp.niro.jimcon.tutorial;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.sql.Date;
 
 /**
  * Created by niro on 2017/03/31.
@@ -31,4 +32,14 @@ public class DateUtil {
     public static boolean validDate(String dateString){
         return DateUtil.parse(dateString) != null;
     }
+
+    @SuppressWarnings("deprecation")
+	public static Date toDate(LocalDate d){
+    	
+    	return new Date(
+	    	d.getYear() - 1900,
+	        d.getDayOfMonth() - 1,
+	        d.getDayOfMonth());
+    }
+
 }
