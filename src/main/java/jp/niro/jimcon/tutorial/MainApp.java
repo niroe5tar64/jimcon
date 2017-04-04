@@ -19,7 +19,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
-import java.sql.Date;
 
 public class MainApp extends Application {
 
@@ -303,24 +302,17 @@ public class MainApp extends Application {
                 sql.executeUpdate();
             }
 
-            if (personData.size() != 0){
-                // Save the DataBase.
-                int index = 0;
-                sql.preparedStatement(query);
-                while (personData.size() != index) {
-                    sql.getPreparedStatement().setString(1, personData.get(index).getFirstName());
-                    sql.getPreparedStatement().setString(2, personData.get(index).getLastName());
-                    sql.getPreparedStatement().setString(3, personData.get(index).getStreet());
-                    sql.getPreparedStatement().setInt(4, personData.get(index).getPostalCode());
-                    sql.getPreparedStatement().setString(5, personData.get(index).getCity());
-                    sql.getPreparedStatement().setDate(6,
-                            new Date(personData.get(index).getBirthday().getYear() - 1900,
-                                    personData.get(index).getBirthday().getDayOfMonth() - 1,
-                                    personData.get(index).getBirthday().getDayOfMonth()));
-                    sql.executeUpdate();
-                    index++;
-                }
-            }
+            sql.preparedStatement(query);
+            
+            for (Person person : personData) {
+                sql.getPreparedStatement().setString(1, person.getFirstName());
+                sql.getPreparedStatement().setString(2, person.getLastName());
+                sql.getPreparedStatement().setString(3, person.getStreet());
+                sql.getPreparedStatement().setInt(4, person.getPostalCode());
+                sql.getPreparedStatement().setString(5, person.getCity());
+                sql.getPreparedStatement().setDate(6,DateUtil.toDate(person.getBirthday()));
+                sql.executeUpdate();
+			}
 
 
 
