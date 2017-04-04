@@ -109,7 +109,6 @@ public class SQLManager {
 	}
 	
 	public static void main(String[] args){
-		SQLManager m = new SQLManager();
 		
 		String driver = "com.mysql.jdbc.Driver";
 		String url = "jdbc:mysql://localhost:3306/jimcondb";
