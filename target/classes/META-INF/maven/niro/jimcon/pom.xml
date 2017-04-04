@@ -24,7 +24,6 @@
           <version>8.8.3</version>
           <configuration>
               <mainClass>jp.niro.jimcon.Main</mainClass>
-              <nativeInstallers />
           </configuration>
       </plugin>
     </plugins>

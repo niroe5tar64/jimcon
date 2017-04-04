@@ -33,6 +33,7 @@ public class MainApp extends Application {
 
     public MainApp() {
         // Add some sample data
+        /*
         personData.add(new Person("Hans", "Muster"));
         personData.add(new Person("Ruth", "Mueller"));
         personData.add(new Person("Heinz", "Kurz"));
@@ -42,6 +43,7 @@ public class MainApp extends Application {
         personData.add(new Person("Anna", "Best"));
         personData.add(new Person("Stefan", "Meier"));
         personData.add(new Person("Martin", "Mueller"));
+        */
     }
 
     public ObservableList<Person> getPersonData() {
@@ -78,11 +80,15 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
 
+        loadPersonDataFromDataBase();
+
+        /*  XMLファイルによるセーブ＆ロード処理をコメントアウト
+
         // Try to load last opened person file.
         File file = getPersonFilePath();
         if (file != null) {
             loadPersonDataFormFile(file);
-        }
+        }*/
 
     }
 
@@ -193,7 +199,7 @@ public class MainApp extends Application {
         String user = "fromclient";
         String password = "motpL@26";
         String query = new StringBuilder()
-                .append("SELECT )")
+                .append("SELECT ")
                 .append("`tutorial_person`.`firstName`, ")
                 .append("`tutorial_person`.`lastName`, ")
                 .append("`tutorial_person`.`street`, ")
@@ -276,7 +282,7 @@ public class MainApp extends Application {
                 .append("`tutorial_person`.`city`, ")
                 .append("`tutorial_person`.`birthday`)")
                 .append("VALUES ")
-                .append("?, ?, ?, ?, ?, ?;")
+                .append("(?, ?, ?, ?, ?, ?);")
                 .toString();
 
         SQL sql = null;
@@ -288,22 +294,32 @@ public class MainApp extends Application {
                     user,
                     password));
 
-            // Clear Data.
-            sql.preparedStatement("TRUNCATE `jimcondb`.`tutorial_person`;");
+            // Check if there are records.
+            sql.preparedStatement("SELECT `tutorial_person`.`firstName` FROM `jimcondb`.`tutorial_person`;");
             sql.executeQuery();
+            if (sql.next()) {
+                // Clear Data.
+                sql.preparedStatement("TRUNCATE `jimcondb`.`tutorial_person`;");
+                sql.executeUpdate();
+            }
 
-            // Save the DataBase.
-            sql.preparedStatement(query);
-            sql.executeQuery();
-            int index = 1;
-            while (sql.next()) {
-                sql.getPreparedStatement().setString(1, personData.get(index).getFirstName());
-                sql.getPreparedStatement().setString(2, personData.get(index).getLastName());
-                sql.getPreparedStatement().setString(3, personData.get(index).getStreet());
-                sql.getPreparedStatement().setInt(4, personData.get(index).getPostalCode());
-                sql.getPreparedStatement().setString(5, personData.get(index).getCity());
-                sql.getPreparedStatement().setDate(6, new Date(personData.get(index).getBirthday().toEpochDay()));
-                index++;
+            if (personData.size() != 0){
+                // Save the DataBase.
+                int index = 0;
+                sql.preparedStatement(query);
+                while (personData.size() != index) {
+                    sql.getPreparedStatement().setString(1, personData.get(index).getFirstName());
+                    sql.getPreparedStatement().setString(2, personData.get(index).getLastName());
+                    sql.getPreparedStatement().setString(3, personData.get(index).getStreet());
+                    sql.getPreparedStatement().setInt(4, personData.get(index).getPostalCode());
+                    sql.getPreparedStatement().setString(5, personData.get(index).getCity());
+                    sql.getPreparedStatement().setDate(6,
+                            new Date(personData.get(index).getBirthday().getYear() - 1900,
+                                    personData.get(index).getBirthday().getDayOfMonth() - 1,
+                                    personData.get(index).getBirthday().getDayOfMonth()));
+                    sql.executeUpdate();
+                    index++;
+                }
             }
 
 

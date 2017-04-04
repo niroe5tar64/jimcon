@@ -42,16 +42,24 @@ public class RootLayoutController {
 
     @FXML
     private void handleSave() {
+
+        mainApp.savePersonDataToDataBase();
+
+        /*  XMLファイルによるセーブ＆ロード処理をコメントアウト
+
         File personFile = mainApp.getPersonFilePath();
         if (personFile != null) {
             mainApp.savePersonDataToFile(personFile);
         } else {
             handleSaveAs();
-        }
+        }*/
     }
 
     @FXML
     private void handleSaveAs() {
+
+        /*  機能一時停止
+
         FileChooser fileChooser = new FileChooser();
 
         // Set extension filter
@@ -67,7 +75,7 @@ public class RootLayoutController {
                 file = new File(file.getPath() + ".xml");
             }
             mainApp.savePersonDataToFile(file);
-        }
+        }*/
     }
 
     @FXML
