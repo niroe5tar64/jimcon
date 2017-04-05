@@ -1,9 +1,7 @@
 package jp.niro.jimcon.tutorial;
 
 import javafx.beans.property.*;
-
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * Created by niro on 2017/03/29.
@@ -15,7 +13,7 @@ public class Person {
     private final StringProperty street;
     private final IntegerProperty postalCode;
     private final StringProperty city;
-    private final ObjectProperty<LocalDate> birthday;
+    private final ObjectProperty<DateTime> birthday;
 
 
     public Person() {
@@ -30,7 +28,7 @@ public class Person {
         this.street = new SimpleStringProperty("some street");
         this.postalCode = new SimpleIntegerProperty(1234);
         this.city = new SimpleStringProperty("some city");
-        this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1987, 9, 4));
+        this.birthday = new SimpleObjectProperty<DateTime>(DateUtil.toDateTime(1987, 9, 4));
     }
 
     // The getter and setter of "firstName"
@@ -89,14 +87,14 @@ public class Person {
     }
 
     // The getter and setter of "birthday"
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    public LocalDate getBirthday(){
+    // @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    public DateTime getBirthday(){
         return birthday.get();
     }
-    public void setBirthday(LocalDate birthday){
+    public void setBirthday(DateTime birthday){
         this.birthday.set(birthday);
     }
-    public ObjectProperty<LocalDate> getBirthdayProperty(){
+    public ObjectProperty<DateTime> getBirthdayProperty(){
         return birthday;
     }
 

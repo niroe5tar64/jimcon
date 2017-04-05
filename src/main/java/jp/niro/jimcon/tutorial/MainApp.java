@@ -228,7 +228,7 @@ public class MainApp extends Application {
                 person.setStreet(sql.getResultSet().getString(3));
                 person.setPostalCode(sql.getResultSet().getInt(4));
                 person.setCity(sql.getResultSet().getString(5));
-                person.setBirthday(sql.getResultSet().getDate(6).toLocalDate());
+                person.setBirthday(DateUtil.toDateTime(sql.getResultSet().getDate(6)));
                 personData.add(person);
             }
 

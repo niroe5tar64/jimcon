@@ -5,7 +5,6 @@ import org.joda.time.DateTime;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
  * Created by niro on 2017/03/31.
@@ -23,12 +22,26 @@ public class DateUtil {
         return DATE_FORMATTER.format(date);
     }
 
-    public static LocalDate parse(String dateString) {
+    private  static final org.joda.time.format.DateTimeFormatter DATE_TIME_FORMATTER =
+            org.joda.time.format.DateTimeFormat.forPattern(DATE_PATTERN);
+
+    public static String format(DateTime date) {
+        if (date == null) {
+            return  null;
+        }
+        return date.toString(DATE_TIME_FORMATTER);
+    }
+
+    /*public static LocalDate parse(String dateString) {
         try {
             return DATE_FORMATTER.parse(dateString, LocalDate::from);
         } catch (DateTimeParseException e) {
             return null;
         }
+    }*/
+
+    public static DateTime parse(String dateString){
+        return DateTime.parse(dateString,DATE_TIME_FORMATTER);
     }
 
     public static boolean validDate(String dateString) {
