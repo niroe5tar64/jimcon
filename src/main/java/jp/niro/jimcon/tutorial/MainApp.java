@@ -228,7 +228,7 @@ public class MainApp extends Application {
                 person.setStreet(sql.getResultSet().getString(3));
                 person.setPostalCode(sql.getResultSet().getInt(4));
                 person.setCity(sql.getResultSet().getString(5));
-                person.setBirthday(DateUtil.toDateTime(sql.getResultSet().getDate(6)));
+                person.setBirthday(new MyDate(sql.getResultSet().getDate(6)));
                 personData.add(person);
             }
 
@@ -310,7 +310,7 @@ public class MainApp extends Application {
                 sql.getPreparedStatement().setString(3, person.getStreet());
                 sql.getPreparedStatement().setInt(4, person.getPostalCode());
                 sql.getPreparedStatement().setString(5, person.getCity());
-                sql.getPreparedStatement().setDate(6,DateUtil.toDate(person.getBirthday()));
+                sql.getPreparedStatement().setDate(6,person.getBirthday().toDate());
                 sql.executeUpdate();
 			}
 
