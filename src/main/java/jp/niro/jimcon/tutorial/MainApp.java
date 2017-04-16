@@ -63,7 +63,7 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("RootLayout.fxml"));
+            loader.setLocation(MainApp.class.getResource("/RootLayout.fxml"));
             rootLayout = loader.load();
 
             // Show the scene containing the root layout.
@@ -95,7 +95,7 @@ public class MainApp extends Application {
         try {
             // Load person overview
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("PersonOverview.fxml"));
+            loader.setLocation(MainApp.class.getResource("/PersonOverview.fxml"));
             AnchorPane personOverview = loader.load();
 
             // Set person overview into the center of root layout.
@@ -114,7 +114,7 @@ public class MainApp extends Application {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("PersonEditDialog.fxml"));
+            loader.setLocation(MainApp.class.getResource("/PersonEditDialog.fxml"));
             AnchorPane page = loader.load();
 
             // Create the dialog Stage.
