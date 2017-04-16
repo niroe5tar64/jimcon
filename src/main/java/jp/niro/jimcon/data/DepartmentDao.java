@@ -24,12 +24,32 @@ public class DepartmentDao {
 
 	public DepartmentDao(){}
 
-    public DepartmentDao(int departmentCode,
-            String departmentName,
-            String postcode,
-            String address,
-            String telNumber,
-            String faxNumber){
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj instanceof DepartmentDao){
+			DepartmentDao subject = (DepartmentDao)obj;
+			if (this.departmentCode == subject.getDepartmentCode()){
+				return true;
+			}
+/*
+			if (this.departmentCode == subject.departmentCode && this.departmentName == subject.getDepartmentName()){
+				return true;
+			}
+*/
+
+		}
+
+		return false;
+
+	}
+
+	public DepartmentDao(int departmentCode,
+						 String departmentName,
+						 String postcode,
+						 String address,
+						 String telNumber,
+						 String faxNumber){
         this.departmentCode = departmentCode;
         this.departmentName = departmentName;
         this.postcode = postcode;

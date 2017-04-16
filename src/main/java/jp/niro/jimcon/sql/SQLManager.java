@@ -1,13 +1,13 @@
 package jp.niro.jimcon.sql;
 
+import jp.niro.jimcon.data.DepartmentDao;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.niro.jimcon.data.DepartmentDao;
 
 public class SQLManager {
 	
@@ -52,7 +52,7 @@ public class SQLManager {
 					bean.getPassword()));
 		
 			sql.preparedStatement(bean.getQuery());
-			bean.setMessage(sql.executeUpdate() + "data updated");
+			bean.setMessage(sql.executeUpdate() + "value updated");
 		} catch (Throwable t) {
 			bean.setSuccess(false);
 			bean.setMessage(t.getMessage());
