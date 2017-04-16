@@ -1,15 +1,15 @@
 # build files of pom.xml
-target
+/target
 .class
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-.settings
-.springBeans
-.DS_Store
+/.settings
+/.springBeans
+/.DS_Store
 
 # eclipise classpath
-.classpath
+/.classpath
 
-.idea/*
+/.idea
