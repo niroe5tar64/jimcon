@@ -28,20 +28,20 @@ public class Units {
     private void diff() throws Exception {
         ObservableList<Unit> currentData = FXCollections.observableArrayList();
 
-        List diffList = ListUtils.subtract(currentData,unitsData);
+        List diffList = ListUtils.subtract(currentData, unitsData);
 
         // DateUtil
-        DateUtils.addDays(new Date(),1);
-        Date aprilFool = DateUtils.parseDate("2017/04/01","YYYY/MM/DD");
-        aprilFool = DateUtils.parseDate("04/01","MM/DD");
+        DateUtils.addDays(new Date(), 1);
+        Date aprilFool = DateUtils.parseDate("2017/04/01", "YYYY/MM/DD");
+        aprilFool = DateUtils.parseDate("04/01", "MM/DD");
 
         // BeanUtil copy properties dependson property name and class
         Unit a = new Unit();
         Unit b = new Unit();
-        BeanUtils.copyProperties(a,b);
+        BeanUtils.copyProperties(a, b);
 
         Method[] methods = a.getClass().getMethods();
-        for (Method meth : methods){
+        for (Method meth : methods) {
             // check method name of unit a and b
             meth.getName();
             //invoke method same name of method of a and b
@@ -52,8 +52,8 @@ public class Units {
         StringUtils.isBlank(a.getUnitName());
 
         // use contains
-        for (Unit unit :unitsData){
-            if (currentData.contains(unit)){
+        for (Unit unit : unitsData) {
+            if (currentData.contains(unit)) {
                 //add diffList
             }
         }
@@ -100,10 +100,22 @@ public class Units {
 
     }
 
-    public void saveUnitsData(LoginInfo login) {
+    public void saveUnitsData(LoginInfo login, ObservableList<Unit> storedList) {
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
+
+            sql.beginTransaction();
+
+            ValueList valuelist = ValueList.create();
+            for (Unit unit : storedList) {
+                valuelist.add(unit.getUnitCode());
+            }
+
+            sql.preparedStatement(QueryBuilder.CreateSQLBuilder()
+                    .deleteFrom(Unit.TABLE_NAME)
+                    .where(Unit.UNIT_CODE).in(valuelist)
+                    .terminate());
 
 
             sql.preparedStatement(QueryBuilder.CreateSQLBuilder()
@@ -119,22 +131,23 @@ public class Units {
                 sql.executeUpdate();
             }
 
+            sql.commit();
+
         } catch (Exception e) {
             e.printStackTrace();
+            if (sql != null) {
+                sql.rollback();
+            }
         }
+
 
         if (sql != null) {
             sql.close();
         }
     }
 
-    /*private boolean isUnique(LoginInfo login) throws SQLException {
-        SQL sql = new SQL(login.getConnection());
 
-
-    }*/
-
-    private List createUniqueList(SQL sql) throws SQLException {
+    private List createExistList(SQL sql) throws SQLException {
         ValueList valuelist = ValueList.create();
         for (Unit unit : unitsData) {
             valuelist.add(unit.getUnitCode());
@@ -154,6 +167,6 @@ public class Units {
 
             list.add(unit);
         }
-        return new ArrayList();
+        return list;
     }
 }

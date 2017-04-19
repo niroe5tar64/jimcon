@@ -93,6 +93,11 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
+    public QueryBuilder deleteFrom(String tableName) {
+        builder.append("DELETE FROM ").append(tableName);
+        return new QueryBuilder(builder);
+    }
+
     public QueryBuilder from(String tableName) {
         builder.append(" FROM ").append(tableName);
         return new QueryBuilder(builder);

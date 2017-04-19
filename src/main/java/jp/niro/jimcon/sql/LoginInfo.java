@@ -13,14 +13,22 @@ public class LoginInfo {
     private String user;
     private String password;
 
-    public LoginInfo(String driver,String url,String user,String password){
+    public static LoginInfo defoult() {
+        return new LoginInfo(
+                "com.mysql.jdbc.Driver",
+                "jdbc:mysql://localhost:3306/jimcondb",
+                "fromclient",
+                "motpL@26");
+    }
+
+    public LoginInfo(String driver, String url, String user, String password) {
         this.driver = driver;
         this.url = url;
         this.user = user;
         this.password = password;
     }
 
-    public Connection getConnection() throws SQLException{
-        return DriverManager.getConnection(url,user,password);
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
     }
 }
