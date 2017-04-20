@@ -64,19 +64,29 @@ public class UnitOverviewController {
     @FXML
     private void handleNewUnit() {
         Unit tempUnit = new Unit();
-        boolean okClicked = showUnitEditDialog(tempUnit);
-        if (okClicked) {
-            units.getUnits().add(tempUnit);
+        boolean isSaved = false;
+        while (!isSaved) {
+            boolean okClicked = showUnitEditDialog(tempUnit, true);
+            //units.getUnits().add(tempUnit);
+            if (okClicked) {
+                isSaved = tempUnit.saveNewData(LoginInfo.defoult());
+                units.loadUnitsData(LoginInfo.defoult());
+            } else {
+                isSaved = true;
+            }
         }
+        showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleEditUnit() {
         Unit selectedUnit = unitTable.getSelectionModel().getSelectedItem();
         if (selectedUnit != null) {
-            boolean okClicked = showUnitEditDialog(selectedUnit);
+            boolean okClicked = showUnitEditDialog(selectedUnit, false);
             if (okClicked) {
-                showUnitDetails(selectedUnit);
+                //showUnitDetails(selectedUnit);
+                selectedUnit.saveEditedData(LoginInfo.defoult());
+                units.loadUnitsData(LoginInfo.defoult());
             }
         } else {
             // Nothing selected.
@@ -87,6 +97,7 @@ public class UnitOverviewController {
 
             alert.showAndWait();
         }
+        showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
@@ -110,7 +121,7 @@ public class UnitOverviewController {
         }
     }
 
-    private boolean showUnitEditDialog(Unit unit) {
+    private boolean showUnitEditDialog(Unit unit, boolean isNew) {
         try {
             // load the fxml file and create a new ownerStage for the pop-up dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -130,6 +141,8 @@ public class UnitOverviewController {
             UnitEditDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setUnit(unit);
+
+            controller.getUnitCodeField().editableProperty().set(isNew);
 
             // Show the dialog and wait the user closes it.
             dialogStage.showAndWait();

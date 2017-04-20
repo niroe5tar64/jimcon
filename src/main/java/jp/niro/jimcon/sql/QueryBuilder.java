@@ -16,7 +16,7 @@ public class QueryBuilder {
         this.builder = builder;
     }
 
-    public static QueryBuilder CreateSQLBuilder() {
+    public static QueryBuilder create() {
         return new QueryBuilder();
     }
 
@@ -67,19 +67,31 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
-    public QueryBuilder update(String tableName) {
+    /*public QueryBuilder update(String tableName, DataPairList list) {
         builder.append(" UPDATE ").append(tableName);
+        return new QueryBuilder(builder);
+    }*/
+
+    public QueryBuilder update(String tableName, String columnName, String data) {
+        builder.append(" UPDATE ").append(tableName)
+                .append(" SET ").append(columnName).append(" = '").append(data).append("'");
         return new QueryBuilder(builder);
     }
 
-    public QueryBuilder update(String tableName, String columnName, String data) {
+    public QueryBuilder update(String tableName, String columnName, int data) {
+        builder.append(" UPDATE ").append(tableName)
+                .append(" SET ").append(columnName).append(" = ").append(data);
+        return new QueryBuilder(builder);
+    }
+
+    public QueryBuilder update(String tableName, String columnName, double data) {
         builder.append(" UPDATE ").append(tableName)
                 .append(" SET ").append(columnName).append(" = ").append(data);
         return new QueryBuilder(builder);
     }
 
     public QueryBuilder addSet(String columnName, String data) {
-        builder.append(" , ").append(columnName).append(" = ").append(data);
+        builder.append(" , ").append(columnName).append(" = '").append(data).append("'");
         return new QueryBuilder(builder);
     }
 

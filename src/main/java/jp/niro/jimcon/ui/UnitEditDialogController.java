@@ -35,6 +35,10 @@ public class UnitEditDialogController {
         unitNameField.setText(unit.getUnitName());
     }
 
+    public TextField getUnitCodeField(){
+        return unitCodeField;
+    }
+
     public boolean isOkClicked() {return okClicked;}
 
     @FXML
@@ -58,11 +62,18 @@ public class UnitEditDialogController {
 
         if (unitCodeField.getText() == null || unitCodeField.getText().length() == 0) {
             errorMessage.append("No valid unit code!\n");
-            try {
-                Integer.parseInt(unitCodeField.getText());
-            } catch (NumberFormatException e) {
-                errorMessage.append("No valid postal code (must be an integer)!\n");
+        }
+
+        try {
+            int unitCode = Integer.parseInt(unitCodeField.getText());
+            if (unitCode < 0){
+                errorMessage.append("No valid unit code (must be 0～255)!\n");
             }
+            if (unitCode > 255) {
+                errorMessage.append("No valid unit code (must be 0～255)!\n");
+            }
+        } catch (NumberFormatException e) {
+            errorMessage.append("No valid unit code (must be an integer)!\n");
         }
 
         if (unitNameField.getText() == null || unitNameField.getText().length() == 0) {

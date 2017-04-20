@@ -19,6 +19,11 @@ public class StringDataPair implements DataPair {
 
     @Override
     public String getValue() {
-        return String.valueOf(value);
+        StringBuilder builder = new StringBuilder();
+        return builder
+                .append("'")
+                .append(String.valueOf(value))
+                .append("'")
+                .toString();
     }
 }

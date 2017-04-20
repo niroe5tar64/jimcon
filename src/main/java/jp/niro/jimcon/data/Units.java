@@ -67,7 +67,7 @@ public class Units {
         try {
             sql = new SQL(login.getConnection());
 
-            String querySelect = QueryBuilder.CreateSQLBuilder()
+            String querySelect = QueryBuilder.create()
                     .select(ColumnNameList.create()
                             .add(Unit.UNIT_CODE)
                             .add(Unit.UNIT_NAME))
@@ -112,13 +112,13 @@ public class Units {
                 valuelist.add(unit.getUnitCode());
             }
 
-            sql.preparedStatement(QueryBuilder.CreateSQLBuilder()
+            sql.preparedStatement(QueryBuilder.create()
                     .deleteFrom(Unit.TABLE_NAME)
                     .where(Unit.UNIT_CODE).in(valuelist)
                     .terminate());
 
 
-            sql.preparedStatement(QueryBuilder.CreateSQLBuilder()
+            sql.preparedStatement(QueryBuilder.create()
                     .insert(Unit.TABLE_NAME,
                             DataPairList.create()
                                     .add(Unit.UNIT_CODE, "?")
@@ -152,7 +152,7 @@ public class Units {
         for (Unit unit : unitsData) {
             valuelist.add(unit.getUnitCode());
         }
-        sql.preparedStatement(QueryBuilder.CreateSQLBuilder()
+        sql.preparedStatement(QueryBuilder.create()
                 .select(Unit.UNIT_CODE)
                 .from(Unit.TABLE_NAME)
                 .where(Unit.UNIT_CODE).in(valuelist)

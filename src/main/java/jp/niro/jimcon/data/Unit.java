@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+import jp.niro.jimcon.sql.DataPairList;
 import jp.niro.jimcon.sql.LoginInfo;
 import jp.niro.jimcon.sql.QueryBuilder;
 import jp.niro.jimcon.sql.SQL;
@@ -60,13 +61,14 @@ public class Unit {
     }
 
 
-    // Save
-    public void save(LoginInfo login) {
+    // Save new data.
+    public boolean saveNewData(LoginInfo login) {
+        boolean result = false;
         SQL sql = null;
         try{
             sql = new SQL(login.getConnection());
 
-            sql.preparedStatement(QueryBuilder.CreateSQLBuilder()
+            sql.preparedStatement(QueryBuilder.create()
                     .select(Unit.UNIT_CODE)
                     .from(Unit.TABLE_NAME)
                     .where(Unit.UNIT_CODE).isEqualTo(unitCode.get())
@@ -81,12 +83,56 @@ public class Unit {
                 alert.setHeaderText("この単位コードは既に使われています。");
 
                 alert.showAndWait();
+            } else {
+                // Save new data
+                sql.preparedStatement(QueryBuilder.create()
+                        .insert(Unit.TABLE_NAME, DataPairList.create()
+                                .add(Unit.UNIT_CODE, unitCode.get())
+                                .add(Unit.UNIT_NAME, unitName.get()))
+                        .terminate());
+                sql.executeUpdate();
+                result = true;
             }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
 
+        return result;
+    }
+
+    public void saveEditedData(LoginInfo login) {
+        SQL sql = null;
+        try{
+            sql = new SQL(login.getConnection());
+
+            sql.preparedStatement(QueryBuilder.create()
+                    .select(Unit.UNIT_CODE)
+                    .from(Unit.TABLE_NAME)
+                    .where(Unit.UNIT_CODE).isEqualTo(unitCode.get())
+                    .terminate());
+            sql.executeQuery();
+
+            if (sql.getResultSet().next()){
+                // Save update data.
+                sql.preparedStatement(QueryBuilder.create()
+                        .update(Unit.TABLE_NAME,
+                                Unit.UNIT_CODE, unitCode.get())
+                        .addSet(Unit.UNIT_NAME, unitName.get())
+                        .where(Unit.UNIT_CODE).isEqualTo(unitCode.get())
+                        .terminate());
+                sql.executeUpdate();
+            } else {
+                // Save new data
+                sql.preparedStatement(QueryBuilder.create()
+                        .insert(Unit.TABLE_NAME, DataPairList.create()
+                                .add(Unit.UNIT_CODE, unitCode.get())
+                                .add(Unit.UNIT_NAME, unitName.get()))
+                        .terminate());
+                sql.executeUpdate();
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
-
 
 }
