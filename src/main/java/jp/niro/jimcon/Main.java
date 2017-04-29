@@ -22,12 +22,12 @@ public class Main extends Application {
             win.initRootLayout();
 
             // Show the unit overview.
-            win.showUnitOverview();
+            //win.setUnitOverview();
+            win.setProductOverview();
 
-            primaryStage.show();
+            win.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

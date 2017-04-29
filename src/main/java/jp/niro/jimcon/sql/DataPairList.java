@@ -35,6 +35,11 @@ public class DataPairList {
         return new DataPairList(dataPairList);
     }
 
+    public DataPairList add(String columnName, boolean value) {
+        dataPairList.add(DataPairFactory.create(columnName, value));
+        return new DataPairList(dataPairList);
+    }
+
     public List<DataPair> getDataPairList() {
         return this.dataPairList;
     }

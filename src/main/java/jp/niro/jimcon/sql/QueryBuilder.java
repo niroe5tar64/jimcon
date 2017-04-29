@@ -95,6 +95,11 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
+    public QueryBuilder addSet(String columnName, boolean data) {
+        builder.append(" , ").append(columnName).append(" = ").append(String.valueOf(data));
+        return new QueryBuilder(builder);
+    }
+
     public QueryBuilder addSet(String columnName, int data) {
         builder.append(" , ").append(columnName).append(" = ").append(data);
         return new QueryBuilder(builder);

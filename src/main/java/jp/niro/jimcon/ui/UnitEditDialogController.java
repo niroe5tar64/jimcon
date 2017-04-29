@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Constant;
+import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.data.Unit;
 
 /**
@@ -60,24 +62,21 @@ public class UnitEditDialogController {
     private boolean isInputValid() {
         StringBuilder errorMessage = new StringBuilder();
 
-        if (unitCodeField.getText() == null || unitCodeField.getText().length() == 0) {
-            errorMessage.append("No valid unit code!\n");
+        if (Validator.isEmpty(unitCodeField.getText())) {
+            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_EMPTY);
         }
 
         try {
             int unitCode = Integer.parseInt(unitCodeField.getText());
-            if (unitCode < 0){
-                errorMessage.append("No valid unit code (must be 0～255)!\n");
-            }
-            if (unitCode > 255) {
-                errorMessage.append("No valid unit code (must be 0～255)!\n");
+            if (Validator.isNotInRange(unitCode,0,255)){
+                errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_IN_RANGE);
             }
         } catch (NumberFormatException e) {
-            errorMessage.append("No valid unit code (must be an integer)!\n");
+            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_INTEGER);
         }
 
-        if (unitNameField.getText() == null || unitNameField.getText().length() == 0) {
-            errorMessage.append("No valid unit name!\n");
+        if (Validator.isEmpty(unitNameField.getText())) {
+            errorMessage.append(Constant.ErrorMessages.User.UNIT_NAME_IS_EMPTY);
         }
 
         if (errorMessage.length() == 0){
@@ -86,8 +85,8 @@ public class UnitEditDialogController {
             // Show the error message.
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(dialogStage);
-            alert.setTitle("Invalid Fields");
-            alert.setHeaderText("Please correct invalid fields");
+            alert.setTitle(Constant.ErrorMessages.Title.INVALID_FIELDS);
+            alert.setHeaderText(Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE);
             alert.setContentText(errorMessage.toString());
 
             alert.showAndWait();

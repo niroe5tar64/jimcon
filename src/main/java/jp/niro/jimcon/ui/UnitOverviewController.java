@@ -7,14 +7,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.data.Unit;
 import jp.niro.jimcon.data.Units;
 import jp.niro.jimcon.sql.LoginInfo;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by niro on 2017/04/17.
@@ -34,21 +36,18 @@ public class UnitOverviewController {
 
     @FXML
     private TableView<Unit> unitTable;
-
     @FXML
     private TableColumn<Unit, Integer> unitCodeColumn;
     @FXML
     private TableColumn<Unit, String> unitNameColumn;
-
     @FXML
     private Label unitCodeLabel;
-
     @FXML
     private Label unitNameLabel;
 
     @FXML
     private void initialize() {
-        units.loadUnitsData(LoginInfo.defoult());
+        units.loadUnitsData(LoginInfo.create());
         unitTable.setItems(units.getUnits());
 
         unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
@@ -67,10 +66,11 @@ public class UnitOverviewController {
         boolean isSaved = false;
         while (!isSaved) {
             boolean okClicked = showUnitEditDialog(tempUnit, true);
-            //units.getUnits().add(tempUnit);
             if (okClicked) {
-                isSaved = tempUnit.saveNewData(LoginInfo.defoult());
-                units.loadUnitsData(LoginInfo.defoult());
+                // DBにデータ登録し、新規か否かの状態を取得する。
+                isSaved = tempUnit.saveNewData(LoginInfo.create());
+                // データテーブルをリロード
+                units.loadUnitsData(LoginInfo.create());
             } else {
                 isSaved = true;
             }
@@ -84,16 +84,16 @@ public class UnitOverviewController {
         if (selectedUnit != null) {
             boolean okClicked = showUnitEditDialog(selectedUnit, false);
             if (okClicked) {
-                //showUnitDetails(selectedUnit);
-                selectedUnit.saveEditedData(LoginInfo.defoult());
-                units.loadUnitsData(LoginInfo.defoult());
+                selectedUnit.saveEditedData(LoginInfo.create());
+                units.loadUnitsData(LoginInfo.create());
             }
+
         } else {
             // Nothing selected.
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(ownerStage);
-            alert.setTitle("No Selection");
-            alert.setHeaderText("単位を選択して下さい。");
+            alert.setTitle(Constant.ErrorMessages.Title.NO_SELECTION_UNIT_CODE);
+            alert.setHeaderText(Constant.ErrorMessages.User.NO_SELECTION_UNIT_CODE);
 
             alert.showAndWait();
         }
@@ -123,28 +123,29 @@ public class UnitOverviewController {
 
     private boolean showUnitEditDialog(Unit unit, boolean isNew) {
         try {
-            // load the fxml file and create a new ownerStage for the pop-up dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(WindowManager.class.getResource("UnitEditDialog.fxml"));
-            Pane pane = loader.load();
+            // load the fxml file and create a new stage for the pop-up dialog.
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_EDIT_DIALOG);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            AnchorPane pane = loader.load();
 
-            // Create the dialog Stage.
+            // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Unit");
+            dialogStage.setTitle(Constant.Dialogs.Title.EDIT_UNIT);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
-            // Set the Unit into the controller
+            // Set the Unit into the controller.
             UnitEditDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setUnit(unit);
 
+            // 新規の場合、単位コードを編集不可にする。
             controller.getUnitCodeField().editableProperty().set(isNew);
 
-            // Show the dialog and wait the user closes it.
             dialogStage.showAndWait();
 
             return controller.isOkClicked();

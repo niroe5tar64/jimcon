@@ -5,15 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Constant;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Paths;
-import java.util.Locale;
-import java.util.ResourceBundle;
+
 
 /**
  * Created by niro on 2017/04/17.
@@ -21,19 +17,6 @@ import java.util.ResourceBundle;
 public class WindowManager {
     private Stage primaryStage;
     private BorderPane rootLayout;
-    private File dicDir = Paths.get("C:\\Users\\niro\\pleiades\\workspace\\jimcon\\src\\main\\resource\\jp\\niro\\jimcon").toFile();
-    private URLClassLoader urlLoader;
-    private ResourceBundle resources;
-
-    public WindowManager(){
-        try{
-            urlLoader = new URLClassLoader(new URL[]{dicDir.toURI().toURL()});
-            resources = ResourceBundle.getBundle("TextName", Locale.getDefault(),urlLoader);
-            //resources "utf8", UTF8_ENCODING_CONTROL
-        }catch (MalformedURLException e){
-            e.printStackTrace();
-        }
-    }
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -46,8 +29,9 @@ public class WindowManager {
     public void initRootLayout() {
         try {
             // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(WindowManager.class.getResource("RootLayout.fxml"));
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.ROOT_LAYOUT);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
             rootLayout = loader.load();
 
             // Show the scene containing the root layout.
@@ -63,11 +47,12 @@ public class WindowManager {
         }
     }
 
-    public void showUnitOverview() {
+    public void setUnitOverview() {
         try {
-            // Load person overview
-            URL location = WindowManager.class.getResource("UnitOverview.fxml");
-            FXMLLoader loader = new FXMLLoader(location, resources);
+            // Load unit overview
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_OVERVIEW);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
             AnchorPane unitOverview = loader.load();
 
             // Set unit overview into the center of root layout.
@@ -80,6 +65,34 @@ public class WindowManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setProductOverview() {
+        try {
+            // load product overview
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            AnchorPane productOverview = loader.load();
+
+            // Set product overview into the center of root layout.
+            rootLayout.setCenter(productOverview);
+
+            // Give the controller set on the primary stage.
+            ProductOverviewController controller = loader.getController();
+            controller.setOwnerStage(primaryStage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void show() {
+        primaryStage.show();
+    }
+
+    public void setResizable(boolean resizable){
+        primaryStage.setResizable(resizable);
     }
 
 

@@ -90,6 +90,13 @@ public class QueryComparisonOperation {
         return set(EQUAL_TO, x);
     }
 
+    public QueryBuilder isTrue(){
+        return set(EQUAL_TO, "true");
+    }
+    public QueryBuilder isFalse(){
+        return set(EQUAL_TO, "false");
+    }
+
     public QueryBuilder in(ValueList list) {
         return new QueryBuilder(builder.append(" IN ").append(list.enumerate(", ","(",")")));
     }

@@ -9,8 +9,8 @@
     <children>
         <GridPane AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
-                <Label text="単位コード" />
-                <Label text="単位名" GridPane.rowIndex="1" />
+                <Label text="%unit.unitCode" />
+                <Label text="%unit.unitName" GridPane.rowIndex="1" />
                 <TextField fx:id="unitCodeField" GridPane.columnIndex="1" />
                 <TextField fx:id="unitNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
@@ -29,12 +29,12 @@
         </GridPane>
         <HBox layoutX="150.0" layoutY="272.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#handleOK" prefWidth="80.0" text="OK">
+                <Button mnemonicParsing="false" onAction="#handleOK" prefWidth="80.0" text="%ok">
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#handleCancel" prefWidth="80.0" text="Cancel">
+                <Button mnemonicParsing="false" onAction="#handleCancel" prefWidth="80.0" text="%cancel">
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>

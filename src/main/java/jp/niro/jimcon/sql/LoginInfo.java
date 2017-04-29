@@ -13,7 +13,7 @@ public class LoginInfo {
     private String user;
     private String password;
 
-    public static LoginInfo defoult() {
+    public static LoginInfo create() {
         return new LoginInfo(
                 "com.mysql.jdbc.Driver",
                 "jdbc:mysql://localhost:3306/jimcondb",
@@ -21,7 +21,11 @@ public class LoginInfo {
                 "motpL@26");
     }
 
-    public LoginInfo(String driver, String url, String user, String password) {
+    public static LoginInfo create(String driver, String url, String user, String password) {
+        return new LoginInfo(driver, url, user, password);
+    }
+
+    private LoginInfo(String driver, String url, String user, String password) {
         this.driver = driver;
         this.url = url;
         this.user = user;

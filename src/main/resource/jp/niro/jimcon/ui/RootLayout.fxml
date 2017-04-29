@@ -3,24 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="jp.niro.jimcon.ui.RootLayoutController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu mnemonicParsing="false" text="%file">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleNew" text="New"/>
-                        <MenuItem mnemonicParsing="false" text="Open..."/>
-                        <MenuItem mnemonicParsing="false" text="Save"/>
-                        <MenuItem mnemonicParsing="false" text="Save As..."/>
-                        <MenuItem mnemonicParsing="false" text="Exit"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleNew" text="%new"/>
+                        <MenuItem mnemonicParsing="false" text="%open"/>
+                        <MenuItem mnemonicParsing="false" text="%save"/>
+                        <MenuItem mnemonicParsing="false" text="%saveAs"/>
+                        <MenuItem mnemonicParsing="false" text="%exit"/>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu mnemonicParsing="false" text="%help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About"/>
+                        <MenuItem mnemonicParsing="false" text="%about"/>
                     </items>
                 </Menu>
             </menus>

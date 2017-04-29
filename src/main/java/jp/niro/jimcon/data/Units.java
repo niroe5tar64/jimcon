@@ -77,7 +77,8 @@ public class Units {
 
             sql.preparedStatement(querySelect);
             sql.executeQuery();
-
+            // データリストを空にしてから、Selectの結果を追加する。
+            unitsData.clear();
             while (sql.next()) {
                 Unit unit = new Unit();
                 unit.setUnitCode(sql.getResultSet().getInt(Unit.UNIT_CODE));
@@ -85,19 +86,13 @@ public class Units {
                 unitsData.add(unit);
             }
 
-        } catch (
-                Exception e)
-
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (sql != null)
-
-        {
+        if (sql != null) {
             sql.close();
         }
-
     }
 
     public void saveUnitsData(LoginInfo login, ObservableList<Unit> storedList) {

@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.sql.DataPairList;
 import jp.niro.jimcon.sql.LoginInfo;
 import jp.niro.jimcon.sql.QueryBuilder;
@@ -26,12 +27,34 @@ public class Unit {
     private final StringProperty unitName;
 
     public Unit() {
-        this(0,"");
+        this(0, "");
     }
 
     public Unit(int unitCode, String unitName) {
         this.unitCode = new SimpleIntegerProperty(unitCode);
         this.unitName = new SimpleStringProperty(unitName);
+    }
+
+    public Unit(LoginInfo login, int unitCodePK) {
+        this();
+        SQL sql = null;
+        try {
+            sql = new SQL(login.getConnection());
+
+            sql.preparedStatement(QueryBuilder.create()
+                    .select(Unit.UNIT_NAME)
+                    .from(Unit.TABLE_NAME)
+                    .where(Unit.UNIT_CODE).isEqualTo(unitCodePK)
+                    .terminate());
+            sql.executeQuery();
+
+            if (sql.getResultSet().next()) {
+                unitCode.set(unitCodePK);
+                unitName.set(sql.getResultSet().getString(Unit.UNIT_NAME));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // The getter and setter of "unitCode"
@@ -63,9 +86,8 @@ public class Unit {
 
     // Save new data.
     public boolean saveNewData(LoginInfo login) {
-        boolean result = false;
         SQL sql = null;
-        try{
+        try {
             sql = new SQL(login.getConnection());
 
             sql.preparedStatement(QueryBuilder.create()
@@ -75,62 +97,54 @@ public class Unit {
                     .terminate());
             sql.executeQuery();
 
-            if (sql.getResultSet().next()){
-                // Show the error message.
+            // レコードが存在する時、エラーメッセージを表示する。
+            if (sql.getResultSet().next()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                //alert.initOwner(stage);
-                alert.setTitle("This unit code is duplicated.");
-                alert.setHeaderText("この単位コードは既に使われています。");
+                alert.setTitle(Constant.ErrorMessages.Title.DUPLICATED_UNIT_CODE);
+                alert.setHeaderText(Constant.ErrorMessages.User.UNIT_CODE_DUPLICATED);
 
                 alert.showAndWait();
             } else {
                 // Save new data
                 sql.preparedStatement(QueryBuilder.create()
                         .insert(Unit.TABLE_NAME, DataPairList.create()
-                                .add(Unit.UNIT_CODE, unitCode.get())
-                                .add(Unit.UNIT_NAME, unitName.get()))
+                                .add(Unit.UNIT_CODE, getUnitCode())
+                                .add(Unit.UNIT_NAME, getUnitName()))
                         .terminate());
                 sql.executeUpdate();
-                result = true;
+                return true;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return result;
+        return false;
     }
 
     public void saveEditedData(LoginInfo login) {
         SQL sql = null;
-        try{
+        try {
             sql = new SQL(login.getConnection());
 
             sql.preparedStatement(QueryBuilder.create()
                     .select(Unit.UNIT_CODE)
                     .from(Unit.TABLE_NAME)
-                    .where(Unit.UNIT_CODE).isEqualTo(unitCode.get())
+                    .where(Unit.UNIT_CODE).isEqualTo(getUnitCode())
                     .terminate());
             sql.executeQuery();
 
-            if (sql.getResultSet().next()){
+            // レコードが存在するならば、更新する。
+            if (sql.getResultSet().next()) {
                 // Save update data.
                 sql.preparedStatement(QueryBuilder.create()
                         .update(Unit.TABLE_NAME,
-                                Unit.UNIT_CODE, unitCode.get())
-                        .addSet(Unit.UNIT_NAME, unitName.get())
-                        .where(Unit.UNIT_CODE).isEqualTo(unitCode.get())
-                        .terminate());
-                sql.executeUpdate();
-            } else {
-                // Save new data
-                sql.preparedStatement(QueryBuilder.create()
-                        .insert(Unit.TABLE_NAME, DataPairList.create()
-                                .add(Unit.UNIT_CODE, unitCode.get())
-                                .add(Unit.UNIT_NAME, unitName.get()))
+                                Unit.UNIT_CODE, getUnitCode())
+                        .addSet(Unit.UNIT_NAME, getUnitName())
+                        .where(Unit.UNIT_CODE).isEqualTo(getUnitCode())
                         .terminate());
                 sql.executeUpdate();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
