@@ -1,11 +1,17 @@
 package jp.niro.jimcon.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.data.Product;
+import jp.niro.jimcon.data.Unit;
+import jp.niro.jimcon.sql.LoginInfo;
 
 /**
  * Created by niro on 2017/04/17.
@@ -81,6 +87,29 @@ public class ProductEditDialogController {
     }
 
     @FXML
+    private void onEvent() {
+        try {
+            product.setUnit(LoginInfo.create(),
+                    Integer.parseInt(unitCodeField.getText()));
+            Unit tempUnit = product.getUnit();
+
+            // unitCodeField.getTextがDBに保存されているかどうか
+            if (Validator.isNotNull(tempUnit)) {
+                unitNameLabel.setText(tempUnit.getUnitName());
+            } else {
+                System.out.println("null-po");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("num_error");
+        }
+    }
+
+    @FXML
+    private void handleUnitSearch() {
+
+    }
+
+    @FXML
     private void handleOK() {
         if (isInputValid()) {
             product.setProductCode(productCodeField.getText());
@@ -118,7 +147,7 @@ public class ProductEditDialogController {
 
         try {
             int productCode = Integer.parseInt(productCodeField.getText());
-            if (Validator.isNotEqual(productCodeField.getLength(),10)) {
+            if (Validator.isNotEqual(productCodeField.getLength(),Constant.System.PRODUCT_CODE_DIGITS)) {
                 errorMessage.append(Constant.ErrorMessages.User.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
             }
         } catch (NumberFormatException e) {
@@ -129,20 +158,15 @@ public class ProductEditDialogController {
             errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_EMPTY);
         }
 
-        if (errorMessage.length() == 0) {
+        if (Validator.isEmpty(errorMessage.toString())) {
             return true;
         } else {
-            // Show the error message.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(dialogStage);
-            alert.setTitle("Invalid Fields");
-            alert.setHeaderText("Please correct invalid fields");
-            alert.setContentText(errorMessage.toString());
-
-            alert.showAndWait();
-
+            Commons.showErrorAlert(
+                    Constant.ErrorMessages.Title.INVALID_FIELDS,
+                    Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
+                    errorMessage.toString(),
+                    true);
             return false;
         }
     }
-
 }

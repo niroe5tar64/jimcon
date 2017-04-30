@@ -76,7 +76,12 @@ public class Constant {
         }
     }
 
+    public class System {
+        public static final int PRODUCT_CODE_DIGITS = 10;
+    }
+
     public class DateFormat {
         public static final String SHORT = "MM/DD";
+
     }
 }

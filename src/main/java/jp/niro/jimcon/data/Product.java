@@ -218,7 +218,7 @@ public class Product {
     }
 
     public void setUnit(LoginInfo login, int unitCodePK) {
-        this.setUnit(new Unit(login, unitCodePK));
+        this.setUnit(Unit.create(login, unitCodePK));
     }
     public void setUnit(int unitCode, String unitName) {
         this.setUnit(new Unit(unitCode,unitName));

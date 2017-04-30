@@ -1,9 +1,9 @@
 package jp.niro.jimcon.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.data.Unit;
@@ -82,15 +82,11 @@ public class UnitEditDialogController {
         if (errorMessage.length() == 0){
             return true;
         } else {
-            // Show the error message.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(dialogStage);
-            alert.setTitle(Constant.ErrorMessages.Title.INVALID_FIELDS);
-            alert.setHeaderText(Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE);
-            alert.setContentText(errorMessage.toString());
-
-            alert.showAndWait();
-
+            Commons.showErrorAlert(
+                    Constant.ErrorMessages.Title.INVALID_FIELDS,
+                    Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
+                    errorMessage.toString(),
+                    true);
             return false;
         }
     }

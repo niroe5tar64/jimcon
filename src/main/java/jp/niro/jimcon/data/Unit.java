@@ -35,8 +35,8 @@ public class Unit {
         this.unitName = new SimpleStringProperty(unitName);
     }
 
-    public Unit(LoginInfo login, int unitCodePK) {
-        this();
+    public static Unit create(LoginInfo login, int unitCodePK) {
+        Unit unit = new Unit();
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
@@ -49,12 +49,14 @@ public class Unit {
             sql.executeQuery();
 
             if (sql.getResultSet().next()) {
-                unitCode.set(unitCodePK);
-                unitName.set(sql.getResultSet().getString(Unit.UNIT_NAME));
+                unit.unitCode.set(unitCodePK);
+                unit.unitName.set(sql.getResultSet().getString(Unit.UNIT_NAME));
+                return unit;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     // The getter and setter of "unitCode"
