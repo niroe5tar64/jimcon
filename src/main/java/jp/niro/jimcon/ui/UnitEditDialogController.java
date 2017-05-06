@@ -12,23 +12,9 @@ import jp.niro.jimcon.data.Unit;
  * Created by niro on 2017/04/17.
  */
 public class UnitEditDialogController {
-
-    @FXML
-    private TextField unitCodeField;
-    @FXML
-    private TextField unitNameField;
-
-    private Stage dialogStage;
     private Unit unit;
+    private Stage ownerStage;
     private boolean okClicked;
-
-    @FXML
-    private void initialize(){
-    }
-
-    public void setDialogStage(Stage dialogStage){
-        this.dialogStage = dialogStage;
-    }
 
     public void setUnit(Unit unit) {
         this.unit = unit;
@@ -37,11 +23,31 @@ public class UnitEditDialogController {
         unitNameField.setText(unit.getUnitName());
     }
 
-    public TextField getUnitCodeField(){
+    public Stage getOwnerStage() {
+        return ownerStage;
+    }
+
+    public void setOwnerStage(Stage ownerStage) {
+        this.ownerStage = ownerStage;
+    }
+
+    public boolean isOkClicked() {
+        return okClicked;
+    }
+
+    public TextField getUnitCodeField() {
         return unitCodeField;
     }
 
-    public boolean isOkClicked() {return okClicked;}
+    @FXML
+    private TextField unitCodeField;
+
+    @FXML
+    private TextField unitNameField;
+
+    @FXML
+    private void initialize() {
+    }
 
     @FXML
     private void handleOK() {
@@ -50,13 +56,13 @@ public class UnitEditDialogController {
             unit.setUnitName(unitNameField.getText());
 
             okClicked = true;
-            dialogStage.close();
+            ownerStage.close();
         }
     }
 
     @FXML
     private void handleCancel() {
-        dialogStage.close();
+        ownerStage.close();
     }
 
     private boolean isInputValid() {
@@ -68,7 +74,7 @@ public class UnitEditDialogController {
 
         try {
             int unitCode = Integer.parseInt(unitCodeField.getText());
-            if (Validator.isNotInRange(unitCode,0,255)){
+            if (Validator.isNotInRange(unitCode, 0, 255)) {
                 errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_IN_RANGE);
             }
         } catch (NumberFormatException e) {
@@ -79,7 +85,7 @@ public class UnitEditDialogController {
             errorMessage.append(Constant.ErrorMessages.User.UNIT_NAME_IS_EMPTY);
         }
 
-        if (errorMessage.length() == 0){
+        if (errorMessage.length() == 0) {
             return true;
         } else {
             Commons.showErrorAlert(

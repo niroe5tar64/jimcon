@@ -1,10 +1,14 @@
 package jp.niro.jimcon.ui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
@@ -13,10 +17,62 @@ import jp.niro.jimcon.data.Product;
 import jp.niro.jimcon.data.Unit;
 import jp.niro.jimcon.sql.LoginInfo;
 
+import java.io.IOException;
+import java.net.URL;
+
 /**
  * Created by niro on 2017/04/17.
  */
-public class ProductEditDialogController {
+public class ProductEditDialogController implements UnitSearchable {
+
+    private Product product;
+    private Stage ownerStage;
+    private boolean okClicked;
+
+    public void setProduct(Product product) {
+        this.product = product;
+
+        productCodeField.setText(product.getProductCode());
+        productNameField.setText(product.getProductName());
+        sizeColorField.setText(product.getSizeColor());
+        modelNumberField.setText(product.getModelNumber());
+        anotherNameField.setText(product.getAnotherName());
+        catalogPriceField.setText(String.valueOf(product.getCatalogPrice()));
+        unitCodeField.setText(String.valueOf(product.getUnit().getUnitCode()));
+        unitNameLabel.setText(product.getUnit().getUnitName());
+        standardUnitPriceField.setText(String.valueOf(product.getStandardUnitPrice()));
+        stockQuantityField.setText(String.valueOf(product.getStockQuantity()));
+        cuttingConstantField.setText(String.valueOf(product.getCuttingConstant()));
+        functionConstantField.setText(String.valueOf(product.getFunctionConstant()));
+        textArea.setText(product.getMemo());
+        processedCheckBox.setSelected(product.isProcessed());
+    }
+
+    public Stage getOwnerStage() {
+        return ownerStage;
+    }
+
+    public void setOwnerStage(Stage ownerStage) {
+        this.ownerStage = ownerStage;
+    }
+
+    public boolean isOkClicked() {
+        return okClicked;
+    }
+
+    public TextField getProductCodeField() {
+        return productCodeField;
+    }
+
+    @Override
+    public void updateDisplay(Unit unit) {
+        if (Validator.isNotNull(unit)) {
+            unitCodeField.setText(String.valueOf(unit.getUnitCode()));
+            unitNameLabel.setText(unit.getUnitName());
+        } else {
+            updateDisplay(new Unit());
+        }
+    }
 
     @FXML
     private TextField productCodeField;
@@ -47,66 +103,50 @@ public class ProductEditDialogController {
     @FXML
     private CheckBox processedCheckBox;
 
-    private Stage dialogStage;
-    private Product product;
-    private boolean okClicked;
-
     @FXML
     private void initialize() {
-    }
-
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-
-        productCodeField.setText(product.getProductCode());
-        productNameField.setText(product.getProductName());
-        sizeColorField.setText(product.getSizeColor());
-        modelNumberField.setText(product.getModelNumber());
-        anotherNameField.setText(product.getAnotherName());
-        catalogPriceField.setText(String.valueOf(product.getCatalogPrice()));
-        unitCodeField.setText(String.valueOf(product.getUnit().getUnitCode()));
-        unitNameLabel.setText(product.getUnit().getUnitName());
-        standardUnitPriceField.setText(String.valueOf(product.getStandardUnitPrice()));
-        stockQuantityField.setText(String.valueOf(product.getStockQuantity()));
-        cuttingConstantField.setText(String.valueOf(product.getCuttingConstant()));
-        functionConstantField.setText(String.valueOf(product.getFunctionConstant()));
-        textArea.setText(String.valueOf(product.getMemo()));
-        processedCheckBox.setSelected(product.isProcessed());
-    }
-
-    public TextField getProductCodeField() {
-        return productCodeField;
-    }
-
-    public boolean isOkClicked() {
-        return okClicked;
+        // 単位コードフィールドのフォーカス喪失時、
+        unitCodeField.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        focusOutFromUnitCodeField();
+                    }
+                });
     }
 
     @FXML
-    private void onEvent() {
-        try {
-            product.setUnit(LoginInfo.create(),
-                    Integer.parseInt(unitCodeField.getText()));
-            Unit tempUnit = product.getUnit();
-
-            // unitCodeField.getTextがDBに保存されているかどうか
-            if (Validator.isNotNull(tempUnit)) {
-                unitNameLabel.setText(tempUnit.getUnitName());
-            } else {
-                System.out.println("null-po");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("num_error");
-        }
+    // TODO rename method name and add javadoc
+    private void focusOutFromUnitCodeField() {
+        updateDisplay(getUnitWithInputValid());
     }
 
     @FXML
     private void handleUnitSearch() {
+        try {
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_SEARCH_DIALOG);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            AnchorPane pane = loader.load();
 
+            // Create the dialog stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(Constant.Dialogs.Title.EDIT_PRODUCT);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(ownerStage);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // Set the Product into the controller.
+            UnitSearchDialogController controller = loader.getController();
+            controller.setOwnerStage(dialogStage);
+            // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
+            controller.setUnitSearchable(this);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -129,13 +169,13 @@ public class ProductEditDialogController {
             product.setProcessed(processedCheckBox.isSelected());
 
             okClicked = true;
-            dialogStage.close();
+            ownerStage.close();
         }
     }
 
     @FXML
     private void handleCancel() {
-        dialogStage.close();
+        ownerStage.close();
     }
 
     private boolean isInputValid() {
@@ -147,7 +187,7 @@ public class ProductEditDialogController {
 
         try {
             int productCode = Integer.parseInt(productCodeField.getText());
-            if (Validator.isNotEqual(productCodeField.getLength(),Constant.System.PRODUCT_CODE_DIGITS)) {
+            if (Validator.isNotEqual(productCodeField.getLength(), Constant.System.PRODUCT_CODE_DIGITS)) {
                 errorMessage.append(Constant.ErrorMessages.User.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
             }
         } catch (NumberFormatException e) {
@@ -168,5 +208,33 @@ public class ProductEditDialogController {
                     true);
             return false;
         }
+    }
+
+    private Unit getUnitWithInputValid() {
+        StringBuilder errorMessage = new StringBuilder();
+        Unit tempUnit = null;
+        try {
+            int unitCodePK = Integer.parseInt(unitCodeField.getText());
+            // unitCodeFieldに入力されたデータがDBに保存されているかどうか
+            tempUnit = Unit.create(LoginInfo.create(), unitCodePK);
+            if (Validator.isNull(tempUnit)) {
+                errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
+            }
+            if (Validator.isNotInRange(unitCodePK, 0, 255)) {
+                errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_IN_RANGE);
+            }
+
+        } catch (NumberFormatException e) {
+            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_INTEGER);
+        }
+
+        if (Validator.isNotEmpty(errorMessage.toString())) {
+            Commons.showErrorAlert(
+                    Constant.ErrorMessages.Title.INVALID_FIELDS,
+                    Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
+                    errorMessage.toString(),
+                    true);
+        }
+        return tempUnit;
     }
 }

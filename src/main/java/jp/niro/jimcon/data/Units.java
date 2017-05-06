@@ -79,8 +79,9 @@ public class Units {
             sql.executeQuery();
             // データリストを空にしてから、Selectの結果を追加する。
             unitsData.clear();
+            Unit unit = null;
             while (sql.next()) {
-                Unit unit = new Unit();
+                unit = new Unit();
                 unit.setUnitCode(sql.getResultSet().getInt(Unit.UNIT_CODE));
                 unit.setUnitName(sql.getResultSet().getString(Unit.UNIT_NAME));
                 unitsData.add(unit);

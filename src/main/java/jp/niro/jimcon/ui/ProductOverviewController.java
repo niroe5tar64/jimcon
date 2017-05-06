@@ -19,9 +19,8 @@ import java.net.URL;
  * Created by niro on 2017/04/21.
  */
 public class ProductOverviewController {
-    // Reference to the owner stage.
-    private Stage ownerStage;
     private Products products = new Products();
+    private Stage ownerStage;
 
     public Stage getOwnerStage() {
         return ownerStage;
@@ -93,7 +92,7 @@ public class ProductOverviewController {
 
 
     @FXML
-    public void handleNewProduct() {
+    private void handleNewProduct() {
         Product tempProduct = new Product();
         boolean isSaved = false;
         while (!isSaved) {
@@ -111,7 +110,7 @@ public class ProductOverviewController {
     }
 
     @FXML
-    public void handleEditProduct() {
+    private void handleEditProduct() {
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
         if (selectedProduct != null) {
             boolean okClicked = showProductEditDialog(selectedProduct, false);
@@ -122,7 +121,7 @@ public class ProductOverviewController {
 
         } else {
             // Nothing selected.
-            Alert alert =new Alert(Alert.AlertType.WARNING);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(ownerStage);
             alert.setTitle(Constant.ErrorMessages.Title.NO_SELECTION_PRODUCT_CODE);
             alert.setHeaderText(Constant.ErrorMessages.User.NO_SELECTION_PRODUCT_CODE);
@@ -134,7 +133,7 @@ public class ProductOverviewController {
 
 
     @FXML
-    public void handleDeleteProduct() {
+    private void handleDeleteProduct() {
     }
 
     private void showProductDetails(Product product) {
@@ -190,7 +189,7 @@ public class ProductOverviewController {
 
             // Set the Product into the controller.
             ProductEditDialogController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
+            controller.setOwnerStage(dialogStage);
             controller.setProduct(product);
 
             // 新規の場合、商品コードを編集不可にする。

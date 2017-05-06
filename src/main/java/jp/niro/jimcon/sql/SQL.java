@@ -20,6 +20,13 @@ public class SQL {
         return this.resultSet;
     }
 
+    public String getString(String columnName) throws SQLException {
+        return this.resultSet.getString(columnName);
+    }
+    public String getString(int columnIndex) throws SQLException {
+        return this.resultSet.getString(columnIndex);
+    }
+
     public PreparedStatement getPreparedStatement() {
         return this.preparedStatement;
     }

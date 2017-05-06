@@ -25,6 +25,7 @@ public class Products {
         try {
             sql = new SQL(login.getConnection());
 
+            // TODO rename querySelect
             String querySelect = QueryBuilder.create()
                     .select(ColumnNameList.create()
                             .add(Product.PRODUCT_CODE)
@@ -51,8 +52,9 @@ public class Products {
 
             // データリストを空にしてから、Selectの結果を追加する。
             productData.clear();
+            Product product = null;
             while (sql.next()) {
-                Product product = new Product();
+                product = new Product();
                 product.setProductCode(sql.getResultSet().getString(Product.PRODUCT_CODE));
                 product.setProductName(sql.getResultSet().getString(Product.PRODUCT_NAME));
                 product.setSizeColor(sql.getResultSet().getString(Product.SIZE_COLOR));
@@ -60,8 +62,9 @@ public class Products {
                 product.setAnotherName(sql.getResultSet().getString(Product.ANOTHER_NAME));
                 product.setCatalogPrice(sql.getResultSet().getDouble(Product.CATALOG_PRICE));
                 product.setUnit(
-                        LoginInfo.create(),
-                        sql.getResultSet().getInt(Product.UNIT_CODE));
+                        Unit.create(
+                                LoginInfo.create(),
+                                sql.getResultSet().getInt(Product.UNIT_CODE)));
                 product.setStandardUnitPrice(sql.getResultSet().getDouble(Product.STANDARD_UNIT_PRICE));
                 product.setStockQuantity(sql.getResultSet().getDouble(Product.STOCK_QUANTITY));
                 product.setCuttingConstant(sql.getResultSet().getDouble(Product.CUTTING_CONSTANT));

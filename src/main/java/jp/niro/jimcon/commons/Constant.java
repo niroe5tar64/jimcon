@@ -27,6 +27,8 @@ public class Constant {
             public static final String UNIT_CODE_DUPLICATED = "この単位コードは既に使われています。\n";
             public static final String PRODUCT_CODE_DUPLICATED = "この商品コードは既に使われています。\n";
 
+            public static final String UNIT_CODE_HAS_NOT_BEEN_REGISTERED = "この単位コードは登録されていません。\n";
+
             public static final String UNIT_CODE_IS_EMPTY = "単位コードが空欄です。\n";
             public static final String UNIT_NAME_IS_EMPTY = "単位名が空欄です。\n";
             public static final String PRODUCT_CODE_IS_EMPTY = "商品コードが空欄です。\n";
@@ -43,7 +45,7 @@ public class Constant {
 
             public static final String UNIT_CODE_IS_NOT_IN_RANGE = "単位コードが不正な値です。0～255の範囲で入力して下さい。\n";
 
-            public static final String PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS = "単位コードが不正な値です。10桁の値を入力して下さい。\n";
+            public static final String PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS = "商品コードが不正な値です。10桁の値を入力して下さい。\n";
 
             public static final String UNIT_CODE_IS_NOT_INTEGER = "単位コードが不正な値です。整数を入力して下さい。\n";
             public static final String PRODUCT_CODE_IS_NOT_INTEGER = "商品コードが不正な値です。整数を入力して下さい。\n";
@@ -55,6 +57,8 @@ public class Constant {
 
             public static final String NO_SELECTION_UNIT_CODE = "単位を選択して下さい。";
             public static final String NO_SELECTION_PRODUCT_CODE = "商品を選択して下さい。";
+
+            public static final String  DO_NOT_DELETE = "単位を削除する場合は管理者に問い合わせて下さい";
         }
     }
 
@@ -67,6 +71,7 @@ public class Constant {
             public static final String ROOT_LAYOUT = "RootLayout.fxml";
             public static final String UNIT_EDIT_DIALOG = "UnitEditDialog.fxml";
             public static final String UNIT_OVERVIEW = "UnitOverview.fxml";
+            public static final String UNIT_SEARCH_DIALOG = "UnitSearchDialog.fxml";
             public static final String PRODUCT_EDIT_DIALOG = "ProductEditDialog.fxml";
             public static final String PRODUCT_OVERVIEW = "ProductOverview.fxml";
         }
@@ -77,6 +82,8 @@ public class Constant {
     }
 
     public class System {
+        public static final int CLICK_COUNT_SINGLE = 1;
+        public static final int CLICK_COUNT_DOUBLE = 2;
         public static final int PRODUCT_CODE_DIGITS = 10;
     }
 

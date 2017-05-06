@@ -19,7 +19,7 @@ public class RootLayoutController {
     }
 
     @FXML
-    public void handleNew() {
+    private void handleNew() {
         System.out.println("click on the menu of New");
     }
 

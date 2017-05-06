@@ -22,9 +22,8 @@ import java.net.URL;
  * Created by niro on 2017/04/17.
  */
 public class UnitOverviewController {
-    // Reference to the ownerStage.
-    private Stage ownerStage;
     private Units units = new Units();
+    private Stage ownerStage;
 
     public Stage getOwnerStage() {
         return ownerStage;
@@ -140,7 +139,7 @@ public class UnitOverviewController {
 
             // Set the Unit into the controller.
             UnitEditDialogController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
+            controller.setOwnerStage(dialogStage);
             controller.setUnit(unit);
 
             // 新規の場合、単位コードを編集不可にする。
