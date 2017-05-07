@@ -42,6 +42,7 @@ public class WindowManager {
             RootLayoutController controller = loader.getController();
             controller.setStage(primaryStage);
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
