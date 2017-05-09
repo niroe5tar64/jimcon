@@ -1,10 +1,9 @@
 package jp.niro.jimcon.data;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import jp.niro.jimcon.sql.LoginInfo;
 
-public interface Department {
+public class Department {
     static final String TABLE_NAME = "m000_departments";
     static final String DEPARTMENT_CODE = "m000_department_code";
     static final String DEPARTMENT_NAME = "m000_department_name";
@@ -13,43 +12,94 @@ public interface Department {
     static final String TEL_NUMBER = "m000_tel_number";
     static final String FAX_NUMBER = "m000_fax_number";
 
-    public int getDepartmentCode();
+    private int departmentCode;
+    private String departmentName;
+    private String postcode;
+    private String address;
+    private String telNumber;
+    private String faxNumber;
 
-    public void setDepartmentCode(int departmentCode);
+    public Department() {
+        this(
+                0,
+                "",
+                "",
+                "",
+                "",
+                "");
+    }
 
-    public IntegerProperty departmentCodeProperty();
+    public Department(int departmentCode,
+                         String departmentName,
+                         String postcode,
+                         String address,
+                         String telNumber,
+                         String faxNumber) {
+        this.departmentCode = departmentCode;
+        this.departmentName = departmentName;
+        this.postcode = postcode;
+        this.address = address;
+        this.telNumber = telNumber;
+        this.faxNumber = faxNumber;
+    }
 
-    public String getDepartmentName();
+    public int getDepartmentCode() {
+        return departmentCode;
+    }
 
-    public void setDepartmentName(String departmentName);
+    public void setDepartmentCode(int departmentCode) {
+        this.departmentCode = departmentCode;
+    }
 
-    public StringProperty departmentNameProperty();
+    public String getDepartmentName() {
+        return departmentName;
+    }
 
-    public String getPostcode();
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
-    public void setPostcode(String postcode);
+    public String getPostcode() {
+        return postcode;
+    }
 
-    public StringProperty postcodeProperty();
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
 
-    public String getAddress();
+    public String getAddress() {
+        return address;
+    }
 
-    public void setAddress(String address);
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-    public StringProperty addressProperty();
+    public String getTelNumber() {
+        return telNumber;
+    }
 
-    public String getTelNumber();
+    public void setTelNumber(String telNumber) {
+        this.telNumber = telNumber;
+    }
 
-    public void setTelNumber(String telNumber);
+    public String getFaxNumber() {
+        return faxNumber;
+    }
 
-    public StringProperty telNumberProperty();
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
+    }
 
-    public String getFaxNumber();
+    public StringProperty faxNumberProperty() {
+        return null;
+    }
 
-    public void setFaxNumber(String faxNumber);
+    public boolean saveNewData(LoginInfo login){
+        return false;
+    }
 
-    public StringProperty faxNumberProperty();
+    public void saveEditedData(LoginInfo login){
 
-    public boolean saveNewData(LoginInfo login);
-
-    public void saveEditedData(LoginInfo login);
+    }
 }

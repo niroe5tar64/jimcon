@@ -7,9 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Department;
 import jp.niro.jimcon.data.DepartmentFX;
-import jp.niro.jimcon.data.Departments;
 import jp.niro.jimcon.data.DepartmentsFX;
 import jp.niro.jimcon.sql.LoginInfo;
 
@@ -17,7 +15,7 @@ import jp.niro.jimcon.sql.LoginInfo;
  * Created by niro on 2017/05/09.
  */
 public class DepartmentOverviewController {
-    private Departments departments = new DepartmentsFX();
+    private DepartmentsFX departmentsFX = new DepartmentsFX();
     private Stage ownerStage;
 
     public Stage getOwnerStage() {
@@ -29,11 +27,11 @@ public class DepartmentOverviewController {
     }
 
     @FXML
-    private TableView<Department> departmentTable;
+    private TableView<DepartmentFX> departmentTable;
     @FXML
-    private TableColumn<Department, Integer> departmentCodeColumn;
+    private TableColumn<DepartmentFX, Integer> departmentCodeColumn;
     @FXML
-    private TableColumn<Department, String> departmentNameColumn;
+    private TableColumn<DepartmentFX, String> departmentNameColumn;
     @FXML
     private Label departmentCodeLabel;
     @FXML
@@ -41,8 +39,8 @@ public class DepartmentOverviewController {
 
     @FXML
     private void initialize() {
-        departments.loadDepartments(LoginInfo.create());
-        departmentTable.setItems(departments.getDepartmentObservableList());
+        departmentsFX.loadDepartments(LoginInfo.create());
+        departmentTable.setItems(departmentsFX.getObservableList());
 
         departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
         departmentNameColumn.setCellValueFactory(cellData -> cellData.getValue().departmentNameProperty());
@@ -56,7 +54,7 @@ public class DepartmentOverviewController {
 
     @FXML
     private void handleNewDepartment() {
-        Department tempDepartment = new DepartmentFX();
+        DepartmentFX tempDepartment = new DepartmentFX();
         boolean isSaved = false;
         while (!isSaved) {
             boolean okClicked = showDepartmentEditDialog(tempDepartment, true);
@@ -64,7 +62,7 @@ public class DepartmentOverviewController {
                 // DBにデータ登録し、新規か否かの状態を取得する。
                 isSaved = tempDepartment.saveNewData(LoginInfo.create());
                 // データテーブルをリロード
-                departments.loadDepartments(LoginInfo.create());
+                departmentsFX.loadDepartments(LoginInfo.create());
             } else {
                 isSaved = true;
             }
@@ -74,12 +72,12 @@ public class DepartmentOverviewController {
 
     @FXML
     private void handleEditDepartment() {
-        Department selectedDepartment = departmentTable.getSelectionModel().getSelectedItem();
+        DepartmentFX selectedDepartment = departmentTable.getSelectionModel().getSelectedItem();
         if (selectedDepartment != null) {
             boolean okClicked = showDepartmentEditDialog(selectedDepartment, false);
             if (okClicked) {
                 selectedDepartment.saveEditedData(LoginInfo.create());
-                departments.loadDepartments(LoginInfo.create());
+                departmentsFX.loadDepartments(LoginInfo.create());
             }
 
         } else {
@@ -105,17 +103,17 @@ public class DepartmentOverviewController {
         alert.showAndWait();
     }
 
-    private void showDepartmentDetails(Department department) {
-        if (department != null) {
-            departmentCodeLabel.setText(Integer.toString(department.getDepartmentCode()));
-            departmentNameLabel.setText(department.getDepartmentName());
+    private void showDepartmentDetails(DepartmentFX departmentFX) {
+        if (departmentFX != null) {
+            departmentCodeLabel.setText(Integer.toString(departmentFX.getDepartmentCode()));
+            departmentNameLabel.setText(departmentFX.getDepartmentName());
         } else {
             departmentCodeLabel.setText("");
             departmentNameLabel.setText("");
         }
     }
 
-    private boolean showDepartmentEditDialog(Department department, boolean isNew) {
+    private boolean showDepartmentEditDialog(DepartmentFX department, boolean isNew) {
         /*try {
             // load the fxml file and create a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_EDIT_DIALOG);
