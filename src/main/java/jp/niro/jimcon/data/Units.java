@@ -3,15 +3,9 @@ package jp.niro.jimcon.data;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jp.niro.jimcon.sql.*;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,43 +17,6 @@ public class Units {
 
     public ObservableList<Unit> getUnits() {
         return unitsData;
-    }
-
-    private void diff() throws Exception {
-        ObservableList<Unit> currentData = FXCollections.observableArrayList();
-
-        List diffList = ListUtils.subtract(currentData, unitsData);
-
-        // DateUtil
-        DateUtils.addDays(new Date(), 1);
-        Date aprilFool = DateUtils.parseDate("2017/04/01", "YYYY/MM/DD");
-        aprilFool = DateUtils.parseDate("04/01", "MM/DD");
-
-        // BeanUtil copy properties dependson property name and class
-        Unit a = new Unit();
-        Unit b = new Unit();
-        BeanUtils.copyProperties(a, b);
-
-        Method[] methods = a.getClass().getMethods();
-        for (Method meth : methods) {
-            // check method name of unit a and b
-            meth.getName();
-            //invoke method same name of method of a and b
-            // a.code -> int b.code ->string -> Exception otherwise copy properties
-        }
-
-        // if (a != null) &&
-        StringUtils.isBlank(a.getUnitName());
-
-        // use contains
-        for (Unit unit : unitsData) {
-            if (currentData.contains(unit)) {
-                //add diffList
-            }
-        }
-
-        // use removeall
-        currentData.removeAll(unitsData);
     }
 
     public void loadUnitsData(LoginInfo login) {
@@ -101,7 +58,8 @@ public class Units {
         try {
             sql = new SQL(login.getConnection());
 
-            sql.beginTransaction();
+            sql.
+                    beginTransaction();
 
             ValueList valuelist = ValueList.create();
             for (Unit unit : storedList) {

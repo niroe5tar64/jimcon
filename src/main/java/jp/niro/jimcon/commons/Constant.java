@@ -69,6 +69,7 @@ public class Constant {
     public class Resources {
         public class FXMLFile {
             public static final String ROOT_LAYOUT = "RootLayout.fxml";
+            public static final String DEPARTMENT_OVERVIEW = "DepartmentOverview.fxml";
             public static final String UNIT_EDIT_DIALOG = "UnitEditDialog.fxml";
             public static final String UNIT_OVERVIEW = "UnitOverview.fxml";
             public static final String UNIT_SEARCH_DIALOG = "UnitSearchDialog.fxml";

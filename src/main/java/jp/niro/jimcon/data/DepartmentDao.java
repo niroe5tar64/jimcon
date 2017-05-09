@@ -1,55 +1,34 @@
 package jp.niro.jimcon.data;
 
-public class DepartmentDao {
-	public static final String TABLE_NAME = "m000_departments";
-	public static final int INDEX_DEPARTMENT_CODE = 1;
-	public static final int INDEX_DEPARTMENT_NAME = 2;
-	public static final int INDEX_POSTCODE = 3;
-	public static final int INDEX_ADDRESS = 4;
-	public static final int INDEX_TEL_NUMBER = 5;
-	public static final int INDEX_FAX_NUMBER = 6;
-	public static final String DEPARTMENT_CODE = "m000_department_code";
-	public static final String DEPARTMENT_NAME = "m000_department_name";
-	public static final String POSTCODE = "m000_postcode";
-	public static final String ADDRESS = "m000_address";
-	public static final String TEL_NUMBER = "m000_tel_number";
-	public static final String FAX_NUMBER = "m000_fax_number";
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
+import jp.niro.jimcon.sql.LoginInfo;
 
-	private int departmentCode = 0;
-	private String departmentName = "";
-	private String postcode = "";
-	private String address = "";
-	private String telNumber = "";
-	private String faxNumber = "";
+public class DepartmentDao implements Department {
 
-	public DepartmentDao(){}
+    private int departmentCode;
+    private String departmentName;
+    private String postcode;
+    private String address;
+    private String telNumber;
+    private String faxNumber;
 
-	@Override
-	public boolean equals(Object obj) {
+    public DepartmentDao() {
+        this(
+                0,
+                "",
+                "",
+                "",
+                "",
+                "");
+    }
 
-		if (obj instanceof DepartmentDao){
-			DepartmentDao subject = (DepartmentDao)obj;
-			if (this.departmentCode == subject.getDepartmentCode()){
-				return true;
-			}
-/*
-			if (this.departmentCode == subject.departmentCode && this.departmentName == subject.getDepartmentName()){
-				return true;
-			}
-*/
-
-		}
-
-		return false;
-
-	}
-
-	public DepartmentDao(int departmentCode,
-						 String departmentName,
-						 String postcode,
-						 String address,
-						 String telNumber,
-						 String faxNumber){
+    public DepartmentDao(int departmentCode,
+                         String departmentName,
+                         String postcode,
+                         String address,
+                         String telNumber,
+                         String faxNumber) {
         this.departmentCode = departmentCode;
         this.departmentName = departmentName;
         this.postcode = postcode;
@@ -58,51 +37,103 @@ public class DepartmentDao {
         this.faxNumber = faxNumber;
     }
 
-	public int getDepartmentCode() {
-		return departmentCode;
-	}
-	public void setDepartmentCode(int departmentCode) {
-		this.departmentCode = departmentCode;
-	}
-	public String getDepartmentName() {
-		return departmentName;
-	}
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
-	}
-	public String getPostcode() {
-		return postcode;
-	}
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getTelNumber() {
-		return telNumber;
-	}
-	public void setTelNumber(String telNumber) {
-		this.telNumber = telNumber;
-	}
-	public String getFaxNumber() {
-		return faxNumber;
-	}
-	public void setFaxNumber(String faxNumber) {
-		this.faxNumber = faxNumber;
-	}
-	@Override
-	public String toString() {
-		return departmentCode + " "
-				+ departmentName + " "
-				+ postcode + " "
-				+ address + " "
-				+ telNumber + " "
-				+ faxNumber + " ";
-	}
-	
-	
+    @Override
+    public int getDepartmentCode() {
+        return departmentCode;
+    }
+
+    @Override
+    public void setDepartmentCode(int departmentCode) {
+        this.departmentCode = departmentCode;
+    }
+
+    @Override
+    public IntegerProperty departmentCodeProperty() {
+        return null;
+    }
+
+    @Override
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    @Override
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    @Override
+    public StringProperty departmentNameProperty() {
+        return null;
+    }
+
+    @Override
+    public String getPostcode() {
+        return postcode;
+    }
+
+    @Override
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    @Override
+    public StringProperty postcodeProperty() {
+        return null;
+    }
+
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
+    @Override
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public StringProperty addressProperty() {
+        return null;
+    }
+
+    @Override
+    public String getTelNumber() {
+        return telNumber;
+    }
+
+    @Override
+    public void setTelNumber(String telNumber) {
+        this.telNumber = telNumber;
+    }
+
+    @Override
+    public StringProperty telNumberProperty() {
+        return null;
+    }
+
+    @Override
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+
+    @Override
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
+    }
+
+    @Override
+    public StringProperty faxNumberProperty() {
+        return null;
+    }
+
+    @Override
+    public boolean saveNewData(LoginInfo login) {
+        return false;
+    }
+
+    @Override
+    public void saveEditedData(LoginInfo login) {
+
+    }
 }

@@ -48,6 +48,26 @@ public class WindowManager {
         }
     }
 
+    public void setDepartmentOverview() {
+        try {
+            // Load department overview
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.DEPARTMENT_OVERVIEW);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            AnchorPane departmentOverview = loader.load();
+
+            // Set unit overview into the center of root layout.
+            rootLayout.setCenter(departmentOverview);
+
+            // Give the controller set on the primary stage.
+            DepartmentOverviewController controller = loader.getController();
+            controller.setOwnerStage(primaryStage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setUnitOverview() {
         try {
             // Load unit overview

@@ -23,7 +23,8 @@ public class Main extends Application {
 
             // Show the unit overview.
             //win.setUnitOverview();
-            win.setProductOverview();
+            //win.setProductOverview();
+            win.setDepartmentOverview();
 
             win.show();
         } catch (Exception e) {
