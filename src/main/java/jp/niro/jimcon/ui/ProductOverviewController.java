@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.data.Product;
 import jp.niro.jimcon.data.Products;
@@ -121,12 +122,10 @@ public class ProductOverviewController {
 
         } else {
             // Nothing selected.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(ownerStage);
-            alert.setTitle(Constant.ErrorMessages.Title.NO_SELECTION_PRODUCT_CODE);
-            alert.setHeaderText(Constant.ErrorMessages.User.NO_SELECTION_PRODUCT_CODE);
-
-            alert.showAndWait();
+            Commons.showWarningAlert(Constant.ErrorMessages.Title.NO_SELECTION_PRODUCT_CODE,
+                    Constant.ErrorMessages.Product.NO_SELECTION,
+                    "",
+                    true);
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
@@ -180,7 +179,7 @@ public class ProductOverviewController {
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.EDIT_PRODUCT);
+            dialogStage.setTitle(Constant.Dialogs.Title.PRODUCT_EDIT);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 

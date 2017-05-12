@@ -1,21 +1,20 @@
 package jp.niro.jimcon.data;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import jp.niro.jimcon.sql.ColumnNameList;
 import jp.niro.jimcon.sql.LoginInfo;
 import jp.niro.jimcon.sql.QueryBuilder;
 import jp.niro.jimcon.sql.SQL;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by niro on 2017/05/08.
  */
 public class Departments {
-    Map<Integer, Department> departmentMap = new HashMap<>();
+    private ObservableList<Department> observableList = FXCollections.observableArrayList();
 
-    public Map<Integer, Department> getDepartmentMap() {
-        return departmentMap;
+    public ObservableList<Department> getObservableList() {
+        return observableList;
     }
 
     public void loadDepartments(LoginInfo login) {
@@ -26,21 +25,25 @@ public class Departments {
             String querySelect = QueryBuilder.create()
                     .select(ColumnNameList.create()
                             .add(Department.DEPARTMENT_CODE)
-                            .add(Department.DEPARTMENT_NAME))
+                            .add(Department.DEPARTMENT_NAME)
+                            .add(Department.POSTCODE)
+                            .add(Department.ADDRESS)
+                            .add(Department.TEL_NUMBER)
+                            .add(Department.FAX_NUMBER))
                     .from(Department.TABLE_NAME)
-                    .orderByASC(Department.DEPARTMENT_CODE).terminate();
+                    .orderByASC(Department.DEPARTMENT_CODE)
+                    .terminate();
 
 
             sql.preparedStatement(querySelect);
             sql.executeQuery();
             // データリストを空にしてから、Selectの結果を追加する。
-            departmentMap.clear();
-            Department department = null;
+            observableList.clear();
+
+            DepartmentFactory departmentFactory = DepartmentFactory.getInstance();
+            ;
             while (sql.next()) {
-                department = new Department();
-                department.setDepartmentCode(sql.getResultSet().getInt(Department.DEPARTMENT_CODE));
-                department.setDepartmentName(sql.getResultSet().getString(Department.DEPARTMENT_NAME));
-                departmentMap.put(department.getDepartmentCode(), department);
+                observableList.add(departmentFactory.getDepartment(sql.getResultSet().getInt(Department.DEPARTMENT_CODE)));
             }
 
         } catch (Exception e) {
@@ -50,5 +53,9 @@ public class Departments {
         if (sql != null) {
             sql.close();
         }
+    }
+
+    public void saveDepartments(LoginInfo login) {
+
     }
 }

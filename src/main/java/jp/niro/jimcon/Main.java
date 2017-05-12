@@ -21,10 +21,12 @@ public class Main extends Application {
             // Show the root layout.
             win.initRootLayout();
 
+            win.setMenu();
+
             // Show the unit overview.
             //win.setUnitOverview();
             //win.setProductOverview();
-            win.setDepartmentOverview();
+            //win.setDepartmentOverview();
 
             win.show();
         } catch (Exception e) {

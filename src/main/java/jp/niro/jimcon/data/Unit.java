@@ -4,8 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.Alert;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.sql.DataPairList;
 import jp.niro.jimcon.sql.LoginInfo;
@@ -26,6 +26,9 @@ public class Unit {
     private final IntegerProperty unitCode;
     private final StringProperty unitName;
 
+    // TODO: テスト用、後で消す。
+    private static int count;
+
     public Unit() {
         this(0, "");
     }
@@ -33,6 +36,9 @@ public class Unit {
     public Unit(int unitCode, String unitName) {
         this.unitCode = new SimpleIntegerProperty(unitCode);
         this.unitName = new SimpleStringProperty(unitName);
+
+        // TODO: テスト用、後で消す。
+        System.out.println("Unit: " + count++);
     }
 
     public static Unit create(LoginInfo login, int unitCodePK) {
@@ -99,13 +105,13 @@ public class Unit {
                     .terminate());
             sql.executeQuery();
 
-            // レコードが存在する時、エラーメッセージを表示する。
-            if (sql.getResultSet().next()) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle(Constant.ErrorMessages.Title.DUPLICATED_UNIT_CODE);
-                alert.setHeaderText(Constant.ErrorMessages.User.UNIT_CODE_DUPLICATED);
-
-                alert.showAndWait();
+            // レコードが既に存在する場合、エラーメッセージを表示する。
+            if (sql.next()) {
+                Commons.showWarningAlert(
+                        Constant.ErrorMessages.Title.DUPLICATED_UNIT_CODE,
+                        Constant.ErrorMessages.Unit.UNIT_CODE_DUPLICATED,
+                        "",
+                        true);
             } else {
                 // Save new data
                 sql.preparedStatement(QueryBuilder.create()

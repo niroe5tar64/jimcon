@@ -129,7 +129,7 @@ public class ProductEditDialogController implements UnitSearchable {
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.EDIT_PRODUCT);
+            dialogStage.setTitle(Constant.Dialogs.Title.PRODUCT_EDIT);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 
@@ -181,20 +181,20 @@ public class ProductEditDialogController implements UnitSearchable {
         StringBuilder errorMessage = new StringBuilder();
 
         if (Validator.isEmpty(productCodeField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.User.PRODUCT_CODE_IS_EMPTY);
+            errorMessage.append(Constant.ErrorMessages.Product.PRODUCT_CODE_IS_EMPTY);
         }
 
         try {
             int productCode = Integer.parseInt(productCodeField.getText());
             if (Validator.isNotEqual(productCodeField.getLength(), Constant.System.PRODUCT_CODE_DIGITS)) {
-                errorMessage.append(Constant.ErrorMessages.User.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
+                errorMessage.append(Constant.ErrorMessages.Product.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
             }
         } catch (NumberFormatException e) {
-            errorMessage.append(Constant.ErrorMessages.User.PRODUCT_CODE_IS_NOT_INTEGER);
+            errorMessage.append(Constant.ErrorMessages.Product.PRODUCT_CODE_IS_NOT_INTEGER);
         }
 
         if (Validator.isEmpty(unitCodeField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_EMPTY);
+            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_EMPTY);
         }
 
         if (Validator.isEmpty(errorMessage.toString())) {
@@ -217,14 +217,14 @@ public class ProductEditDialogController implements UnitSearchable {
             // unitCodeFieldに入力されたデータがDBに保存されているかどうか
             tempUnit = Unit.create(LoginInfo.create(), unitCodePK);
             if (Validator.isNull(tempUnit)) {
-                errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
+                errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
             }
             if (Validator.isNotInRange(unitCodePK, 0, 255)) {
-                errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_IN_RANGE);
+                errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_IN_RANGE);
             }
 
         } catch (NumberFormatException e) {
-            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_INTEGER);
+            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_INTEGER);
         }
 
         if (Validator.isNotEmpty(errorMessage.toString())) {

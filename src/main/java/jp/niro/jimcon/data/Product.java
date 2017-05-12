@@ -49,6 +49,9 @@ public class Product {
     private final BooleanProperty processed;
     private final BooleanProperty deleted;
 
+    // TODO: テスト用、後で消す。
+    private static int count;
+
     public Product() {
         this(
                 "0000000000",
@@ -95,6 +98,9 @@ public class Product {
         this.memo = new SimpleStringProperty(memo);
         this.processed = new SimpleBooleanProperty(processed);
         this.deleted = new SimpleBooleanProperty(deleted);
+
+        // TODO: テスト用、後で消す。
+        System.out.println("Product: " + count++);
     }
 
     public Product(String productCode,
@@ -218,7 +224,7 @@ public class Product {
     }
 
     public void setUnit(int unitCode, String unitName) {
-        this.setUnit(new Unit(unitCode,unitName));
+        this.setUnit(new Unit(unitCode, unitName));
     }
 
     public ObjectProperty unitProperty() {
@@ -334,7 +340,7 @@ public class Product {
             if (sql.getResultSet().next()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle(Constant.ErrorMessages.Title.DUPLICATED_PRODUCT_CODE);
-                alert.setHeaderText(Constant.ErrorMessages.User.PRODUCT_CODE_DUPLICATED);
+                alert.setHeaderText(Constant.ErrorMessages.Product.PRODUCT_CODE_DUPLICATED);
 
                 alert.showAndWait();
             } else {

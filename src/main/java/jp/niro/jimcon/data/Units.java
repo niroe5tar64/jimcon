@@ -114,7 +114,7 @@ public class Units {
                 .terminate());
         sql.executeQuery();
 
-        List<Unit> list = new ArrayList();
+        List<Unit> list = new ArrayList<>();
         for (Unit unit : unitsData) {
             unit.setUnitCode(sql.getResultSet().getInt(Unit.UNIT_CODE));
             unit.setUnitName(sql.getResultSet().getString(Unit.UNIT_NAME));

@@ -18,4 +18,16 @@ public class Commons {
             alert.show();
         }
     }
+    public static void showWarningAlert(String title, String headerText, String errorMessage, boolean wait) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(errorMessage);
+
+        if (wait){
+            alert.showAndWait();
+        } else {
+            alert.show();
+        }
+    }
 }

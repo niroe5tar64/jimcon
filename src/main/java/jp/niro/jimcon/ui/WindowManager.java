@@ -48,6 +48,27 @@ public class WindowManager {
         }
     }
 
+    public void setMenu() {
+        try {
+            // Load menu
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.MENU);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            AnchorPane menu = loader.load();
+
+            // Set unit overview into the center of root layout.
+            rootLayout.setCenter(menu);
+
+            // Give the controller set on the primary stage.
+            MenuController controller = loader.getController();
+            controller.setRootLayout(rootLayout);
+            controller.setPrimaryStage(primaryStage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setDepartmentOverview() {
         try {
             // Load department overview

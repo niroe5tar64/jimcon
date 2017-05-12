@@ -41,10 +41,27 @@ public class Validator {
         return !isEqual(actual, expect);
     }
 
-    public static boolean isNull(Object object){
+    public static boolean isGreaterThan(int a, int b) {
+        return a > b;
+    }
+
+    public static boolean isLessThan(int a, int b) {
+        return a < b;
+    }
+
+    public static boolean isGreaterThanOrEqualTo(int a, int b) {
+        return a >= b;
+    }
+
+    public static boolean isLessThanOrEqualTo(int a, int b) {
+        return a <= b;
+    }
+
+    public static boolean isNull(Object object) {
         return object == null;
     }
-    public static boolean isNotNull(Object object){
+
+    public static boolean isNotNull(Object object) {
         return object != null;
     }
 }

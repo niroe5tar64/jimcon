@@ -3,13 +3,13 @@ package jp.niro.jimcon.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.data.Unit;
 import jp.niro.jimcon.data.Units;
@@ -89,12 +89,12 @@ public class UnitOverviewController {
 
         } else {
             // Nothing selected.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(ownerStage);
-            alert.setTitle(Constant.ErrorMessages.Title.NO_SELECTION_UNIT_CODE);
-            alert.setHeaderText(Constant.ErrorMessages.User.NO_SELECTION_UNIT_CODE);
-
-            alert.showAndWait();
+            Commons.showWarningAlert(
+                    Constant.ErrorMessages.Title.NO_SELECTION_UNIT_CODE,
+                    Constant.ErrorMessages.Unit.NO_SELECTION,
+                    "",
+                    true
+            );
         }
         showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
     }
@@ -102,12 +102,12 @@ public class UnitOverviewController {
     @FXML
     private void handleDeleteUnit() {
         // Don't delete.
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(ownerStage);
-        alert.setTitle("Don't delete.");
-        alert.setHeaderText("単位を削除する場合は管理者に問い合わせて下さい。");
-
-        alert.showAndWait();
+        Commons.showWarningAlert(
+                Constant.ErrorMessages.Title.DO_NOT_DELETE,
+                Constant.ErrorMessages.Unit.DO_NOT_DELETE,
+                "",
+                true
+        );
     }
 
     private void showUnitDetails(Unit unit) {
@@ -130,7 +130,7 @@ public class UnitOverviewController {
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.EDIT_UNIT);
+            dialogStage.setTitle(Constant.Dialogs.Title.UNIT_EDIT);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 

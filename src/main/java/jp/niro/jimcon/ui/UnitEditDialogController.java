@@ -69,23 +69,27 @@ public class UnitEditDialogController {
         StringBuilder errorMessage = new StringBuilder();
 
         if (Validator.isEmpty(unitCodeField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_EMPTY);
+            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_EMPTY);
         }
 
         try {
             int unitCode = Integer.parseInt(unitCodeField.getText());
             if (Validator.isNotInRange(unitCode, 0, 255)) {
-                errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_IN_RANGE);
+                errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_IN_RANGE);
             }
         } catch (NumberFormatException e) {
-            errorMessage.append(Constant.ErrorMessages.User.UNIT_CODE_IS_NOT_INTEGER);
+            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_INTEGER);
         }
 
         if (Validator.isEmpty(unitNameField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.User.UNIT_NAME_IS_EMPTY);
+            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_NAME_IS_EMPTY);
         }
 
-        if (errorMessage.length() == 0) {
+        if (Validator.isGreaterThan(unitNameField.getLength(), Constant.System.UNIT_NAME_LENGTH)) {
+            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_NAME_IS_TOO_LONG);
+        }
+
+        if (Validator.isEmpty(errorMessage.toString())) {
             return true;
         } else {
             Commons.showErrorAlert(
@@ -93,8 +97,8 @@ public class UnitEditDialogController {
                     Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
                     errorMessage.toString(),
                     true);
-            return false;
         }
+        return false;
     }
 
 }
