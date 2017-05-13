@@ -12,6 +12,7 @@ import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.data.Product;
 import jp.niro.jimcon.data.Unit;
+import jp.niro.jimcon.data.UnitFactory;
 import jp.niro.jimcon.sql.LoginInfo;
 
 import java.io.IOException;
@@ -215,8 +216,8 @@ public class ProductEditDialogController implements UnitSearchable {
         try {
             int unitCodePK = Integer.parseInt(unitCodeField.getText());
             // unitCodeFieldに入力されたデータがDBに保存されているかどうか
-            tempUnit = Unit.create(LoginInfo.create(), unitCodePK);
-            if (Validator.isNull(tempUnit)) {
+            tempUnit = UnitFactory.getInstance().getUnit(LoginInfo.create(), unitCodePK);
+            if (Validator.isEqual(tempUnit, Unit.NULL_UNIT)) {
                 errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
             }
             if (Validator.isNotInRange(unitCodePK, 0, 255)) {

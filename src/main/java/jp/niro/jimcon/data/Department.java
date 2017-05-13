@@ -56,8 +56,8 @@ public class Department {
         this.faxNumber = new SimpleStringProperty(faxNumber);
     }
 
-    public Department(LoginInfo login, int departmentCode) {
-        this();
+    public static Department create(LoginInfo login, int departmentCodePK) {
+        Department department = new Department();
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
@@ -70,21 +70,23 @@ public class Department {
                             .add(Department.TEL_NUMBER)
                             .add(Department.FAX_NUMBER))
                     .from(Department.TABLE_NAME)
-                    .where(Department.DEPARTMENT_CODE).isEqualTo(departmentCode)
+                    .where(Department.DEPARTMENT_CODE).isEqualTo(departmentCodePK)
                     .terminate());
             sql.executeQuery();
 
             if (sql.next()) {
-                setDepartmentCode(departmentCode);
-                setDepartmentName(sql.getResultSet().getString(Department.DEPARTMENT_NAME));
-                setPostcode(sql.getResultSet().getString(Department.POSTCODE));
-                setAddress(sql.getResultSet().getString(Department.ADDRESS));
-                setTelNumber(sql.getResultSet().getString(Department.TEL_NUMBER));
-                setFaxNumber(sql.getResultSet().getString(Department.FAX_NUMBER));
+                department.departmentCode.set(departmentCodePK);
+                department.departmentName.set(sql.getString(Department.DEPARTMENT_NAME));
+                department.postcode.set(sql.getString(Department.POSTCODE));
+                department.address.set(sql.getString(Department.ADDRESS));
+                department.telNumber.set(sql.getString(Department.TEL_NUMBER));
+                department.faxNumber.set(sql.getString(Department.FAX_NUMBER));
+                return department;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public int getDepartmentCode() {

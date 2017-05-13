@@ -23,8 +23,57 @@ public class SQL {
     public String getString(String columnName) throws SQLException {
         return this.resultSet.getString(columnName);
     }
+
     public String getString(int columnIndex) throws SQLException {
         return this.resultSet.getString(columnIndex);
+    }
+
+    public int getInt(String columnName) throws SQLException {
+        return this.resultSet.getInt(columnName);
+    }
+
+    public int getInt(int columnIndex) throws SQLException {
+        return this.resultSet.getInt(columnIndex);
+    }
+
+    public double getDouble(String columnName) throws SQLException {
+        return this.resultSet.getDouble(columnName);
+    }
+
+    public double getDouble(int columnIndex) throws SQLException {
+        return this.resultSet.getDouble(columnIndex);
+    }
+
+    public Boolean getBoolean(String columnName) throws SQLException {
+        return this.resultSet.getBoolean(columnName);
+    }
+
+    public Boolean getBoolean(int columnIndex) throws SQLException {
+        return this.resultSet.getBoolean(columnIndex);
+    }
+
+    public void setString(int parameterIndex, String x) throws SQLException {
+        preparedStatement.setString(parameterIndex, x);
+    }
+
+    public void setInt(int parameterIndex, int x) throws SQLException {
+        preparedStatement.setInt(parameterIndex, x);
+    }
+
+    public void setDouble(int parameterIndex, double x) throws SQLException {
+        preparedStatement.setDouble(parameterIndex, x);
+    }
+
+    public void setBoolean(int parameterIndex, boolean x) throws SQLException {
+        preparedStatement.setBoolean(parameterIndex, x);
+    }
+
+    public void setDate(int parameterIndex, Date x) throws SQLException {
+        preparedStatement.setDate(parameterIndex, x);
+    }
+
+    public void setObject(int parameterIndex, Object x) throws SQLException {
+        preparedStatement.setObject(parameterIndex, x);
     }
 
     public PreparedStatement getPreparedStatement() {

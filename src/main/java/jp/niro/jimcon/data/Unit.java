@@ -26,6 +26,8 @@ public class Unit {
     private final IntegerProperty unitCode;
     private final StringProperty unitName;
 
+    public static final Unit NULL_UNIT = new Unit(-1,"");
+
     // TODO: テスト用、後で消す。
     private static int count;
 
@@ -54,15 +56,15 @@ public class Unit {
                     .terminate());
             sql.executeQuery();
 
-            if (sql.getResultSet().next()) {
+            if (sql.next()) {
                 unit.unitCode.set(unitCodePK);
-                unit.unitName.set(sql.getResultSet().getString(Unit.UNIT_NAME));
+                unit.unitName.set(sql.getString(Unit.UNIT_NAME));
                 return unit;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return Unit.NULL_UNIT;
     }
 
     // The getter and setter of "unitCode"
@@ -142,7 +144,7 @@ public class Unit {
             sql.executeQuery();
 
             // レコードが存在するならば、更新する。
-            if (sql.getResultSet().next()) {
+            if (sql.next()) {
                 // Save update data.
                 sql.preparedStatement(QueryBuilder.create()
                         .update(Unit.TABLE_NAME,

@@ -4,10 +4,7 @@ import javafx.beans.property.*;
 import javafx.scene.control.Alert;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.sql.DataPairList;
-import jp.niro.jimcon.sql.LoginInfo;
-import jp.niro.jimcon.sql.QueryBuilder;
-import jp.niro.jimcon.sql.SQL;
+import jp.niro.jimcon.sql.*;
 
 import java.sql.SQLException;
 
@@ -60,7 +57,7 @@ public class Product {
                 "",
                 "",
                 0.00,
-                0, "",
+                LoginInfo.create(), 0,
                 0.00,
                 0.00,
                 0.000,
@@ -109,7 +106,7 @@ public class Product {
                    String modelNumber,
                    String anotherName,
                    double catalogPrice,
-                   int unitCode, String unitName,
+                   LoginInfo login, int unitCode,
                    double standardUnitPrice,
                    double stockQuantity,
                    double cuttingConstant,
@@ -125,7 +122,7 @@ public class Product {
                 modelNumber,
                 anotherName,
                 catalogPrice,
-                new Unit(unitCode, unitName),
+                UnitFactory.getInstance().getUnit(login, unitCode),
                 standardUnitPrice,
                 stockQuantity,
                 cuttingConstant,
@@ -133,6 +130,57 @@ public class Product {
                 memo,
                 processed,
                 deleted);
+    }
+
+    public static Product create(LoginInfo login, String productCodePK) {
+        Product product = new Product();
+        SQL sql = null;
+        try {
+            sql = new SQL(login.getConnection());
+
+            sql.preparedStatement(QueryBuilder.create()
+                    .select(ColumnNameList.create()
+                            .add(Product.PRODUCT_CODE)
+                            .add(Product.PRODUCT_NAME)
+                            .add(Product.SIZE_COLOR)
+                            .add(Product.MODEL_NUMBER)
+                            .add(Product.ANOTHER_NAME)
+                            .add(Product.CATALOG_PRICE)
+                            .add(Product.UNIT_CODE)
+                            .add(Product.STANDARD_UNIT_PRICE)
+                            .add(Product.STOCK_QUANTITY)
+                            .add(Product.CUTTING_CONSTANT)
+                            .add(Product.FUNCTION_CONSTANT)
+                            .add(Product.MEMO)
+                            .add(Product.PROCESSED)
+                            .add(Product.DELETED))
+                    .from(Product.TABLE_NAME)
+                    .where(Product.PRODUCT_CODE).isEqualTo(productCodePK)
+                    .terminate());
+            sql.executeQuery();
+
+            if (sql.next()) {
+                product.productCode.set(productCodePK);
+                product.productName.set(sql.getString(Product.PRODUCT_NAME));
+                product.sizeColor.set(sql.getString(Product.SIZE_COLOR));
+                product.modelNumber.set(sql.getString(Product.MODEL_NUMBER));
+                product.anotherName.set(sql.getString(Product.ANOTHER_NAME));
+                product.catalogPrice.set(sql.getDouble(Product.CATALOG_PRICE));
+                product.unit.set(UnitFactory.getInstance().getUnit(LoginInfo.create(),
+                        sql.getInt(Product.UNIT_CODE)));
+                product.standardUnitPrice.set(sql.getDouble(Product.STANDARD_UNIT_PRICE));
+                product.stockQuantity.set(sql.getDouble(Product.STOCK_QUANTITY));
+                product.cuttingConstant.set(sql.getDouble(Product.CUTTING_CONSTANT));
+                product.functionConstant.set(sql.getDouble(Product.FUNCTION_CONSTANT));
+                product.memo.set(sql.getString(Product.MEMO));
+                product.processed.set(sql.getBoolean(Product.PROCESSED));
+                product.deleted.set(sql.getBoolean(Product.DELETED));
+                return product;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -337,7 +385,7 @@ public class Product {
             sql.executeQuery();
 
             // レコードが存在する時、エラーメッセージを表示する。
-            if (sql.getResultSet().next()) {
+            if (sql.next()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle(Constant.ErrorMessages.Title.DUPLICATED_PRODUCT_CODE);
                 alert.setHeaderText(Constant.ErrorMessages.Product.PRODUCT_CODE_DUPLICATED);
@@ -385,7 +433,7 @@ public class Product {
             sql.executeQuery();
 
             // レコードが存在するならば、更新する。
-            if (sql.getResultSet().next()) {
+            if (sql.next()) {
                 // Save update data.
                 sql.preparedStatement(QueryBuilder.create()
                         .update(Product.TABLE_NAME,

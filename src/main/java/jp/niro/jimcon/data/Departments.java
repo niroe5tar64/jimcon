@@ -40,10 +40,13 @@ public class Departments {
             // データリストを空にしてから、Selectの結果を追加する。
             observableList.clear();
 
-            DepartmentFactory departmentFactory = DepartmentFactory.getInstance();
-            ;
             while (sql.next()) {
-                observableList.add(departmentFactory.getDepartment(sql.getResultSet().getInt(Department.DEPARTMENT_CODE)));
+                observableList.add(
+                        DepartmentFactory.getInstance().getDepartment(
+                                LoginInfo.create(),
+                                sql.getInt(Department.DEPARTMENT_CODE)
+                        )
+                );
             }
 
         } catch (Exception e) {

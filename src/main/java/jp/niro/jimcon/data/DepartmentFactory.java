@@ -20,10 +20,10 @@ public class DepartmentFactory {
         return singleton;
     }
 
-    public synchronized Department getDepartment(int departmentCode) {
+    public synchronized Department getDepartment(LoginInfo login, int departmentCode) {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
         return pool.computeIfAbsent(departmentCode,
-                k -> new Department(LoginInfo.create(), departmentCode));
+                k -> Department.create(login, departmentCode));
     }
 
 }

@@ -25,12 +25,10 @@ public class Units {
             sql = new SQL(login.getConnection());
 
             String querySelect = QueryBuilder.create()
-                    .select(ColumnNameList.create()
-                            .add(Unit.UNIT_CODE)
-                            .add(Unit.UNIT_NAME))
+                    .select(Unit.UNIT_CODE)
                     .from(Unit.TABLE_NAME)
-                    .orderByASC(Unit.UNIT_CODE).terminate();
-
+                    .orderByASC(Unit.UNIT_CODE)
+                    .terminate();
 
             sql.preparedStatement(querySelect);
             sql.executeQuery();
@@ -38,9 +36,8 @@ public class Units {
             unitsData.clear();
             Unit unit = null;
             while (sql.next()) {
-                unit = new Unit();
-                unit.setUnitCode(sql.getResultSet().getInt(Unit.UNIT_CODE));
-                unit.setUnitName(sql.getResultSet().getString(Unit.UNIT_NAME));
+                unit = UnitFactory.getInstance().getUnit(LoginInfo.create(),
+                        sql.getInt(Unit.UNIT_CODE));
                 unitsData.add(unit);
             }
 
@@ -58,8 +55,7 @@ public class Units {
         try {
             sql = new SQL(login.getConnection());
 
-            sql.
-                    beginTransaction();
+            sql.beginTransaction();
 
             ValueList valuelist = ValueList.create();
             for (Unit unit : storedList) {
@@ -80,8 +76,8 @@ public class Units {
                     .terminate());
 
             for (Unit unit : unitsData) {
-                sql.getPreparedStatement().setInt(1, unit.getUnitCode());
-                sql.getPreparedStatement().setString(2, unit.getUnitName());
+                sql.setInt(1, unit.getUnitCode());
+                sql.setString(2, unit.getUnitName());
                 sql.executeUpdate();
             }
 
@@ -116,8 +112,8 @@ public class Units {
 
         List<Unit> list = new ArrayList<>();
         for (Unit unit : unitsData) {
-            unit.setUnitCode(sql.getResultSet().getInt(Unit.UNIT_CODE));
-            unit.setUnitName(sql.getResultSet().getString(Unit.UNIT_NAME));
+            unit.setUnitCode(sql.getInt(Unit.UNIT_CODE));
+            unit.setUnitName(sql.getString(Unit.UNIT_NAME));
 
             list.add(unit);
         }

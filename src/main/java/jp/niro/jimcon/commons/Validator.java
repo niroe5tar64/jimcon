@@ -64,4 +64,12 @@ public class Validator {
     public static boolean isNotNull(Object object) {
         return object != null;
     }
+
+    public static boolean isEqual(Object actual, Object expect) {
+        return actual == expect;
+    }
+
+    public static boolean isNotEqual(Object actual, Object expect) {
+        return !isEqual(actual, expect);
+    }
 }

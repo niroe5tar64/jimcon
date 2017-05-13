@@ -293,12 +293,12 @@ public class MainApp extends Application {
             sql.preparedStatement(query);
             
             for (Person person : personData) {
-                sql.getPreparedStatement().setString(1, person.getFirstName());
-                sql.getPreparedStatement().setString(2, person.getLastName());
-                sql.getPreparedStatement().setString(3, person.getStreet());
-                sql.getPreparedStatement().setInt(4, person.getPostalCode());
-                sql.getPreparedStatement().setString(5, person.getCity());
-                sql.getPreparedStatement().setDate(6,person.getBirthday().toDate());
+                sql.setString(1, person.getFirstName());
+                sql.setString(2, person.getLastName());
+                sql.setString(3, person.getStreet());
+                sql.setInt(4, person.getPostalCode());
+                sql.setString(5, person.getCity());
+                sql.setDate(6,person.getBirthday().toDate());
                 sql.executeUpdate();
 			}
 
