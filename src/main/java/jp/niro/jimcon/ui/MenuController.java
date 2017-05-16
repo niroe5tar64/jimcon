@@ -146,7 +146,7 @@ public class MenuController {
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。
-            ProductOverviewController controller = loader.getController();
+            ProductOverviewWithTagController controller = loader.getController();
             controller.setOwnerStage(dialogStage);
 
             dialogStage.showAndWait();

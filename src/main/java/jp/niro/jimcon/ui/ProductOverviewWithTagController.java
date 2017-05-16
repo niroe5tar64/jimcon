@@ -3,10 +3,7 @@ package jp.niro.jimcon.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -70,7 +67,7 @@ public class ProductOverviewWithTagController {
     @FXML
     private Label functionConstantLabel;
     @FXML
-    private Label memoLabel;
+    private TextArea memoArea;
     @FXML
     private CheckBox processedCheckBox;
     @FXML
@@ -151,7 +148,7 @@ public class ProductOverviewWithTagController {
             stockQuantityLabel.setText(Double.toString(product.getStockQuantity()));
             cuttingConstantLabel.setText(Double.toString(product.getCuttingConstant()));
             functionConstantLabel.setText(Double.toString(product.getFunctionConstant()));
-            memoLabel.setText(product.getMemo());
+            memoArea.setText(product.getMemo());
             processedCheckBox.setSelected(product.isProcessed());
             deletedCheckBox.setSelected(product.isDeleted());
         } else {
@@ -166,7 +163,7 @@ public class ProductOverviewWithTagController {
             stockQuantityLabel.setText("");
             cuttingConstantLabel.setText("");
             functionConstantLabel.setText("");
-            memoLabel.setText("");
+            memoArea.setText("");
             processedCheckBox.setSelected(false);
             deletedCheckBox.setSelected(false);
         }
@@ -190,7 +187,7 @@ public class ProductOverviewWithTagController {
             dialogStage.setScene(scene);
 
             // Set the Product into the controller.
-            ProductEditDialogController controller = loader.getController();
+            ProductEditDialogWithTagController controller = loader.getController();
             controller.setOwnerStage(dialogStage);
             controller.setProduct(product);
 
