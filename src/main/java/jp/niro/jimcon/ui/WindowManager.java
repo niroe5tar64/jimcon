@@ -2,8 +2,8 @@ package jp.niro.jimcon.ui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
 
@@ -54,7 +54,7 @@ public class WindowManager {
             URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.MENU);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane menu = loader.load();
+            Pane menu = loader.load();
 
             // Set unit overview into the center of root layout.
             rootLayout.setCenter(menu);
@@ -69,73 +69,8 @@ public class WindowManager {
         }
     }
 
-    public void setDepartmentOverview() {
-        try {
-            // Load department overview
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.DEPARTMENT_OVERVIEW);
-            FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane departmentOverview = loader.load();
-
-            // Set unit overview into the center of root layout.
-            rootLayout.setCenter(departmentOverview);
-
-            // Give the controller set on the primary stage.
-            DepartmentOverviewController controller = loader.getController();
-            controller.setOwnerStage(primaryStage);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setUnitOverview() {
-        try {
-            // Load unit overview
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_OVERVIEW);
-            FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane unitOverview = loader.load();
-
-            // Set unit overview into the center of root layout.
-            rootLayout.setCenter(unitOverview);
-
-            // Give the controller set on the primary stage.
-            UnitOverviewController controller = loader.getController();
-            controller.setOwnerStage(primaryStage);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setProductOverview() {
-        try {
-            // load product overview
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW);
-            FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane productOverview = loader.load();
-
-            // Set product overview into the center of root layout.
-            rootLayout.setCenter(productOverview);
-
-            // Give the controller set on the primary stage.
-            ProductOverviewController controller = loader.getController();
-            controller.setOwnerStage(primaryStage);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void show() {
         primaryStage.show();
     }
-
-    public void setResizable(boolean resizable){
-        primaryStage.setResizable(resizable);
-    }
-
 
 }

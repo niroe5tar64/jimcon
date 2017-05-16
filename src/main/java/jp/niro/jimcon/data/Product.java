@@ -46,9 +46,6 @@ public class Product {
     private final BooleanProperty processed;
     private final BooleanProperty deleted;
 
-    // TODO: テスト用、後で消す。
-    private static int count;
-
     public Product() {
         this(
                 "0000000000",
@@ -95,9 +92,6 @@ public class Product {
         this.memo = new SimpleStringProperty(memo);
         this.processed = new SimpleBooleanProperty(processed);
         this.deleted = new SimpleBooleanProperty(deleted);
-
-        // TODO: テスト用、後で消す。
-        System.out.println("Product: " + count++);
     }
 
     public Product(String productCode,
@@ -133,7 +127,6 @@ public class Product {
     }
 
     public static Product create(LoginInfo login, String productCodePK) {
-        Product product = new Product();
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
@@ -160,6 +153,7 @@ public class Product {
             sql.executeQuery();
 
             if (sql.next()) {
+                Product product = new Product();
                 product.productCode.set(productCodePK);
                 product.productName.set(sql.getString(Product.PRODUCT_NAME));
                 product.sizeColor.set(sql.getString(Product.SIZE_COLOR));
@@ -377,15 +371,8 @@ public class Product {
         try {
             sql = new SQL(login.getConnection());
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(Product.PRODUCT_CODE)
-                    .from(Product.TABLE_NAME)
-                    .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
-                    .terminate());
-            sql.executeQuery();
-
             // レコードが存在する時、エラーメッセージを表示する。
-            if (sql.next()) {
+            if (isExisted(login)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle(Constant.ErrorMessages.Title.DUPLICATED_PRODUCT_CODE);
                 alert.setHeaderText(Constant.ErrorMessages.Product.PRODUCT_CODE_DUPLICATED);
@@ -425,15 +412,8 @@ public class Product {
         try {
             sql = new SQL(login.getConnection());
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(Product.PRODUCT_CODE)
-                    .from(Product.TABLE_NAME)
-                    .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
-                    .terminate());
-            sql.executeQuery();
-
             // レコードが存在するならば、更新する。
-            if (sql.next()) {
+            if (isExisted(login)) {
                 // Save update data.
                 sql.preparedStatement(QueryBuilder.create()
                         .update(Product.TABLE_NAME,
@@ -458,5 +438,18 @@ public class Product {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Boolean isExisted(LoginInfo login) throws SQLException {
+        SQL sql = new SQL(login.getConnection());
+
+        sql.preparedStatement(QueryBuilder.create()
+                .select(Product.PRODUCT_CODE)
+                .from(Product.TABLE_NAME)
+                .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
+                .terminate());
+        sql.executeQuery();
+
+        return sql.next();
     }
 }

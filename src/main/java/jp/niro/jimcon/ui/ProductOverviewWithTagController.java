@@ -3,7 +3,10 @@ package jp.niro.jimcon.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,7 +22,7 @@ import java.net.URL;
 /**
  * Created by niro on 2017/04/21.
  */
-public class ProductOverviewController {
+public class ProductOverviewWithTagController {
     private Products products = new Products();
     private Stage ownerStage;
 
@@ -172,7 +175,7 @@ public class ProductOverviewController {
     private boolean showProductEditDialog(Product product, boolean isNew) {
         try {
             // load the fxml file and create a new stage for the pup-up dialog.
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_EDIT_DIALOG);
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_EDIT_DIALOG_WITH_TAG);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
             AnchorPane pane = loader.load();
@@ -204,3 +207,4 @@ public class ProductOverviewController {
         return false;
     }
 }
+

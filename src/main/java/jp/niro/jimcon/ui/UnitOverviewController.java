@@ -46,7 +46,7 @@ public class UnitOverviewController {
 
     @FXML
     private void initialize() {
-        units.loadUnitsData(LoginInfo.create());
+        units.loadUnits(LoginInfo.create());
         unitTable.setItems(units.getUnits());
 
         unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
@@ -62,16 +62,16 @@ public class UnitOverviewController {
     @FXML
     private void handleNewUnit() {
         Unit tempUnit = new Unit();
-        boolean isSaved = false;
-        while (!isSaved) {
+        boolean isClosableDialog = false;
+        while (!isClosableDialog) {
             boolean okClicked = showUnitEditDialog(tempUnit, true);
             if (okClicked) {
                 // DBにデータ登録し、新規か否かの状態を取得する。
-                isSaved = tempUnit.saveNewData(LoginInfo.create());
+                isClosableDialog = tempUnit.saveNewData(LoginInfo.create());
                 // データテーブルをリロード
-                units.loadUnitsData(LoginInfo.create());
+                units.loadUnits(LoginInfo.create());
             } else {
-                isSaved = true;
+                isClosableDialog = true;
             }
         }
         showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
@@ -84,7 +84,7 @@ public class UnitOverviewController {
             boolean okClicked = showUnitEditDialog(selectedUnit, false);
             if (okClicked) {
                 selectedUnit.saveEditedData(LoginInfo.create());
-                units.loadUnitsData(LoginInfo.create());
+                units.loadUnits(LoginInfo.create());
             }
 
         } else {
@@ -150,8 +150,8 @@ public class UnitOverviewController {
             return controller.isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
 }

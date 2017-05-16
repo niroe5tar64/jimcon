@@ -11,10 +11,10 @@ import jp.niro.jimcon.sql.SQL;
  * Created by niro on 2017/05/08.
  */
 public class Departments {
-    private ObservableList<Department> observableList = FXCollections.observableArrayList();
+    private ObservableList<Department> departmentsData = FXCollections.observableArrayList();
 
     public ObservableList<Department> getObservableList() {
-        return observableList;
+        return departmentsData;
     }
 
     public void loadDepartments(LoginInfo login) {
@@ -38,10 +38,10 @@ public class Departments {
             sql.preparedStatement(querySelect);
             sql.executeQuery();
             // データリストを空にしてから、Selectの結果を追加する。
-            observableList.clear();
+            departmentsData.clear();
 
             while (sql.next()) {
-                observableList.add(
+                departmentsData.add(
                         DepartmentFactory.getInstance().getDepartment(
                                 LoginInfo.create(),
                                 sql.getInt(Department.DEPARTMENT_CODE)

@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Created by niro on 2017/04/17.
+ * Created by niro on 2017/05/16.
  */
-public class ProductEditDialogController implements UnitSearchable {
+public class ProductEditDialogWithTagController implements UnitSearchable {
 
     private Product product;
     private Stage ownerStage;

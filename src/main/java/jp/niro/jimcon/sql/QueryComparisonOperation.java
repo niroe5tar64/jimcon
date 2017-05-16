@@ -17,11 +17,11 @@ public class QueryComparisonOperation {
         this.builder = builder;
     }
 
-    private QueryBuilder set(String operator, String x) {
+    private QueryBuilder set(String operator, int x) {
         return new QueryBuilder(builder.append(operator).append(x));
     }
 
-    private QueryBuilder set(String operator, int x) {
+    private QueryBuilder set(String operator, long x) {
         return new QueryBuilder(builder.append(operator).append(x));
     }
 
@@ -29,7 +29,15 @@ public class QueryComparisonOperation {
         return new QueryBuilder(builder.append(operator).append(x));
     }
 
+    private QueryBuilder set(String operator, String x) {
+        return new QueryBuilder(builder.append(operator).append(x));
+    }
+
     public QueryBuilder isGreaterThanOrEqualTo(int x) {
+        return set(GREATER_THAN_OR_EQUAL_TO, x);
+    }
+
+    public QueryBuilder isGreaterThanOrEqualTo(long x) {
         return set(GREATER_THAN_OR_EQUAL_TO, x);
     }
 
@@ -45,6 +53,10 @@ public class QueryComparisonOperation {
         return set(GREATER_THAN, x);
     }
 
+    public QueryBuilder isGreaterThan(long x) {
+        return set(GREATER_THAN, x);
+    }
+
     public QueryBuilder isGreaterThan(double x) {
         return set(GREATER_THAN, x);
     }
@@ -57,6 +69,10 @@ public class QueryComparisonOperation {
         return set(LESS_THAN_OR_EQUAL_TO, x);
     }
 
+    public QueryBuilder isLessThanOrEqualTo(long x) {
+        return set(LESS_THAN_OR_EQUAL_TO, x);
+    }
+
     public QueryBuilder isLessThanOrEqualTo(double x) {
         return set(LESS_THAN_OR_EQUAL_TO, x);
     }
@@ -66,6 +82,10 @@ public class QueryComparisonOperation {
     }
 
     public QueryBuilder isLessThan(int x) {
+        return set(LESS_THAN, x);
+    }
+
+    public QueryBuilder isLessThan(long x) {
         return set(LESS_THAN, x);
     }
 
@@ -82,6 +102,10 @@ public class QueryComparisonOperation {
         return set(EQUAL_TO, x);
     }
 
+    public QueryBuilder isEqualTo(long x) {
+        return set(EQUAL_TO, x);
+    }
+
     public QueryBuilder isEqualTo(double x) {
         return set(EQUAL_TO, x);
     }
@@ -90,15 +114,16 @@ public class QueryComparisonOperation {
         return set(EQUAL_TO, x);
     }
 
-    public QueryBuilder isTrue(){
+    public QueryBuilder isTrue() {
         return set(EQUAL_TO, "true");
     }
-    public QueryBuilder isFalse(){
+
+    public QueryBuilder isFalse() {
         return set(EQUAL_TO, "false");
     }
 
     public QueryBuilder in(ValueList list) {
-        return new QueryBuilder(builder.append(" IN ").append(list.enumerate(", ","(",")")));
+        return new QueryBuilder(builder.append(" IN ").append(list.enumerate(", ", "(", ")")));
     }
 
     public QueryBuilder between(int a, int b) {

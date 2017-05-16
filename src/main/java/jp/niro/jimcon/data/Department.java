@@ -25,8 +25,6 @@ public class Department {
     private final StringProperty address;
     private final StringProperty telNumber;
     private final StringProperty faxNumber;
-    // TODO: テスト用、後で消す。
-    private static int count;
 
     public Department() {
         this(
@@ -37,8 +35,6 @@ public class Department {
                 "",
                 ""
         );
-        // TODO: テスト用、後で消す。
-        System.out.println("Department: " + count++);
     }
 
     public Department(int departmentCode,

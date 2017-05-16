@@ -72,16 +72,16 @@ public class DepartmentOverviewController {
     @FXML
     private void handleNewDepartment() {
         Department tempDepartment = new Department();
-        boolean isSaved = false;
-        while (!isSaved) {
+        boolean isClosableDialog = false;
+        while (!isClosableDialog) {
             boolean okClicked = showDepartmentEditDialog(tempDepartment, true);
             if (okClicked) {
                 // DBにデータ登録し、新規か否かの状態を取得する。
-                isSaved = tempDepartment.saveNewData(LoginInfo.create());
+                isClosableDialog = tempDepartment.saveNewData(LoginInfo.create());
                 // データテーブルをリロード
                 departments.loadDepartments(LoginInfo.create());
             } else {
-                isSaved = true;
+                isClosableDialog = true;
             }
         }
         showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());

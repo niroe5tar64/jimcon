@@ -36,6 +36,14 @@ public class SQL {
         return this.resultSet.getInt(columnIndex);
     }
 
+    public long getLong(String columnName) throws SQLException {
+        return this.resultSet.getInt(columnName);
+    }
+
+    public long getLong(int columnIndex) throws SQLException {
+        return this.resultSet.getLong(columnIndex);
+    }
+
     public double getDouble(String columnName) throws SQLException {
         return this.resultSet.getDouble(columnName);
     }

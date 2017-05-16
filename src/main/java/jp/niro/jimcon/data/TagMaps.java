@@ -9,39 +9,37 @@ import jp.niro.jimcon.sql.SQL;
 import java.sql.SQLException;
 
 /**
- * Created by niro on 2017/04/22.
+ * Created by niro on 2017/05/14.
  */
-public class Products {
+public class TagMaps {
 
-    private ObservableList<Product> productsData = FXCollections.observableArrayList();
+    private ObservableList<TagMap> tagMapsData = FXCollections.observableArrayList();
 
-    public ObservableList<Product> getProducts() {
-        return productsData;
+    public ObservableList<TagMap> getTagMaps() {
+        return tagMapsData;
     }
 
-    public void loadProducts(LoginInfo login) {
+    public void loadTagMaps(LoginInfo login) {
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
 
-            // TODO rename querySelect
             String querySelect = QueryBuilder.create()
-                    .select(Product.PRODUCT_CODE)
-                    .from(Product.TABLE_NAME)
-                    .where(Product.DELETED).isFalse()
-                    .orderByASC(Product.PRODUCT_CODE)
+                    .select(TagMap.TAG_MAP_ID)
+                    .from(TagMap.TABLE_NAME)
+                    .where(TagMap.DELETED).isFalse()
+                    .orderByASC(TagMap.TAG_MAP_ID)
                     .terminate();
-
             sql.preparedStatement(querySelect);
             sql.executeQuery();
 
             // データリストを空にしてから、Selectの結果を追加する。
-            productsData.clear();
-            Product product = null;
+            tagMapsData.clear();
+            TagMap tagMap = null;
             while (sql.next()) {
-                product = ProductFactory.getInstance().getProduct(LoginInfo.create(),
-                        sql.getString(Product.PRODUCT_CODE));
-                productsData.add(product);
+                tagMap = TagMapFactory.getInstance().getTagMap(LoginInfo.create(),
+                        sql.getLong(TagMap.TAG_MAP_ID));
+                tagMapsData.add(tagMap);
             }
 
         } catch (SQLException e) {
@@ -52,5 +50,4 @@ public class Products {
             sql.close();
         }
     }
-
 }

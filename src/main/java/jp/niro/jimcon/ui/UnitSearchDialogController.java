@@ -45,7 +45,7 @@ public class UnitSearchDialogController {
     @FXML
     private void initialize() {
         // 単位ロード＆テーブルカラムにセット
-        units.loadUnitsData(LoginInfo.create());
+        units.loadUnits(LoginInfo.create());
         unitTable.setItems(units.getUnits());
 
         unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());

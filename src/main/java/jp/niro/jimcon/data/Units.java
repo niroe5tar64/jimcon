@@ -19,7 +19,7 @@ public class Units {
         return unitsData;
     }
 
-    public void loadUnitsData(LoginInfo login) {
+    public void loadUnits(LoginInfo login) {
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
@@ -50,7 +50,7 @@ public class Units {
         }
     }
 
-    public void saveUnitsData(LoginInfo login, ObservableList<Unit> storedList) {
+    public void saveUnits(LoginInfo login, ObservableList<Unit> storedList) {
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());

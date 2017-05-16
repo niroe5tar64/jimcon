@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
@@ -42,6 +43,8 @@ public class MenuController {
     private Button unitMasterButton;
     @FXML
     private Button productMasterButton;
+    @FXML
+    private Button tagMasterButton;
 
     @FXML
     private void initialize() {
@@ -61,6 +64,11 @@ public class MenuController {
     @FXML
     private void handleProductMaster() {
         showProductMaster();
+    }
+
+    @FXML
+    private void handleTagMaster() {
+        showTagMaster();
     }
 
     private void showDepartmentMaster() {
@@ -122,7 +130,8 @@ public class MenuController {
     private void showProductMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW);
+            //URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW);
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW_WITH_TAG);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
             AnchorPane pane = loader.load();
@@ -138,6 +147,34 @@ public class MenuController {
 
             // コントローラーをセットする。
             ProductOverviewController controller = loader.getController();
+            controller.setOwnerStage(dialogStage);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showTagMaster() {
+        try {
+            // FXMLファイルをPaneにロードする。
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.TAG_OVERVIEW);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            Pane pane = loader.load();
+
+            // Stageを新たに生成する。
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(Constant.Dialogs.Title.TAG_OVERVIEW);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // コントローラーをセットする。
+            TagOverviewController controller = loader.getController();
             controller.setOwnerStage(dialogStage);
 
             dialogStage.showAndWait();

@@ -26,11 +26,6 @@ public class Unit {
     private final IntegerProperty unitCode;
     private final StringProperty unitName;
 
-    public static final Unit NULL_UNIT = new Unit(-1,"");
-
-    // TODO: テスト用、後で消す。
-    private static int count;
-
     public Unit() {
         this(0, "");
     }
@@ -38,13 +33,9 @@ public class Unit {
     public Unit(int unitCode, String unitName) {
         this.unitCode = new SimpleIntegerProperty(unitCode);
         this.unitName = new SimpleStringProperty(unitName);
-
-        // TODO: テスト用、後で消す。
-        System.out.println("Unit: " + count++);
     }
 
     public static Unit create(LoginInfo login, int unitCodePK) {
-        Unit unit = new Unit();
         SQL sql = null;
         try {
             sql = new SQL(login.getConnection());
@@ -57,6 +48,7 @@ public class Unit {
             sql.executeQuery();
 
             if (sql.next()) {
+                Unit unit = new Unit();
                 unit.unitCode.set(unitCodePK);
                 unit.unitName.set(sql.getString(Unit.UNIT_NAME));
                 return unit;
@@ -64,7 +56,7 @@ public class Unit {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Unit.NULL_UNIT;
+        return null;
     }
 
     // The getter and setter of "unitCode"
@@ -100,15 +92,8 @@ public class Unit {
         try {
             sql = new SQL(login.getConnection());
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(Unit.UNIT_CODE)
-                    .from(Unit.TABLE_NAME)
-                    .where(Unit.UNIT_CODE).isEqualTo(unitCode.get())
-                    .terminate());
-            sql.executeQuery();
-
             // レコードが既に存在する場合、エラーメッセージを表示する。
-            if (sql.next()) {
+            if (isExisted(login)) {
                 Commons.showWarningAlert(
                         Constant.ErrorMessages.Title.DUPLICATED_UNIT_CODE,
                         Constant.ErrorMessages.Unit.UNIT_CODE_DUPLICATED,
@@ -136,15 +121,8 @@ public class Unit {
         try {
             sql = new SQL(login.getConnection());
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(Unit.UNIT_CODE)
-                    .from(Unit.TABLE_NAME)
-                    .where(Unit.UNIT_CODE).isEqualTo(getUnitCode())
-                    .terminate());
-            sql.executeQuery();
-
             // レコードが存在するならば、更新する。
-            if (sql.next()) {
+            if (isExisted(login)) {
                 // Save update data.
                 sql.preparedStatement(QueryBuilder.create()
                         .update(Unit.TABLE_NAME,
@@ -157,6 +135,19 @@ public class Unit {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Boolean isExisted(LoginInfo login) throws SQLException {
+        SQL sql = new SQL(login.getConnection());
+
+        sql.preparedStatement(QueryBuilder.create()
+                .select(Unit.UNIT_CODE)
+                .from(Unit.TABLE_NAME)
+                .where(Unit.UNIT_CODE).isEqualTo(getUnitCode())
+                .terminate());
+        sql.executeQuery();
+
+        return sql.next();
     }
 
 }

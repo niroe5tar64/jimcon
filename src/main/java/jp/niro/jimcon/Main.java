@@ -16,17 +16,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             win.setPrimaryStage(primaryStage);
-            win.getPrimaryStage().setTitle("テストテスト");
+            win.getPrimaryStage().setTitle("test menu");
 
             // Show the root layout.
             win.initRootLayout();
-
             win.setMenu();
-
-            // Show the unit overview.
-            //win.setUnitOverview();
-            //win.setProductOverview();
-            //win.setDepartmentOverview();
 
             win.show();
         } catch (Exception e) {
