@@ -2,6 +2,8 @@ package jp.niro.jimcon.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jp.niro.jimcon.commons.HashMapTable;
+import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.sql.LoginInfo;
 import jp.niro.jimcon.sql.QueryBuilder;
 import jp.niro.jimcon.sql.SQL;
@@ -13,9 +15,9 @@ import java.sql.SQLException;
  */
 public class TagMaps {
 
-    private ObservableList<TagMap> tagMapsData = FXCollections.observableArrayList();
+    private HashMapTable<Long, String, TagMap> tagMapsData = new HashMapTable<>();
 
-    public ObservableList<TagMap> getTagMaps() {
+    public HashMapTable<Long, String, TagMap> getTagMaps() {
         return tagMapsData;
     }
 
@@ -39,7 +41,7 @@ public class TagMaps {
             while (sql.next()) {
                 tagMap = TagMapFactory.getInstance().getTagMap(LoginInfo.create(),
                         sql.getLong(TagMap.TAG_MAP_ID));
-                tagMapsData.add(tagMap);
+                tagMapsData.put(tagMap.getTagId(), tagMap.getProductCode(), tagMap);
             }
 
         } catch (SQLException e) {
@@ -49,5 +51,21 @@ public class TagMaps {
         if (sql != null) {
             sql.close();
         }
+    }
+
+    public ObservableList<Tag> getTagsData(LoginInfo login, String productCode) {
+        ObservableList<Tag> tagsData = FXCollections.observableArrayList();
+        tagMapsData.getColumn(productCode).forEach((tagId, tagMap) -> {
+            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag(LoginInfo.create()));
+        });
+        return tagsData;
+    }
+
+    public ObservableList<Product> getProductsData(LoginInfo login, long tagId) {
+        ObservableList<Product> productsData = FXCollections.observableArrayList();
+        tagMapsData.getRow(tagId).forEach((productCode, tagMap) -> {
+            if (Validator.isNotNull(tagMap)) productsData.add(tagMap.getProduct(login));
+        });
+        return productsData;
     }
 }

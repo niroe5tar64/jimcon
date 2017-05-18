@@ -13,6 +13,7 @@ public class LoginInfo {
     private String user;
     private String password;
 
+    // TODO singletonを適用する事
     public static LoginInfo create() {
         return new LoginInfo(
                 "com.mysql.jdbc.Driver",

@@ -107,4 +107,12 @@ public class TagMap {
         return deleted;
     }
 
+    public Tag getTag(LoginInfo login){
+        return TagFactory.getInstance().getTag(login, getTagId());
+    }
+
+    public Product getProduct(LoginInfo login){
+        return ProductFactory.getInstance().getProduct(login, getProductCode());
+    }
+
 }

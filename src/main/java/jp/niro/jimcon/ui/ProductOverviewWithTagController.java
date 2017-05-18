@@ -7,10 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import jp.niro.jimcon.commons.Commons;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.data.Product;
 import jp.niro.jimcon.data.Products;
+import jp.niro.jimcon.data.Tag;
+import jp.niro.jimcon.data.TagMaps;
 import jp.niro.jimcon.sql.LoginInfo;
 
 import java.io.IOException;
@@ -21,6 +24,7 @@ import java.net.URL;
  */
 public class ProductOverviewWithTagController {
     private Products products = new Products();
+    private TagMaps tagMaps = new TagMaps();
     private Stage ownerStage;
 
     public Stage getOwnerStage() {
@@ -69,12 +73,15 @@ public class ProductOverviewWithTagController {
     @FXML
     private TextArea memoArea;
     @FXML
+    private ListView<Tag> tagList;
+    @FXML
     private CheckBox processedCheckBox;
     @FXML
     private CheckBox deletedCheckBox;
 
     @FXML
     private void initialize() {
+        // productTableの初期設定
         products.loadProducts(LoginInfo.create());
         productTable.setItems(products.getProducts());
 
@@ -83,6 +90,9 @@ public class ProductOverviewWithTagController {
         sizeColorColumn.setCellValueFactory(cellData -> cellData.getValue().sizeColorProperty());
         modelNumberColumn.setCellValueFactory(cellData -> cellData.getValue().modelNumberProperty());
         anotherNameColumn.setCellValueFactory(cellData -> cellData.getValue().anotherNameProperty());
+
+        // tagListの初期設定
+        tagMaps.loadTagMaps(LoginInfo.create());
 
         showProductDetails(null);
 
@@ -130,7 +140,6 @@ public class ProductOverviewWithTagController {
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
-
     @FXML
     private void handleDeleteProduct() {
     }
@@ -149,6 +158,13 @@ public class ProductOverviewWithTagController {
             cuttingConstantLabel.setText(Double.toString(product.getCuttingConstant()));
             functionConstantLabel.setText(Double.toString(product.getFunctionConstant()));
             memoArea.setText(product.getMemo());
+            tagList.setItems(tagMaps.getTagsData(LoginInfo.create(), product.getProductCode()));
+            tagList.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
+                @Override
+                public ListCell<Tag> call(ListView<Tag> arg0) {
+                    return new TagCell();
+                }
+            });
             processedCheckBox.setSelected(product.isProcessed());
             deletedCheckBox.setSelected(product.isDeleted());
         } else {
@@ -203,5 +219,14 @@ public class ProductOverviewWithTagController {
 
         return false;
     }
-}
 
+    private static class TagCell extends ListCell<Tag> {
+        @Override
+        protected void updateItem(Tag tag, boolean empty) {
+            super.updateItem(tag, empty);
+            if(!empty) {
+                setText(tag.getTagName());
+            }
+        }
+    }
+}

@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -21,7 +20,7 @@ public class MenuController {
     private BorderPane rootLayout;
     private Stage primaryStage;
 
-    public BorderPane getRootLayout(){
+    public BorderPane getRootLayout() {
         return rootLayout;
     }
 
@@ -48,7 +47,6 @@ public class MenuController {
 
     @FXML
     private void initialize() {
-
     }
 
     @FXML
@@ -77,7 +75,7 @@ public class MenuController {
             URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.DEPARTMENT_OVERVIEW);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane pane = loader.load();
+            Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
@@ -91,6 +89,7 @@ public class MenuController {
             // コントローラーをセットする。
             DepartmentOverviewController controller = loader.getController();
             controller.setOwnerStage(dialogStage);
+            dialogStage.setResizable(false);
 
             dialogStage.showAndWait();
 
@@ -105,13 +104,14 @@ public class MenuController {
             URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_OVERVIEW);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane pane = loader.load();
+            Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
             dialogStage.setTitle(Constant.Dialogs.Title.UNIT_OVERVIEW);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
+            dialogStage.setResizable(false);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
@@ -134,7 +134,7 @@ public class MenuController {
             URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW_WITH_TAG);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
-            AnchorPane pane = loader.load();
+            Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
@@ -169,6 +169,7 @@ public class MenuController {
             dialogStage.setTitle(Constant.Dialogs.Title.TAG_OVERVIEW);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
+            dialogStage.setResizable(false);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
@@ -183,5 +184,4 @@ public class MenuController {
             e.printStackTrace();
         }
     }
-
 }

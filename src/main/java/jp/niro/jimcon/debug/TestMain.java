@@ -17,25 +17,6 @@ public class TestMain {
 
         tags.loadTags(login);
         tagMaps.loadTagMaps(login);
-
-        tags.getTags().forEach(tag -> System.out.println(tag.getTagName()));
-        tagMaps.getTagMaps().forEach(tagMap -> {
-                    System.out.print(tagMap.getTagMapId() + " : ");
-                    System.out.print(TagFactory.getInstance().getTag(login, tagMap.getTagId()).getTagId() + " : ");
-                    System.out.print(TagFactory.getInstance().getTag(login, tagMap.getTagId()).getTagName());
-                    System.out.println();
-                }
-        );
-
-        tagMaps.getTagMaps().forEach(tagMap -> {
-                    System.out.print(tagMap.getProductCode() + " : ");
-                    System.out.print(ProductFactory.getInstance().getProduct(login, tagMap.getProductCode()).getProductName() + " : ");
-                    System.out.print(tagMap.getTagMapId() + " : ");
-                    System.out.print(TagFactory.getInstance().getTag(login, tagMap.getTagId()).getTagId() + " : ");
-                    System.out.print(TagFactory.getInstance().getTag(login, tagMap.getTagId()).getTagName());
-                    System.out.println();
-                }
-        );
     }
 
 
@@ -45,4 +26,6 @@ public class TestMain {
             System.out.println("<tr><td>" + key + "</td><td>" + System.getProperties().getProperty((String) key) + "</td></tr>");
         }
     }
+
+    
 }

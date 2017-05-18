@@ -13,6 +13,11 @@ public class Tags {
 
     private ObservableList<Tag> tagsData = FXCollections.observableArrayList();
 
+    public Tags(){}
+    public Tags(ObservableList<Tag> tagsData){
+        this.tagsData = tagsData;
+    }
+
     public ObservableList<Tag> getTags() {
         return tagsData;
     }
