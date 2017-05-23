@@ -1,10 +1,10 @@
 package jp.niro.jimcon.tutorial;
 
+import flowlistview.FlowListView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 
 /**
@@ -30,6 +30,10 @@ public class PersonOverviewController {
     private Label cityLabel;
     @FXML
     private Label birthdayLabel;
+    @FXML
+    private FlowListView<String> myFlowListController;
+    @FXML
+    private TextField nameField;
 
     // Reference to the main application.
     private MainApp mainApp;
@@ -40,6 +44,7 @@ public class PersonOverviewController {
 
     @FXML
     private void initialize() {
+
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
 
@@ -48,6 +53,21 @@ public class PersonOverviewController {
         personTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showPersonDetails(newValue)
         );
+
+
+
+        myFlowListController.selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> o, String old, String _new) {
+                if(_new != null) {
+                    nameField.setText(_new);
+                }
+            }});
+
+        myFlowListController.getItems().add("aaa");
+        myFlowListController.getItems().add("bbb");
+
+
     }
 
     @FXML

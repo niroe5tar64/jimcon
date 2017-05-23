@@ -83,5 +83,10 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.22</version>
         </dependency>
+        <dependency>
+            <groupId>andytill</groupId>
+            <artifactId>flow-list-view</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>
