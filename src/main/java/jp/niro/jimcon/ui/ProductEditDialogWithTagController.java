@@ -130,7 +130,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.PRODUCT_EDIT);
+            dialogStage.setTitle(Constant.Dialogs.Title.UNIT_SEARCH);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 

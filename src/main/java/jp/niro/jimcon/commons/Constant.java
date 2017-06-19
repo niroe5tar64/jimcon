@@ -15,6 +15,9 @@ public class Constant {
             public static final String PRODUCT_EDIT = "商品編集";
             public static final String UNIT_EDIT = "単位編集";
             public static final String TAG_EDIT = "タグ編集";
+            public static final String PRODUCT_SEARCH = "商品検索";
+            public static final String UNIT_SEARCH = "単位検索";
+            public static final String TAG_SEARCH = "タグ検索";
         }
     }
 
@@ -129,6 +132,7 @@ public class Constant {
             public static final String UNIT_SEARCH_DIALOG = "UnitSearchDialog.fxml";
             public static final String TAG_EDIT_DIALOG = "TagEditDialog.fxml";
             public static final String TAG_OVERVIEW = "TagOverview.fxml";
+            public static final String TAG_SEARCH_DIALOG = "TagSearchDialog.fxml";
 
             public static final String PRODUCT_EDIT_DIALOG_WITH_TAG = "ProductEditDialogWithTag.fxml";
             public static final String PRODUCT_OVERVIEW_WITH_TAG = "ProductOverviewWithTag.fxml";

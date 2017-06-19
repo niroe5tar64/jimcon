@@ -142,6 +142,7 @@ public class QueryComparisonOperation {
     }
 
     public QueryBuilder isLike(String x) {
-        return set(LIKE, x);
+        String xx = "'%" + x + "%'";
+        return set(LIKE, xx);
     }
 }

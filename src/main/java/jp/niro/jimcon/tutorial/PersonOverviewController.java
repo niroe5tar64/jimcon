@@ -1,10 +1,8 @@
 package jp.niro.jimcon.tutorial;
 
-import flowlistview.FlowListView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import jp.niro.jimcon.flowlistview.FlowListView;
 
 
 /**
@@ -56,13 +54,11 @@ public class PersonOverviewController {
 
 
 
-        myFlowListController.selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> o, String old, String _new) {
-                if(_new != null) {
-                    nameField.setText(_new);
-                }
-            }});
+        myFlowListController.selectedItemProperty().addListener((o, old, _new) -> {
+            if(_new != null) {
+                nameField.setText(_new);
+            }
+        });
 
         myFlowListController.getItems().add("aaa");
         myFlowListController.getItems().add("bbb");

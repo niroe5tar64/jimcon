@@ -7,24 +7,24 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Unit;
-import jp.niro.jimcon.data.Units;
+import jp.niro.jimcon.data.Tag;
+import jp.niro.jimcon.data.Tags;
 import jp.niro.jimcon.sql.LoginInfo;
 
 /**
  * Created by niro on 2017/05/01.
  */
-public class UnitSearchDialogController {
-    private Units units = new Units();
-    private UnitSearchable unitSearchable;
+public class TagSearchDialogController {
+    private Tags tags = new Tags();
+    private TagSearchable tagSearchable;
     private Stage ownerStage;
 
-    void setUnitSearchable(UnitSearchable unitSearchable) {
-        this.unitSearchable = unitSearchable;
+    void setTagSearchable(TagSearchable tagSearchable) {
+        this.tagSearchable = tagSearchable;
     }
 
-    UnitSearchable getUnitSearchable() {
-        return unitSearchable;
+    TagSearchable getTagSearchable() {
+        return tagSearchable;
     }
 
     public Stage getOwnerStage() {
@@ -36,22 +36,19 @@ public class UnitSearchDialogController {
     }
 
     @FXML
-    private TableView<Unit> unitTable;
+    private TableView<Tag> tagTable;
     @FXML
-    private TableColumn<Unit, Integer> unitCodeColumn;
+    private TableColumn<Tag, Long> tagIdColumn;
     @FXML
-    private TableColumn<Unit, String> unitNameColumn;
+    private TableColumn<Tag, String> tagNameColumn;
 
     @FXML
     private void initialize() {
-        // 単位ロード＆テーブルカラムにセット
-        units.loadUnits(LoginInfo.create());
-        unitTable.setItems(units.getUnits());
+        //テーブルカラムにセット
+        tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
+        tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
 
-        unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
-        unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
-
-        unitTable.setOnKeyReleased(
+        tagTable.setOnKeyReleased(
                 event -> {
                     // Enterキーを押した時
                     if (event.getCode() == KeyCode.ENTER) {
@@ -65,7 +62,7 @@ public class UnitSearchDialogController {
                 }
         );
 
-        unitTable.setOnMouseClicked(
+        tagTable.setOnMouseClicked(
                 event -> {
                     final boolean primaryButtonClicked = event.getButton().equals(MouseButton.PRIMARY);
                     final int clickCount = event.getClickCount();
@@ -82,11 +79,17 @@ public class UnitSearchDialogController {
 
     @FXML
     private void handleOnMouseClicked() {
-        System.out.println(unitTable.getSelectionModel().getSelectedItem().getUnitName());
+        System.out.println(tagTable.getSelectionModel().getSelectedItem().getTagName());
     }
 
     private void selection() {
-        unitSearchable.updateDisplay(unitTable.getSelectionModel().getSelectedItem());
+        tagSearchable.updateDisplay(tagTable.getSelectionModel().getSelectedItem());
+    }
+
+    public void load() {
+        // タグロード
+        tags.loadTags(LoginInfo.create(), tagSearchable.getSearchValue());
+        tagTable.setItems(tags.getTags());
     }
 
 }

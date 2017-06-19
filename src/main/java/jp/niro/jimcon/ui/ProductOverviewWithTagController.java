@@ -14,6 +14,7 @@ import jp.niro.jimcon.data.Product;
 import jp.niro.jimcon.data.Products;
 import jp.niro.jimcon.data.Tag;
 import jp.niro.jimcon.data.TagMaps;
+import jp.niro.jimcon.flowlistview.FlowListView;
 import jp.niro.jimcon.sql.LoginInfo;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.net.URL;
 /**
  * Created by niro on 2017/04/21.
  */
-public class ProductOverviewWithTagController {
+public class ProductOverviewWithTagController implements TagSearchable {
     private Products products = new Products();
     private TagMaps tagMaps = new TagMaps();
     private Stage ownerStage;
@@ -34,6 +35,11 @@ public class ProductOverviewWithTagController {
     public void setOwnerStage(Stage ownerStage) {
         this.ownerStage = ownerStage;
     }
+
+    @FXML
+    private TextField tagSearchField;
+    @FXML
+    private FlowListView<Tag> tagFlowList;
 
     @FXML
     private TableView<Product> productTable;
@@ -101,6 +107,40 @@ public class ProductOverviewWithTagController {
         );
     }
 
+    @FXML
+    private void handleTagSearch() {
+        try {
+            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.TAG_SEARCH_DIALOG);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+            AnchorPane pane = loader.load();
+
+            // Create the dialog stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(Constant.Dialogs.Title.TAG_SEARCH);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(ownerStage);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // Set the Product into the controller.
+            TagSearchDialogController controller = loader.getController();
+            controller.setOwnerStage(dialogStage);
+            // TagSearchDialogControllerとProductOverviewControllerの紐付け
+            controller.setTagSearchable(this);
+            controller.load();
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleProductSearch(){
+
+    }
 
     @FXML
     private void handleNewProduct() {
@@ -218,6 +258,22 @@ public class ProductOverviewWithTagController {
         }
 
         return false;
+    }
+
+    @Override
+    public void updateDisplay(Tag tag) {
+        tagFlowList.getItems().add(tag);
+        /*tagFlowList.setCellFactory(new Callback<Void, NodeCellPair<Tag>>() {
+            @Override
+            public NodeCellPair<Tag> call(Void param) {
+                return new NodeCellPair<Tag>();
+            }
+        });*/
+    }
+
+    @Override
+    public String getSearchValue(){
+        return tagSearchField.getText().trim();
     }
 
     private static class TagCell extends ListCell<Tag> {
