@@ -9,12 +9,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Commons;
-import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.data.Tag;
-import jp.niro.jimcon.data.Tags;
-import jp.niro.jimcon.sql.LoginInfo;
+import jp.niro.jimcon.commons.WarningAlert;
+import jp.niro.jimcon.datamodel.Tag;
+import jp.niro.jimcon.datamodel.Tags;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +22,11 @@ import java.net.URL;
  * Created by niro on 2017/05/15.
  */
 public class TagOverviewController {
+    public static final String FXML_NAME = "TagOverview.fxml";
+    public static final String TITLE_NAME = "タグ一覧";
+    public static final String NO_SELECTION_ERROR = "No Selection Error：タグＩＤ";
+    public static final String DO_NOT_DELETE_ERROR = "Don't delete";
+
     private Tags tags = new Tags();
     private Stage ownerStage;
 
@@ -89,24 +93,22 @@ public class TagOverviewController {
 
         } else {
             // Nothing selected.
-            Commons.showWarningAlert(
-                    Constant.ErrorMessages.Title.NO_SELECTION_TAG_ID,
-                    Constant.ErrorMessages.Tag.NO_SELECTION,
-                    "",
-                    true
-            );
+            new WarningAlert(
+                    NO_SELECTION_ERROR,
+                    Tag.NO_SELECTION,
+                    ""
+            ).showAndWait();
         }
     }
 
     @FXML
     private void handleDeleteTag() {
         // Don't delete.
-        Commons.showWarningAlert(
-                Constant.ErrorMessages.Title.DO_NOT_DELETE,
-                Constant.ErrorMessages.Tag.DO_NOT_DELETE,
-                "",
-                true
-        );
+        new WarningAlert(
+                DO_NOT_DELETE_ERROR,
+                Tag.DO_NOT_DELETE,
+                ""
+        ).showAndWait();
     }
 
     private void showTagDetails(Tag tag){
@@ -122,14 +124,14 @@ public class TagOverviewController {
     private boolean showTagEditDialog(Tag tag, boolean isNew){
         try {
             // load the fxml file and create a new stage for the pop-up dialog.
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.TAG_EDIT_DIALOG);
+            URL location = WindowManager.class.getResource(TagEditDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.TAG_EDIT);
+            dialogStage.setTitle(TagEditDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
 
             Scene scene = new Scene(pane);

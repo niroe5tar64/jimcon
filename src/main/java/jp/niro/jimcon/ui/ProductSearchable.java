@@ -1,6 +1,6 @@
 package jp.niro.jimcon.ui;
 
-import jp.niro.jimcon.data.Product;
+import jp.niro.jimcon.datamodel.Product;
 
 /**
  * Created by niro on 2017/05/06.

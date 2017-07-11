@@ -1,7 +1,5 @@
 package jp.niro.jimcon.commons;
 
-import jp.niro.jimcon.data.TagMap;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,11 +43,4 @@ public class HashMapTable<R, C, V> {
         table.clear();
     }
 
-    public static void main(String[] args) {
-        HashMapTable<Long, String, TagMap> t = new HashMapTable<>();
-
-
-
-
-    }
 }

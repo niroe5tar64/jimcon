@@ -1,6 +1,6 @@
 package jp.niro.jimcon.ui;
 
-import jp.niro.jimcon.data.Tag;
+import jp.niro.jimcon.datamodel.Tag;
 
 /**
  * Created by niro on 2017/05/15.

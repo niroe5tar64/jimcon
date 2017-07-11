@@ -9,12 +9,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Commons;
-import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Department;
-import jp.niro.jimcon.data.DepartmentFactory;
-import jp.niro.jimcon.data.Departments;
-import jp.niro.jimcon.sql.LoginInfo;
+import jp.niro.jimcon.commons.WarningAlert;
+import jp.niro.jimcon.datamodel.Department;
+import jp.niro.jimcon.datamodel.DepartmentFactory;
+import jp.niro.jimcon.datamodel.Departments;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +22,9 @@ import java.net.URL;
  * Created by niro on 2017/05/09.
  */
 public class DepartmentOverviewController {
+    public static final String FXML_NAME = "DepartmentOverview.fxml";
+    public static final String TITLE_NAME = "部署一覧";
+
     private DepartmentFactory departmentFactory = DepartmentFactory.getInstance();
     private Departments departments = new Departments();
     private Stage ownerStage;
@@ -99,12 +101,11 @@ public class DepartmentOverviewController {
 
         } else {
             // Nothing selected.
-            Commons.showWarningAlert(
-                    Constant.ErrorMessages.Title.NO_SELECTION_DEPARTMENT_CODE,
-                    Constant.ErrorMessages.Department.NO_SELECTION,
-                    "",
-                    true
-            );
+            new WarningAlert(
+                    Department.NO_SELECTION_ERROR,
+                    Department.NO_SELECTION,
+                    ""
+            ).showAndWait();
         }
         showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
@@ -112,12 +113,11 @@ public class DepartmentOverviewController {
     @FXML
     private void handleDeleteDepartment() {
         // Don't delete.
-        Commons.showWarningAlert(
-                Constant.ErrorMessages.Title.DO_NOT_DELETE,
-                Constant.ErrorMessages.Department.DO_NOT_DELETE,
-                "",
-                true
-        );
+        new WarningAlert(
+                Department.DO_NOT_DELETE_ERROR,
+                Department.DO_NOT_DELETE,
+                ""
+        ).showAndWait();
     }
 
     private void showDepartmentDetails(Department department) {
@@ -141,14 +141,14 @@ public class DepartmentOverviewController {
     private boolean showDepartmentEditDialog(Department department, boolean isNew) {
         try {
             // load the fxml file and create a new stage for the pop-up dialog.
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.DEPARTMENT_EDIT_DIALOG);
+            URL location = WindowManager.class.getResource(DepartmentEditDialogController.FXML_FILE);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.DEPARTMENT_EDIT);
+            dialogStage.setTitle(DepartmentEditDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 

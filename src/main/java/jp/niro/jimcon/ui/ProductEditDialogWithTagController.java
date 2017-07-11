@@ -7,13 +7,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Commons;
-import jp.niro.jimcon.commons.Constant;
+import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.data.Product;
-import jp.niro.jimcon.data.Unit;
-import jp.niro.jimcon.data.UnitFactory;
-import jp.niro.jimcon.sql.LoginInfo;
+import jp.niro.jimcon.datamodel.Product;
+import jp.niro.jimcon.datamodel.Unit;
+import jp.niro.jimcon.datamodel.UnitFactory;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +21,10 @@ import java.net.URL;
  * Created by niro on 2017/05/16.
  */
 public class ProductEditDialogWithTagController implements UnitSearchable {
+    public static final String FXML_NAME = "ProductEditDialogWithTag.fxml";
+    public static final String TITLE_NAME = "商品編集";
+    public static final String INVALID_FIELDS = "Invalid Fields Error";
+    public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
 
     private Product product;
     private Stage ownerStage;
@@ -123,14 +126,14 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
     @FXML
     private void handleUnitSearch() {
         try {
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_SEARCH_DIALOG);
+            URL location = WindowManager.class.getResource(UnitSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.UNIT_SEARCH);
+            dialogStage.setTitle(UnitSearchDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 
@@ -182,30 +185,30 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
         StringBuilder errorMessage = new StringBuilder();
 
         if (Validator.isEmpty(productCodeField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.Product.PRODUCT_CODE_IS_EMPTY);
+            errorMessage.append(Product.PRODUCT_CODE_IS_EMPTY);
         }
 
         try {
             int productCode = Integer.parseInt(productCodeField.getText());
-            if (Validator.isNotEqual(productCodeField.getLength(), Constant.System.PRODUCT_CODE_DIGITS)) {
-                errorMessage.append(Constant.ErrorMessages.Product.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
+            if (Validator.isNotEqual(productCodeField.getLength(), Product.PRODUCT_CODE_DIGITS)) {
+                errorMessage.append(Product.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
             }
         } catch (NumberFormatException e) {
-            errorMessage.append(Constant.ErrorMessages.Product.PRODUCT_CODE_IS_NOT_INTEGER);
+            errorMessage.append(Product.PRODUCT_CODE_IS_NOT_INTEGER);
         }
 
         if (Validator.isEmpty(unitCodeField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_EMPTY);
+            errorMessage.append(Unit.UNIT_CODE_IS_EMPTY);
         }
 
         if (Validator.isEmpty(errorMessage.toString())) {
             return true;
         } else {
-            Commons.showErrorAlert(
-                    Constant.ErrorMessages.Title.INVALID_FIELDS,
-                    Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
-                    errorMessage.toString(),
-                    true);
+            new ErrorAlert(
+                    INVALID_FIELDS,
+                    PLEASE_INPUT_CORRECT_VALUE,
+                    errorMessage.toString()
+            ).showAndWait();
             return false;
         }
     }
@@ -218,22 +221,22 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
             // unitCodeFieldに入力されたデータがDBに保存されているかどうか
             tempUnit = UnitFactory.getInstance().getUnit(LoginInfo.create(), unitCodePK);
             if (Validator.isNull(tempUnit)) {
-                errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
+                errorMessage.append(Unit.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
             }
             if (Validator.isNotInRange(unitCodePK, 0, 255)) {
-                errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_IN_RANGE);
+                errorMessage.append(Unit.UNIT_CODE_IS_NOT_IN_RANGE);
             }
 
         } catch (NumberFormatException e) {
-            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_INTEGER);
+            errorMessage.append(Unit.UNIT_CODE_IS_NOT_INTEGER);
         }
 
         if (Validator.isNotEmpty(errorMessage.toString())) {
-            Commons.showErrorAlert(
-                    Constant.ErrorMessages.Title.INVALID_FIELDS,
-                    Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
-                    errorMessage.toString(),
-                    true);
+            new ErrorAlert(
+                    INVALID_FIELDS,
+                    PLEASE_INPUT_CORRECT_VALUE,
+                    errorMessage.toString()
+            ).showAndWait();
         }
         return tempUnit;
     }

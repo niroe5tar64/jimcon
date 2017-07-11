@@ -7,6 +7,8 @@ import javafx.stage.Stage;
  * Created by niro on 2017/04/18.
  */
 public class RootLayoutController {
+    public static final String FXML_FILE = "RootLayout.fxml";
+
     // Reference to the stage.
     private Stage stage;
 

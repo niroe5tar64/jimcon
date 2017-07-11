@@ -9,11 +9,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Commons;
-import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Unit;
-import jp.niro.jimcon.data.Units;
-import jp.niro.jimcon.sql.LoginInfo;
+import jp.niro.jimcon.commons.WarningAlert;
+import jp.niro.jimcon.datamodel.Unit;
+import jp.niro.jimcon.datamodel.Units;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +21,11 @@ import java.net.URL;
  * Created by niro on 2017/04/17.
  */
 public class UnitOverviewController {
+    public static final String FXML_NAME = "UnitOverview.fxml";
+    public static final String TITLE_NAME = "単位一覧";
+    public static final String NO_SELECTION_ERROR = "No Selection Error：単位コード";
+    public static final String DO_NOT_DELETE = "Don't delete";
+
     private Units units = new Units();
     private Stage ownerStage;
 
@@ -89,12 +93,11 @@ public class UnitOverviewController {
 
         } else {
             // Nothing selected.
-            Commons.showWarningAlert(
-                    Constant.ErrorMessages.Title.NO_SELECTION_UNIT_CODE,
-                    Constant.ErrorMessages.Unit.NO_SELECTION,
-                    "",
-                    true
-            );
+            new WarningAlert(
+                    NO_SELECTION_ERROR,
+                    Unit.NO_SELECTION,
+                    ""
+            ).showAndWait();
         }
         showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
     }
@@ -102,12 +105,11 @@ public class UnitOverviewController {
     @FXML
     private void handleDeleteUnit() {
         // Don't delete.
-        Commons.showWarningAlert(
-                Constant.ErrorMessages.Title.DO_NOT_DELETE,
-                Constant.ErrorMessages.Unit.DO_NOT_DELETE,
-                "",
-                true
-        );
+        new WarningAlert(
+                DO_NOT_DELETE,
+                Unit.DO_NOT_DELETE,
+                ""
+        ).showAndWait();
     }
 
     private void showUnitDetails(Unit unit) {
@@ -123,14 +125,14 @@ public class UnitOverviewController {
     private boolean showUnitEditDialog(Unit unit, boolean isNew) {
         try {
             // load the fxml file and create a new stage for the pop-up dialog.
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_EDIT_DIALOG);
+            URL location = WindowManager.class.getResource(UnitEditDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.UNIT_EDIT);
+            dialogStage.setTitle(UnitEditDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 

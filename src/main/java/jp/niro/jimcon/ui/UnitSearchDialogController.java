@@ -7,14 +7,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Unit;
-import jp.niro.jimcon.data.Units;
-import jp.niro.jimcon.sql.LoginInfo;
+import jp.niro.jimcon.datamodel.Unit;
+import jp.niro.jimcon.datamodel.Units;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 
 /**
  * Created by niro on 2017/05/01.
  */
 public class UnitSearchDialogController {
+    public static final String FXML_NAME = "UnitSearchDialog.fxml";
+    public static final String TITLE_NAME = "単位検索";
+
     private Units units = new Units();
     private UnitSearchable unitSearchable;
     private Stage ownerStage;

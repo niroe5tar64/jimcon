@@ -8,7 +8,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Constant;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,6 +16,8 @@ import java.net.URL;
  * Created by niro on 2017/05/12.
  */
 public class MenuController {
+    public static final String FXML_FILE = "Menu.fxml";
+    public static final String TITLE_NAME = "メインメニュー";
     private BorderPane rootLayout;
     private Stage primaryStage;
 
@@ -72,14 +73,14 @@ public class MenuController {
     private void showDepartmentMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.DEPARTMENT_OVERVIEW);
+            URL location = WindowManager.class.getResource(DepartmentOverviewController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.DEPARTMENT_OVERVIEW);
+            dialogStage.setTitle(DepartmentOverviewController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
 
@@ -101,14 +102,14 @@ public class MenuController {
     private void showUnitMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.UNIT_OVERVIEW);
+            URL location = WindowManager.class.getResource(UnitOverviewController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.UNIT_OVERVIEW);
+            dialogStage.setTitle(UnitOverviewController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             dialogStage.setResizable(false);
@@ -130,15 +131,14 @@ public class MenuController {
     private void showProductMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            //URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW);
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_OVERVIEW_WITH_TAG);
+            URL location = WindowManager.class.getResource(ProductOverviewWithTagController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.PRODUCT_OVERVIEW);
+            dialogStage.setTitle(ProductOverviewWithTagController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
 
@@ -159,14 +159,14 @@ public class MenuController {
     private void showTagMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.TAG_OVERVIEW);
+            URL location = WindowManager.class.getResource(TagOverviewController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.TAG_OVERVIEW);
+            dialogStage.setTitle(TagOverviewController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             dialogStage.setResizable(false);

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-
-
-<properties>
-    <comment>アプリケーションのプロパティ</comment>
-    <entry key="scenebuilder.path">C:\Users\niro\AppData\Local\SceneBuilder\SceneBuilder.exe</entry>
-    <entry key="scenebuilder.cfgfile">C:\Users\niro\AppData\Local\SceneBuilder\app\SceneBuilder.cfg</entry>
-</properties>

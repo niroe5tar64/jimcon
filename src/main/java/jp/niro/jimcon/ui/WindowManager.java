@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Constant;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,9 +28,10 @@ public class WindowManager {
     public void initRootLayout() {
         try {
             // Load root layout from fxml file.
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.ROOT_LAYOUT);
+            System.out.println(WindowManager.class.getResource(RootLayoutController.FXML_FILE));
+            URL location = WindowManager.class.getResource(RootLayoutController.FXML_FILE);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             rootLayout = loader.load();
 
             // Show the scene containing the root layout.
@@ -51,9 +51,9 @@ public class WindowManager {
     public void setMenu() {
         try {
             // Load menu
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.MENU);
+            URL location = WindowManager.class.getResource(MenuController.FXML_FILE);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane menu = loader.load();
 
             // Set unit overview into the center of root layout.

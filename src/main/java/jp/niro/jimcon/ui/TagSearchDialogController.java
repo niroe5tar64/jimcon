@@ -7,14 +7,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Tag;
-import jp.niro.jimcon.data.Tags;
-import jp.niro.jimcon.sql.LoginInfo;
+import jp.niro.jimcon.datamodel.Tag;
+import jp.niro.jimcon.datamodel.Tags;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 
 /**
  * Created by niro on 2017/05/01.
  */
 public class TagSearchDialogController {
+    public static final String FXML_NAME = "TagSearchDialog.fxml";
+    public static final String TITLE_NAME = "タグ検索";
+
     private Tags tags = new Tags();
     private TagSearchable tagSearchable;
     private Stage ownerStage;

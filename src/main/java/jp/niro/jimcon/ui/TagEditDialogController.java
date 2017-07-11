@@ -3,15 +3,20 @@ package jp.niro.jimcon.ui;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.Commons;
-import jp.niro.jimcon.commons.Constant;
+import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.data.Tag;
+import jp.niro.jimcon.datamodel.Tag;
+import jp.niro.jimcon.datamodel.Unit;
 
 /**
  * Created by niro on 2017/05/15.
  */
 public class TagEditDialogController {
+    public static final String FXML_NAME = "TagEditDialog.fxml";
+    public static final String TITLE_NAME = "タグ編集";
+    public static final String INVALID_FIELDS = "Invalid Fields Error";
+    public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
+
     private Tag tag;
     private Stage ownerStage;
     private boolean okClicked;
@@ -74,29 +79,28 @@ public class TagEditDialogController {
         StringBuilder errorMessage = new StringBuilder();
 
         if (Validator.isEmpty(tagIdField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.Tag.TAG_ID_IS_EMPTY);
+            errorMessage.append(Tag.TAG_ID_IS_EMPTY);
         }
 
         try {
             long tagId = Long.parseLong(tagIdField.getText());
 
         } catch (NumberFormatException e) {
-            errorMessage.append(Constant.ErrorMessages.Unit.UNIT_CODE_IS_NOT_INTEGER);
+            errorMessage.append(Unit.UNIT_CODE_IS_NOT_INTEGER);
         }
 
         if (Validator.isEmpty(tagNameField.getText())) {
-            errorMessage.append(Constant.ErrorMessages.Tag.TAG_ID_IS_EMPTY);
+            errorMessage.append(Tag.TAG_ID_IS_EMPTY);
         }
 
         if (Validator.isEmpty(errorMessage.toString())) {
             return true;
         } else {
-            Commons.showErrorAlert(
-                    Constant.ErrorMessages.Title.INVALID_FIELDS,
-                    Constant.ErrorMessages.User.PLEASE_INPUT_CORRECT_VALUE,
-                    errorMessage.toString(),
-                    true
-            );
+            new ErrorAlert(
+                    INVALID_FIELDS,
+                    PLEASE_INPUT_CORRECT_VALUE,
+                    errorMessage.toString()
+            ).showAndWait();
         }
         return false;
     }

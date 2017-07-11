@@ -8,14 +8,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import jp.niro.jimcon.commons.Commons;
-import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.data.Product;
-import jp.niro.jimcon.data.Products;
-import jp.niro.jimcon.data.Tag;
-import jp.niro.jimcon.data.TagMaps;
+import jp.niro.jimcon.commons.WarningAlert;
+import jp.niro.jimcon.datamodel.Product;
+import jp.niro.jimcon.datamodel.Products;
+import jp.niro.jimcon.datamodel.Tag;
+import jp.niro.jimcon.datamodel.TagMaps;
+import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.flowlistview.FlowListView;
-import jp.niro.jimcon.sql.LoginInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +23,10 @@ import java.net.URL;
  * Created by niro on 2017/04/21.
  */
 public class ProductOverviewWithTagController implements TagSearchable {
+    public static final String FXML_NAME = "ProductOverviewWithTag.fxml";
+    public static final String TITLE_NAME = "商品一覧";
+    public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
+
     private Products products = new Products();
     private TagMaps tagMaps = new TagMaps();
     private Stage ownerStage;
@@ -110,14 +113,14 @@ public class ProductOverviewWithTagController implements TagSearchable {
     @FXML
     private void handleTagSearch() {
         try {
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.TAG_SEARCH_DIALOG);
+            URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.TAG_SEARCH);
+            dialogStage.setTitle(TagSearchDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 
@@ -172,10 +175,10 @@ public class ProductOverviewWithTagController implements TagSearchable {
 
         } else {
             // Nothing selected.
-            Commons.showWarningAlert(Constant.ErrorMessages.Title.NO_SELECTION_PRODUCT_CODE,
-                    Constant.ErrorMessages.Product.NO_SELECTION,
-                    "",
-                    true);
+            new WarningAlert(NO_SELECTION_ERROR,
+                    Product.NO_SELECTION,
+                    ""
+            ).showAndWait();
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
@@ -228,14 +231,14 @@ public class ProductOverviewWithTagController implements TagSearchable {
     private boolean showProductEditDialog(Product product, boolean isNew) {
         try {
             // load the fxml file and create a new stage for the pup-up dialog.
-            URL location = WindowManager.class.getResource(Constant.Resources.FXMLFile.PRODUCT_EDIT_DIALOG_WITH_TAG);
+            URL location = WindowManager.class.getResource(ProductEditDialogWithTagController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(Constant.Resources.Properties.TEXT_NAME));
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(Constant.Dialogs.Title.PRODUCT_EDIT);
+            dialogStage.setTitle(ProductEditDialogWithTagController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
 
@@ -263,12 +266,6 @@ public class ProductOverviewWithTagController implements TagSearchable {
     @Override
     public void updateDisplay(Tag tag) {
         tagFlowList.getItems().add(tag);
-        /*tagFlowList.setCellFactory(new Callback<Void, NodeCellPair<Tag>>() {
-            @Override
-            public NodeCellPair<Tag> call(Void param) {
-                return new NodeCellPair<Tag>();
-            }
-        });*/
     }
 
     @Override

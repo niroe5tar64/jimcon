@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
  * Created by niro on 2017/04/21.
  */
 public class ResourceBundleWithUtf8 {
+    public static final String TEXT_NAME = "TextName";
     private static File dicDir = Paths.get(System.getProperty("user.dir"), "\\src\\main\\resource\\jp\\niro\\jimcon").toFile();
     private static URLClassLoader urlLoader;
 
