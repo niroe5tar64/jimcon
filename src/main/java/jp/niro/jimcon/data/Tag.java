@@ -161,4 +161,9 @@ public class Tag {
 
         return sql.next();
     }
+
+    @Override
+    public String toString(){
+        return getTagName();
+    }
 }
