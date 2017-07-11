@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.niro.jimcon.ui.DepartmentEditDialogController">
+    <children>
+        <GridPane AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <Label text="%department.departmentCode" />
+                <Label text="%department.departmentName" GridPane.rowIndex="1" />
+                <Label text="%department.postcode" GridPane.rowIndex="2" />
+                <Label text="%department.address" GridPane.rowIndex="3" />
+                <Label text="%department.tel_number" GridPane.rowIndex="4" />
+                <Label text="%department.fax_number" GridPane.rowIndex="5" />
+                <TextField fx:id="departmentCodeField" GridPane.columnIndex="1" />
+                <TextField fx:id="departmentNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="postcodeField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="telNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="faxNumberField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.0" minWidth="10.0" prefWidth="197.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="416.0" minWidth="10.0" prefWidth="393.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+        <HBox layoutX="150.0" layoutY="272.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleOK" prefWidth="80.0" text="%ok">
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#handleCancel" prefWidth="80.0" text="%cancel">
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
