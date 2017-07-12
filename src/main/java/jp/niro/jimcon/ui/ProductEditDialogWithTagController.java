@@ -114,7 +114,8 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
                     if (!newValue) {
                         focusOutFromUnitCodeField();
                     }
-                });
+                }
+        );
     }
 
     @FXML
@@ -124,7 +125,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
     }
 
     @FXML
-    private void handleUnitSearch() {
+    private void handleSearchUnit() {
         try {
             URL location = WindowManager.class.getResource(UnitSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(

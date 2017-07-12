@@ -4,19 +4,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jp.niro.jimcon.commons.WarningAlert;
+import jp.niro.jimcon.customcomponents.ListTagCell;
+import jp.niro.jimcon.customcomponents.flowlistview.FlowListView;
 import jp.niro.jimcon.datamodel.Product;
 import jp.niro.jimcon.datamodel.Products;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.TagMaps;
 import jp.niro.jimcon.dbaccess.LoginInfo;
-import jp.niro.jimcon.customcomponents.flowlistview.FlowListView;
-import jp.niro.jimcon.customcomponents.ListTagCell;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,7 @@ import java.net.URL;
  */
 public class ProductOverviewWithTagController implements TagSearchable {
     public static final String FXML_NAME = "ProductOverviewWithTag.fxml";
+    public static final String CSS_NAME = "ProductOverviewWithTag.css";
     public static final String TITLE_NAME = "商品一覧";
     public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
 
@@ -110,41 +112,34 @@ public class ProductOverviewWithTagController implements TagSearchable {
         productTable.getSelectionModel().selectedItemProperty().addListener(
                 ((observable, oldValue, newValue) -> showProductDetails(newValue))
         );
+
+        // タグ検索用テキストボックス選択時のキー操作
+        tagSearchField.setOnKeyReleased(
+                event -> {
+                    // Enterキーを押した時
+                    if (event.getCode() == KeyCode.ENTER) {
+                        searchTag();
+                    }
+                }
+        );
+        // FlowListView<Tag>選択時のキー操作
+        tagFlowList.setOnKeyReleased(
+                event -> {
+                    // Deleteキーを押した時
+                    if (event.getCode() == KeyCode.DELETE) {
+                        tagFlowList.getItems().remove(tagFlowList.selectedItemProperty().get());
+                    }
+        });
+
     }
 
     @FXML
-    private void handleTagSearch() {
-        try {
-            URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
-            FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
-            BorderPane pane = loader.load();
-
-            // Create the dialog stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle(TagSearchDialogController.TITLE_NAME);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(ownerStage);
-
-            Scene scene = new Scene(pane);
-            dialogStage.setScene(scene);
-
-            // Set the Product into the controller.
-            TagSearchDialogController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
-            // TagSearchDialogControllerとProductOverviewControllerの紐付け
-            controller.setTagSearchable(this);
-            controller.setTagSearchField(getSearchValue());
-            controller.load();
-
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void handleSearchTag() {
+        searchTag();
     }
 
     @FXML
-    private void handleProductSearch() {
+    private void handleSearchProduct() {
         products.loadProducts(LoginInfo.create(), tagFlowList.getItems());
         productTable.setItems(products.getProducts());
     }
@@ -267,9 +262,40 @@ public class ProductOverviewWithTagController implements TagSearchable {
         return false;
     }
 
+    private void searchTag() {
+        try {
+            URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
+            BorderPane pane = loader.load();
+
+            // Create the dialog stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(TagSearchDialogController.TITLE_NAME);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(ownerStage);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // Set the Product into the controller.
+            TagSearchDialogController controller = loader.getController();
+            controller.setOwnerStage(dialogStage);
+            // TagSearchDialogControllerとProductOverviewControllerの紐付け
+            controller.setTagSearchable(this);
+            controller.setTagSearchField(getSearchValue());
+            controller.load();
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void updateDisplay(Tag tag) {
         tagFlowList.addNonDuplication(tag);
+        tagSearchField.clear();
     }
 
     @Override

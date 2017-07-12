@@ -18,7 +18,7 @@
                         <Insets bottom="3.0" top="3.0" />
                     </HBox.margin>
                 </TextField>
-                <Button mnemonicParsing="false" onAction="#handleTagSearch" text="%tagSearch">
+                <Button mnemonicParsing="false" onAction="#handleSearchTag" text="%tagSearch">
                     <HBox.margin>
                         <Insets bottom="3.0" top="3.0" />
                     </HBox.margin>

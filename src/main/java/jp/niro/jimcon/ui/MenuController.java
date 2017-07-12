@@ -143,6 +143,7 @@ public class MenuController {
             dialogStage.initOwner(primaryStage);
 
             Scene scene = new Scene(pane);
+            scene.getStylesheets().add(WindowManager.class.getResource(ProductOverviewWithTagController.CSS_NAME).toExternalForm());
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。

@@ -25,6 +25,10 @@ public class Validator {
         return StringUtils.isNotEmpty(s);
     }
 
+    public static boolean isNotEmpty(List<?> list) {
+        return !isEmpty(list);
+    }
+
     public static boolean isInRange(int value, int min, int max) {
         return value >= min && value <= max;
     }

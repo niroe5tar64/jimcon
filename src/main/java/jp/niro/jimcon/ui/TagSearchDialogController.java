@@ -54,13 +54,26 @@ public class TagSearchDialogController {
         //テーブルカラムにセット
         tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
         tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
-
+        // タグテーブル選択時のキー操作
         tagTable.setOnKeyReleased(
                 event -> {
                     // Enterキーを押した時
                     if (event.getCode() == KeyCode.ENTER) {
                         selection();
                         ownerStage.close();
+                    }
+                    // Escapeキーを押した時
+                    else if (event.getCode() == KeyCode.ESCAPE) {
+                        tagSearchField.requestFocus();
+                    }
+                }
+        );
+        // タグ検索用テキストボックス選択時のキー操作
+        tagSearchField.setOnKeyReleased(
+                event -> {
+                    // Enterキーを押した時
+                    if (event.getCode() == KeyCode.ENTER) {
+                        load();
                     }
                     // Escapeキーを押した時
                     else if (event.getCode() == KeyCode.ESCAPE) {
@@ -85,7 +98,7 @@ public class TagSearchDialogController {
     }
 
     @FXML
-    private void handleTagSearch() {
+    private void handleSearchTag() {
         load();
     }
 
@@ -98,6 +111,10 @@ public class TagSearchDialogController {
         // タグロード
         tags.loadTags(LoginInfo.create(), tagSearchField.getText().trim());
         tagTable.setItems(tags.getTags());
+        if (Validator.isNotEmpty(tags.getTags())) {
+            tagTable.requestFocus();
+            tagTable.getSelectionModel().selectFirst();
+        }
     }
 
     public void setTagSearchField(String searchValue) {

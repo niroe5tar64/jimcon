@@ -37,7 +37,7 @@
                 <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <children>
                         <TextField fx:id="unitCodeField" prefWidth="60.0"/>
-                        <Button fx:id="unitSearch" mnemonicParsing="false" onAction="#handleUnitSearch" text="%search"/>
+                        <Button fx:id="unitSearch" mnemonicParsing="false" onAction="#handleSearchUnit" text="%search"/>
                         <Label fx:id="unitNameLabel" prefWidth="40.0"/>
                     </children>
                 </HBox>
