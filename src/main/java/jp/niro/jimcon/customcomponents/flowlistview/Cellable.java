@@ -1,4 +1,4 @@
-package jp.niro.jimcon.flowlistview;
+package jp.niro.jimcon.customcomponents.flowlistview;
 
 /**
  * A {@link Cellable} instance is able to update it's nodes UI with the list
@@ -7,6 +7,6 @@ package jp.niro.jimcon.flowlistview;
  * @param <E>
  *            The list item type.
  */
-public interface Cellable<E> {
+public interface Cellable<E extends FlowListViewItem> {
     void updateItem(E item, boolean empty);
 }

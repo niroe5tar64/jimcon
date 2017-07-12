@@ -1,4 +1,4 @@
-package jp.niro.jimcon.flowlistview;
+package jp.niro.jimcon.customcomponents.flowlistview;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -8,7 +8,7 @@ import javafx.util.Callback;
 /**
  * A simple cell factory that creates {@link Label} nodes from strings.
  */
-public class LabelCellFactory<T> implements Callback<Void, NodeCellPair<T>> {
+public class LabelCellFactory<T extends FlowListViewItem> implements Callback<Void, NodeCellPair<T>> {
 
     private String customStyle = "-fx-border-color: #b2b2b2;";
 
@@ -24,9 +24,9 @@ public class LabelCellFactory<T> implements Callback<Void, NodeCellPair<T>> {
 
         // the Cellable just sets the string as the label text
         Cellable<T> cell = (item, empty) -> {
-            if (item != null)
-                node.setText(item.toString());
-            else
+            if (item != null) {
+                node.setText(item.getLabelName());
+            } else
                 node.setText("null");
         };
 

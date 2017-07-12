@@ -25,6 +25,11 @@ public class DataPairList {
         return new DataPairList(dataPairList);
     }
 
+    public DataPairList add(String columnName, long value) {
+        dataPairList.add(DataPairFactory.create(columnName, value));
+        return new DataPairList(dataPairList);
+    }
+
     public DataPairList add(String columnName, double value) {
         dataPairList.add(DataPairFactory.create(columnName, value));
         return new DataPairList(dataPairList);

@@ -1,4 +1,4 @@
-package jp.niro.jimcon.flowlistview;
+package jp.niro.jimcon.customcomponents.flowlistview;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -14,7 +14,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 
-public class FlowListView<E> extends ScrollPane {
+public class FlowListView<E extends FlowListViewItem> extends ScrollPane {
     @FXML
     private FlowPane flowPane;
 
@@ -73,4 +73,11 @@ public class FlowListView<E> extends ScrollPane {
         return itemConverter.selectedItemProperty();
     }
 
+    public void addNonDuplication(E item) {
+        if (items.contains(item)) {
+            System.out.println(item.getLabelName() + "は既に選択済みです。");
+        } else {
+            items.add(item);
+        }
+    }
 }

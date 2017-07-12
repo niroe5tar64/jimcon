@@ -1,4 +1,4 @@
-package jp.niro.jimcon.flowlistview;
+package jp.niro.jimcon.customcomponents.flowlistview;
 
 import com.sun.javafx.collections.MappingChange.Map;
 import javafx.beans.property.ObjectProperty;
@@ -13,7 +13,7 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 
-class ItemModel<E> implements ListChangeListener<E> {
+class ItemModel<E extends FlowListViewItem> implements ListChangeListener<E> {
     
     public static final String SELECTED_ITEM_CSS_CLASS = "flow-list-selected-item";
 
@@ -133,7 +133,7 @@ class ItemModel<E> implements ListChangeListener<E> {
         return flowNodes;
     }
 
-    private static class Entry<E> {
+    private static class Entry<E extends FlowListViewItem> {
         final E it;
         final NodeCellPair<E> nodeCell;
         public Entry(E it, NodeCellPair<E> nodeCell) {

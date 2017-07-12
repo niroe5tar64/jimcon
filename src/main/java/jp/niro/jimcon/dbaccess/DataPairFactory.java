@@ -8,6 +8,10 @@ public class DataPairFactory {
         return new IntDataPair(columnName, value);
     }
 
+    public static DataPair create(String columnName, long value) {
+        return new LongDataPair(columnName, value);
+    }
+
     public static DataPair create(String columnName, double value) {
         return new DoubleDataPair(columnName, value);
     }

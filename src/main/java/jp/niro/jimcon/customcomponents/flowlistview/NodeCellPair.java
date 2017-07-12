@@ -1,4 +1,4 @@
-package jp.niro.jimcon.flowlistview;
+package jp.niro.jimcon.customcomponents.flowlistview;
 
 import javafx.scene.Node;
 
@@ -10,7 +10,7 @@ import javafx.scene.Node;
  * @param <E>
  *            Type of the list item.
  */
-public class NodeCellPair<E> {
+public class NodeCellPair<E extends FlowListViewItem> {
     
     private final Node node;
     

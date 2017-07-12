@@ -120,11 +120,6 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
-    public QueryComparisonOperation and(String columnName) {
-        builder.append(" AND ").append(columnName);
-        return new QueryComparisonOperation(builder);
-    }
-
     public QueryComparisonOperation where(String columnName) {
         builder.append(" WHERE ").append(columnName);
         return new QueryComparisonOperation(builder);
@@ -135,9 +130,42 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
+    public QueryComparisonOperation and(String columnName) {
+        builder.append(" AND ").append(columnName);
+        return new QueryComparisonOperation(builder);
+    }
+
+    public QueryBuilder and(DataPairList list) {
+        builder.append(" AND ( ");
+        for (DataPair pair: list.getDataPairList()) {
+            builder
+                    .append(pair.getColumnName())
+                    .append(" = ")
+                    .append(pair.getValue())
+                    .append(" OR ");
+        }
+        builder.delete(builder.lastIndexOf(" OR "), builder.length());
+        builder.append(" )");
+        return new QueryBuilder(builder);
+    }
+
     public QueryComparisonOperation or(String columnName) {
         builder.append(" OR ").append(columnName);
         return new QueryComparisonOperation(builder);
+    }
+
+    public QueryBuilder or(DataPairList list) {
+        builder.append(" OR ( ");
+        for (DataPair pair: list.getDataPairList()) {
+            builder
+                    .append(pair.getColumnName())
+                    .append(" = ")
+                    .append(pair.getValue())
+                    .append(" OR ");
+        }
+        builder.deleteCharAt(builder.lastIndexOf(" OR "));
+        builder.append(" )");
+        return new QueryBuilder(builder);
     }
 
     public QueryBuilder orderByASC(String columnName) {
@@ -148,6 +176,16 @@ public class QueryBuilder {
     public QueryBuilder orderByDESC(String columnName) {
         builder.append(" ORDER BY ").append(columnName).append(" DESC");
         return new QueryBuilder(builder);
+    }
+
+    public QueryBuilder groupBy(String columnName) {
+        builder.append(" GROUP BY ").append(columnName);
+        return new QueryBuilder(builder);
+    }
+
+    public QueryComparisonOperation havingCount(String columnName) {
+        builder.append(" HAVING COUNT(").append(columnName).append(")");
+        return new QueryComparisonOperation(builder);
     }
 
     public QueryBuilder append(String text) {

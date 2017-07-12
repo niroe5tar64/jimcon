@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<?import jp.niro.jimcon.flowlistview.FlowListView?>
+<?import jp.niro.jimcon.customcomponents.flowlistview.FlowListView?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.niro.jimcon.ui.ProductOverviewWithTagController">
     <children>
         <SplitPane dividerPositions="0.11182108626198083" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL">

@@ -3,10 +3,12 @@ package jp.niro.jimcon.ui;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
+import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.Tags;
 import jp.niro.jimcon.dbaccess.LoginInfo;
@@ -38,6 +40,8 @@ public class TagSearchDialogController {
         this.ownerStage = ownerStage;
     }
 
+    @FXML
+    private TextField tagSearchField;
     @FXML
     private TableView<Tag> tagTable;
     @FXML
@@ -81,18 +85,22 @@ public class TagSearchDialogController {
     }
 
     @FXML
-    private void handleOnMouseClicked() {
-        System.out.println(tagTable.getSelectionModel().getSelectedItem().getTagName());
+    private void handleTagSearch() {
+        load();
     }
 
     private void selection() {
-        tagSearchable.updateDisplay(tagTable.getSelectionModel().getSelectedItem());
+        Tag tag = tagTable.getSelectionModel().getSelectedItem();
+        if (Validator.isNotNull(tag)) tagSearchable.updateDisplay(tag);
     }
 
     public void load() {
         // タグロード
-        tags.loadTags(LoginInfo.create(), tagSearchable.getSearchValue());
+        tags.loadTags(LoginInfo.create(), tagSearchField.getText().trim());
         tagTable.setItems(tags.getTags());
     }
 
+    public void setTagSearchField(String searchValue) {
+        tagSearchField.setText(searchValue);
+    }
 }

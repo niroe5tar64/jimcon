@@ -3,13 +3,14 @@ package jp.niro.jimcon.datamodel;
 import javafx.beans.property.*;
 import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.dbaccess.*;
+import jp.niro.jimcon.customcomponents.flowlistview.FlowListViewItem;
 
 import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/05/13.
  */
-public class Tag {
+public class Tag implements FlowListViewItem {
     public static final String DUPLICATED_ERROR = "Duplicated Error：タグＩＤ";
 
     public static final String TAG_ID_DUPLICATED = "このタグＩＤは既に使われています。\n";
@@ -170,5 +171,10 @@ public class Tag {
         sql.executeQuery();
 
         return sql.next();
+    }
+
+    @Override
+    public String getLabelName() {
+        return getTagName();
     }
 }

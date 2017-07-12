@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -14,7 +15,8 @@ import jp.niro.jimcon.datamodel.Products;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.TagMaps;
 import jp.niro.jimcon.dbaccess.LoginInfo;
-import jp.niro.jimcon.flowlistview.FlowListView;
+import jp.niro.jimcon.customcomponents.flowlistview.FlowListView;
+import jp.niro.jimcon.customcomponents.ListTagCell;
 
 import java.io.IOException;
 import java.net.URL;
@@ -116,7 +118,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
-            AnchorPane pane = loader.load();
+            BorderPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
@@ -132,6 +134,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             controller.setOwnerStage(dialogStage);
             // TagSearchDialogControllerとProductOverviewControllerの紐付け
             controller.setTagSearchable(this);
+            controller.setTagSearchField(getSearchValue());
             controller.load();
 
             dialogStage.showAndWait();
@@ -141,8 +144,9 @@ public class ProductOverviewWithTagController implements TagSearchable {
     }
 
     @FXML
-    private void handleProductSearch(){
-
+    private void handleProductSearch() {
+        products.loadProducts(LoginInfo.create(), tagFlowList.getItems());
+        productTable.setItems(products.getProducts());
     }
 
     @FXML
@@ -205,7 +209,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             tagList.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
                 @Override
                 public ListCell<Tag> call(ListView<Tag> arg0) {
-                    return new TagCell();
+                    return new ListTagCell();
                 }
             });
             processedCheckBox.setSelected(product.isProcessed());
@@ -265,21 +269,11 @@ public class ProductOverviewWithTagController implements TagSearchable {
 
     @Override
     public void updateDisplay(Tag tag) {
-        tagFlowList.getItems().add(tag);
+        tagFlowList.addNonDuplication(tag);
     }
 
     @Override
-    public String getSearchValue(){
+    public String getSearchValue() {
         return tagSearchField.getText().trim();
-    }
-
-    private static class TagCell extends ListCell<Tag> {
-        @Override
-        protected void updateItem(Tag tag, boolean empty) {
-            super.updateItem(tag, empty);
-            if(!empty) {
-                setText(tag.getTagName());
-            }
-        }
     }
 }
