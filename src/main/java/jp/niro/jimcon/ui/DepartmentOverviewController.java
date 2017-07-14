@@ -58,7 +58,7 @@ public class DepartmentOverviewController {
 
     @FXML
     private void initialize() {
-        departments.loadDepartments(LoginInfo.create());
+        departments.loadDepartments(LoginInfo.getInstance());
         departmentTable.setItems(departments.getObservableList());
 
         departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
@@ -79,9 +79,9 @@ public class DepartmentOverviewController {
             boolean okClicked = showDepartmentEditDialog(tempDepartment, true);
             if (okClicked) {
                 // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempDepartment.saveNewData(LoginInfo.create());
+                isClosableDialog = tempDepartment.saveNewData(LoginInfo.getInstance());
                 // データテーブルをリロード
-                departments.loadDepartments(LoginInfo.create());
+                departments.loadDepartments(LoginInfo.getInstance());
             } else {
                 isClosableDialog = true;
             }
@@ -95,8 +95,8 @@ public class DepartmentOverviewController {
         if (selectedDepartment != null) {
             boolean okClicked = showDepartmentEditDialog(selectedDepartment, false);
             if (okClicked) {
-                selectedDepartment.saveEditedData(LoginInfo.create());
-                departments.loadDepartments(LoginInfo.create());
+                selectedDepartment.saveEditedData(LoginInfo.getInstance());
+                departments.loadDepartments(LoginInfo.getInstance());
             }
 
         } else {
@@ -140,7 +140,7 @@ public class DepartmentOverviewController {
 
     private boolean showDepartmentEditDialog(Department department, boolean isNew) {
         try {
-            // load the fxml file and create a new stage for the pop-up dialog.
+            // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(DepartmentEditDialogController.FXML_FILE);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));

@@ -109,7 +109,7 @@ public class TagSearchDialogController {
 
     public void load() {
         // タグロード
-        tags.loadTags(LoginInfo.create(), tagSearchField.getText().trim());
+        tags.loadTags(LoginInfo.getInstance(), tagSearchField.getText().trim());
         tagTable.setItems(tags.getTags());
         if (Validator.isNotEmpty(tags.getTags())) {
             tagTable.requestFocus();

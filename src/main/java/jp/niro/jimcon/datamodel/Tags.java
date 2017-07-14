@@ -41,7 +41,7 @@ public class Tags {
             tagsData.clear();
             Tag tag = null;
             while (sql.next()) {
-                tag = TagFactory.getInstance().getTag(LoginInfo.create(),
+                tag = TagFactory.getInstance().getTag(LoginInfo.getInstance(),
                         sql.getLong(Tag.TAG_ID));
                 tagsData.add(tag);
             }
@@ -79,7 +79,7 @@ public class Tags {
 
             Tag tag = null;
             while (sql.next()) {
-                tag = TagFactory.getInstance().getTag(LoginInfo.create(),
+                tag = TagFactory.getInstance().getTag(LoginInfo.getInstance(),
                         sql.getLong(Tag.TAG_ID));
                 tagsData.add(tag);
             }

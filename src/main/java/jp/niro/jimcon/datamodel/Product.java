@@ -82,7 +82,7 @@ public class Product {
                 "",
                 "",
                 0.00,
-                LoginInfo.create(), 0,
+                LoginInfo.getInstance(), 0,
                 0.00,
                 0.00,
                 0.000,
@@ -188,7 +188,7 @@ public class Product {
                 product.modelNumber.set(sql.getString(Product.MODEL_NUMBER));
                 product.anotherName.set(sql.getString(Product.ANOTHER_NAME));
                 product.catalogPrice.set(sql.getDouble(Product.CATALOG_PRICE));
-                product.unit.set(UnitFactory.getInstance().getUnit(LoginInfo.create(),
+                product.unit.set(UnitFactory.getInstance().getUnit(LoginInfo.getInstance(),
                         sql.getInt(Product.UNIT_CODE)));
                 product.standardUnitPrice.set(sql.getDouble(Product.STANDARD_UNIT_PRICE));
                 product.stockQuantity.set(sql.getDouble(Product.STOCK_QUANTITY));
@@ -465,6 +465,10 @@ public class Product {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        if (sql != null) {
+            sql.close();
         }
     }
 

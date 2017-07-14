@@ -36,7 +36,7 @@ public class Units {
             unitsData.clear();
             Unit unit = null;
             while (sql.next()) {
-                unit = UnitFactory.getInstance().getUnit(LoginInfo.create(),
+                unit = UnitFactory.getInstance().getUnit(LoginInfo.getInstance(),
                         sql.getInt(Unit.UNIT_CODE));
                 unitsData.add(unit);
             }

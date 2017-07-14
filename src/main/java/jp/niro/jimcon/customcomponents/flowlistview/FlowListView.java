@@ -49,7 +49,7 @@ public class FlowListView<E extends FlowListViewItem> extends ScrollPane {
         // by default, if it is the same size the bars will always show
         DoubleBinding contentWidth = widthProperty().add(-2);
         flowPane.prefWidthProperty().bind(contentWidth);
-        flowPane.setStyle("");
+        flowPane.getStylesheets().add(getClass().getResource("FlowListView.css").toExternalForm());
         Bindings.bindContentBidirectional(flowPane.getChildren(), itemConverter.getFlowNodes());
 
         items.addListener(itemConverter);

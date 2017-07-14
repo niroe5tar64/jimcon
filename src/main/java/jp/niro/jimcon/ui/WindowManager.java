@@ -2,7 +2,6 @@ package jp.niro.jimcon.ui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -15,7 +14,6 @@ import java.net.URL;
  */
 public class WindowManager {
     private Stage primaryStage;
-    private BorderPane rootLayout;
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -25,43 +23,19 @@ public class WindowManager {
         this.primaryStage = primaryStage;
     }
 
-    public void initRootLayout() {
+    public void init() {
         try {
-            // Load root layout from fxml file.
-            System.out.println(WindowManager.class.getResource(RootLayoutController.FXML_FILE));
-            URL location = WindowManager.class.getResource(RootLayoutController.FXML_FILE);
+            // Load login
+            URL location = WindowManager.class.getResource(LoginController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
-            rootLayout = loader.load();
+            Pane login = loader.load();
 
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
+            Scene scene = new Scene(login);
             primaryStage.setScene(scene);
 
             // Give the controller set on the primary stage.
-            RootLayoutController controller = loader.getController();
-            controller.setStage(primaryStage);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setMenu() {
-        try {
-            // Load menu
-            URL location = WindowManager.class.getResource(MenuController.FXML_FILE);
-            FXMLLoader loader = new FXMLLoader(
-                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
-            Pane menu = loader.load();
-
-            // Set unit overview into the center of root layout.
-            rootLayout.setCenter(menu);
-
-            // Give the controller set on the primary stage.
-            MenuController controller = loader.getController();
-            controller.setRootLayout(rootLayout);
+            LoginController controller = loader.getController();
             controller.setPrimaryStage(primaryStage);
 
         } catch (IOException e) {

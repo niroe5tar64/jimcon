@@ -43,7 +43,7 @@ public class Departments {
             while (sql.next()) {
                 departmentsData.add(
                         DepartmentFactory.getInstance().getDepartment(
-                                LoginInfo.create(),
+                                LoginInfo.getInstance(),
                                 sql.getInt(Department.DEPARTMENT_CODE)
                         )
                 );

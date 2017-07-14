@@ -112,16 +112,10 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
         unitCodeField.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (!newValue) {
-                        focusOutFromUnitCodeField();
+                        updateDisplay(getUnitWithInputValid());
                     }
                 }
         );
-    }
-
-    @FXML
-    // TODO rename method name and add javadoc
-    private void focusOutFromUnitCodeField() {
-        updateDisplay(getUnitWithInputValid());
     }
 
     @FXML
@@ -220,7 +214,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
         try {
             int unitCodePK = Integer.parseInt(unitCodeField.getText());
             // unitCodeFieldに入力されたデータがDBに保存されているかどうか
-            tempUnit = UnitFactory.getInstance().getUnit(LoginInfo.create(), unitCodePK);
+            tempUnit = UnitFactory.getInstance().getUnit(LoginInfo.getInstance(), unitCodePK);
             if (Validator.isNull(tempUnit)) {
                 errorMessage.append(Unit.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
             }

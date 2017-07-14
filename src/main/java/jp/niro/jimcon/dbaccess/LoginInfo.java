@@ -8,25 +8,23 @@ import java.sql.SQLException;
  * Created by niro on 2017/04/13.
  */
 public class LoginInfo {
+    public static final String DEFAULT_DRIVER = "com.mysql.jdbc.Driver";
+    public static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/jimcondb";
     private String driver;
     private String url;
     private String user;
     private String password;
 
-    // TODO singletonを適用する事
-    public static LoginInfo create() {
-        return new LoginInfo(
-                "com.mysql.jdbc.Driver",
-                "jdbc:mysql://localhost:3306/jimcondb",
-                "fromclient",
-                "motpL@26");
+
+    private LoginInfo() {}
+
+    private static LoginInfo singleton = new LoginInfo();
+
+    public static LoginInfo getInstance() {
+        return singleton;
     }
 
-    public static LoginInfo create(String driver, String url, String user, String password) {
-        return new LoginInfo(driver, url, user, password);
-    }
-
-    private LoginInfo(String driver, String url, String user, String password) {
+    public void setLoginInfo(String driver, String url, String user, String password) {
         this.driver = driver;
         this.url = url;
         this.user = user;

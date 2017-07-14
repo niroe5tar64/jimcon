@@ -27,7 +27,6 @@ import java.net.URL;
  */
 public class ProductOverviewWithTagController implements TagSearchable {
     public static final String FXML_NAME = "ProductOverviewWithTag.fxml";
-    public static final String CSS_NAME = "ProductOverviewWithTag.css";
     public static final String TITLE_NAME = "商品一覧";
     public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
 
@@ -95,7 +94,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
     @FXML
     private void initialize() {
         // productTableの初期設定
-        products.loadProducts(LoginInfo.create());
+        products.loadProducts(LoginInfo.getInstance());
         productTable.setItems(products.getProducts());
 
         productCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productCodeProperty());
@@ -105,7 +104,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
         anotherNameColumn.setCellValueFactory(cellData -> cellData.getValue().anotherNameProperty());
 
         // tagListの初期設定
-        tagMaps.loadTagMaps(LoginInfo.create());
+        tagMaps.loadTagMaps(LoginInfo.getInstance());
 
         showProductDetails(null);
 
@@ -140,7 +139,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
 
     @FXML
     private void handleSearchProduct() {
-        products.loadProducts(LoginInfo.create(), tagFlowList.getItems());
+        products.loadProducts(LoginInfo.getInstance(), tagFlowList.getItems());
         productTable.setItems(products.getProducts());
     }
 
@@ -152,9 +151,9 @@ public class ProductOverviewWithTagController implements TagSearchable {
             boolean okClicked = showProductEditDialog(tempProduct, true);
             if (okClicked) {
                 // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempProduct.saveNewData(LoginInfo.create());
+                isClosableDialog = tempProduct.saveNewData(LoginInfo.getInstance());
                 // データテーブルをリロード
-                products.loadProducts(LoginInfo.create());
+                products.loadProducts(LoginInfo.getInstance());
             } else {
                 isClosableDialog = true;
             }
@@ -168,13 +167,14 @@ public class ProductOverviewWithTagController implements TagSearchable {
         if (selectedProduct != null) {
             boolean okClicked = showProductEditDialog(selectedProduct, false);
             if (okClicked) {
-                selectedProduct.saveEditedData(LoginInfo.create());
-                products.loadProducts(LoginInfo.create());
+                selectedProduct.saveEditedData(LoginInfo.getInstance());
+                products.loadProducts(LoginInfo.getInstance());
             }
 
         } else {
             // Nothing selected.
-            new WarningAlert(NO_SELECTION_ERROR,
+            new WarningAlert(
+                    NO_SELECTION_ERROR,
                     Product.NO_SELECTION,
                     ""
             ).showAndWait();
@@ -200,7 +200,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             cuttingConstantLabel.setText(Double.toString(product.getCuttingConstant()));
             functionConstantLabel.setText(Double.toString(product.getFunctionConstant()));
             memoArea.setText(product.getMemo());
-            tagList.setItems(tagMaps.getTagsData(LoginInfo.create(), product.getProductCode()));
+            tagList.setItems(tagMaps.getTagsData(LoginInfo.getInstance(), product.getProductCode()));
             tagList.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
                 @Override
                 public ListCell<Tag> call(ListView<Tag> arg0) {
@@ -229,7 +229,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
 
     private boolean showProductEditDialog(Product product, boolean isNew) {
         try {
-            // load the fxml file and create a new stage for the pup-up dialog.
+            // load the fxml file and getInstance a new stage for the pup-up dialog.
             URL location = WindowManager.class.getResource(ProductEditDialogWithTagController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));

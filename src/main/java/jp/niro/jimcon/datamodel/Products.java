@@ -16,6 +16,8 @@ import java.util.List;
  * Created by niro on 2017/04/22.
  */
 public class Products {
+    public static final String  NOT_INPUT_ERROR = "必須項目が未入力です。";
+    public static final String  TAG_IS_REQUIRED = "検索タグが未入力です。";
 
     private ObservableList<Product> productsData = FXCollections.observableArrayList();
 
@@ -43,7 +45,7 @@ public class Products {
             productsData.clear();
             Product product = null;
             while (sql.next()) {
-                product = ProductFactory.getInstance().getProduct(LoginInfo.create(),
+                product = ProductFactory.getInstance().getProduct(LoginInfo.getInstance(),
                         sql.getString(Product.PRODUCT_CODE));
                 productsData.add(product);
             }
@@ -61,8 +63,8 @@ public class Products {
         // タグが未入力ならアラート表示
         if (Validator.isEmpty(searchedTags)) {
             new WarningAlert(
-                    "",
-                    "",
+                    NOT_INPUT_ERROR,
+                    TAG_IS_REQUIRED,
                     ""
             ).showAndWait();
         } else {
@@ -93,7 +95,7 @@ public class Products {
                 productsData.clear();
                 Product product = null;
                 while (sql.next()) {
-                    product = ProductFactory.getInstance().getProduct(LoginInfo.create(),
+                    product = ProductFactory.getInstance().getProduct(LoginInfo.getInstance(),
                             sql.getString(TagMap.PRODUCT_CODE));
                     productsData.add(product);
                 }

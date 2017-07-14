@@ -51,7 +51,7 @@ public class TagOverviewController {
 
     @FXML
     private void initialize() {
-        tags.loadTags(LoginInfo.create());
+        tags.loadTags(LoginInfo.getInstance());
         tagTable.setItems(tags.getTags());
 
         tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
@@ -72,9 +72,9 @@ public class TagOverviewController {
             boolean okClicked = showTagEditDialog(tempTag, true);
             if (okClicked) {
                 // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempTag.saveNewData(LoginInfo.create());
+                isClosableDialog = tempTag.saveNewData(LoginInfo.getInstance());
                 // データテーブルをリロード
-                tags.loadTags(LoginInfo.create());
+                tags.loadTags(LoginInfo.getInstance());
             } else {
                 isClosableDialog = true;
             }
@@ -87,8 +87,8 @@ public class TagOverviewController {
         if (selectedTag != null) {
             boolean okClicked = showTagEditDialog(selectedTag, false);
             if (okClicked) {
-                selectedTag.saveEditedData(LoginInfo.create());
-                tags.loadTags(LoginInfo.create());
+                selectedTag.saveEditedData(LoginInfo.getInstance());
+                tags.loadTags(LoginInfo.getInstance());
             }
 
         } else {
@@ -123,7 +123,7 @@ public class TagOverviewController {
 
     private boolean showTagEditDialog(Tag tag, boolean isNew){
         try {
-            // load the fxml file and create a new stage for the pop-up dialog.
+            // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(TagEditDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));

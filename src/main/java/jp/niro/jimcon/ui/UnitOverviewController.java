@@ -50,7 +50,7 @@ public class UnitOverviewController {
 
     @FXML
     private void initialize() {
-        units.loadUnits(LoginInfo.create());
+        units.loadUnits(LoginInfo.getInstance());
         unitTable.setItems(units.getUnits());
 
         unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
@@ -71,9 +71,9 @@ public class UnitOverviewController {
             boolean okClicked = showUnitEditDialog(tempUnit, true);
             if (okClicked) {
                 // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempUnit.saveNewData(LoginInfo.create());
+                isClosableDialog = tempUnit.saveNewData(LoginInfo.getInstance());
                 // データテーブルをリロード
-                units.loadUnits(LoginInfo.create());
+                units.loadUnits(LoginInfo.getInstance());
             } else {
                 isClosableDialog = true;
             }
@@ -87,8 +87,8 @@ public class UnitOverviewController {
         if (selectedUnit != null) {
             boolean okClicked = showUnitEditDialog(selectedUnit, false);
             if (okClicked) {
-                selectedUnit.saveEditedData(LoginInfo.create());
-                units.loadUnits(LoginInfo.create());
+                selectedUnit.saveEditedData(LoginInfo.getInstance());
+                units.loadUnits(LoginInfo.getInstance());
             }
 
         } else {
@@ -124,7 +124,7 @@ public class UnitOverviewController {
 
     private boolean showUnitEditDialog(Unit unit, boolean isNew) {
         try {
-            // load the fxml file and create a new stage for the pop-up dialog.
+            // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(UnitEditDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));

@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,18 +15,10 @@ import java.net.URL;
  * Created by niro on 2017/05/12.
  */
 public class MenuController {
-    public static final String FXML_FILE = "Menu.fxml";
+    public static final String FXML_NAME = "Menu.fxml";
     public static final String TITLE_NAME = "メインメニュー";
-    private BorderPane rootLayout;
+
     private Stage primaryStage;
-
-    public BorderPane getRootLayout() {
-        return rootLayout;
-    }
-
-    public void setRootLayout(BorderPane rootLayout) {
-        this.rootLayout = rootLayout;
-    }
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -143,7 +134,6 @@ public class MenuController {
             dialogStage.initOwner(primaryStage);
 
             Scene scene = new Scene(pane);
-            scene.getStylesheets().add(WindowManager.class.getResource(ProductOverviewWithTagController.CSS_NAME).toExternalForm());
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。

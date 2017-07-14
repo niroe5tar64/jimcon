@@ -2,7 +2,7 @@ package jp.niro.jimcon;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import jp.niro.jimcon.ui.MenuController;
+import jp.niro.jimcon.ui.LoginController;
 import jp.niro.jimcon.ui.WindowManager;
 
 /**
@@ -19,11 +19,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         try {
             win.setPrimaryStage(primaryStage);
-            win.getPrimaryStage().setTitle(MenuController.TITLE_NAME);
+            win.getPrimaryStage().setTitle(LoginController.TITLE_NAME);
 
             // Show the root layout.
-            win.initRootLayout();
-            win.setMenu();
+            win.init();
 
             win.show();
 

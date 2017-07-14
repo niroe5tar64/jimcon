@@ -39,7 +39,7 @@ public class TagMaps {
             tagMapsData.clear();
             TagMap tagMap = null;
             while (sql.next()) {
-                tagMap = TagMapFactory.getInstance().getTagMap(LoginInfo.create(),
+                tagMap = TagMapFactory.getInstance().getTagMap(LoginInfo.getInstance(),
                         sql.getLong(TagMap.TAG_MAP_ID));
                 tagMapsData.put(tagMap.getTagId(), tagMap.getProductCode(), tagMap);
             }
@@ -56,7 +56,7 @@ public class TagMaps {
     public ObservableList<Tag> getTagsData(LoginInfo login, String productCode) {
         ObservableList<Tag> tagsData = FXCollections.observableArrayList();
         tagMapsData.getColumn(productCode).forEach((tagId, tagMap) -> {
-            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag(LoginInfo.create()));
+            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag(LoginInfo.getInstance()));
         });
         return tagsData;
     }
