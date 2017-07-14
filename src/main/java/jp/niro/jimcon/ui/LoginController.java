@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.FXRobotController;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
 
@@ -26,6 +27,7 @@ public class LoginController {
     public static final String ACCESS_DENIED_MESSAGE = "ユーザー名 パスワードが違います。";
     public static final int ACCESS_DENIED = 1045;
 
+    private FXRobotController robotController;
     private Stage primaryStage;
 
     public Stage getPrimaryStage() {
@@ -44,6 +46,36 @@ public class LoginController {
     private PasswordField passwordField;
     @FXML
     private Text actionTarget;
+
+    @FXML
+    private void initialize() {
+        /*try {
+            Class classInstance = Class.forName(pane.getScene().getFocusOwner().getClass().getName());
+            Method method = classInstance.getMethod("setOnAction");
+            //method.invoke(classInstance, );
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }*/
+
+
+
+
+        /*pane.setOnKeyPressed(event -> {
+            robotController = FXRobotController.create(pane.getScene(), event);
+            robotController.addEnableClassList(TextField.class);
+            robotController.addEnableClassList(PasswordField.class);
+            robotController.keyPress(KeyCode.ENTER ,KeyCode.TAB);
+        });*/
+
+        // テスト用
+        userNameField.setOnAction(event -> {
+
+                System.out.println("aaa");
+
+        });
+    }
 
     @FXML
     protected void handleSubmitButtonAction(ActionEvent event) {

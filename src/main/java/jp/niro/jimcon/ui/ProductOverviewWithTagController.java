@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -41,6 +42,9 @@ public class ProductOverviewWithTagController implements TagSearchable {
     public void setOwnerStage(Stage ownerStage) {
         this.ownerStage = ownerStage;
     }
+
+    @FXML
+    Pane pane;
 
     @FXML
     private TextField tagSearchField;
