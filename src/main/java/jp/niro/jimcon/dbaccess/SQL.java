@@ -12,6 +12,10 @@ public class SQL {
         this.connection = connection;
     }
 
+    public SQL() throws SQLException {
+        new SQL(LoginInfo.getInstance().getConnection());
+    }
+
     public Connection getConnection() {
         return this.connection;
     }

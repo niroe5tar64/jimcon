@@ -15,6 +15,14 @@ import java.sql.SQLException;
  */
 public class TagMaps {
 
+    private static TagMaps singleton = new TagMaps();
+
+    private TagMaps() {}
+
+    public static TagMaps getInstance(){
+        return singleton;
+    }
+
     private HashMapTable<Long, String, TagMap> tagMapsData = new HashMapTable<>();
 
     public HashMapTable<Long, String, TagMap> getTagMaps() {
@@ -56,7 +64,7 @@ public class TagMaps {
     public ObservableList<Tag> getTagsData(LoginInfo login, String productCode) {
         ObservableList<Tag> tagsData = FXCollections.observableArrayList();
         tagMapsData.getColumn(productCode).forEach((tagId, tagMap) -> {
-            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag(LoginInfo.getInstance()));
+            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag(login));
         });
         return tagsData;
     }

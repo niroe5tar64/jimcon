@@ -394,87 +394,66 @@ public class Product {
 
 
     // Save new data.
-    public boolean saveNewData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            // レコードが存在する時、エラーメッセージを表示する。
-            if (isExisted(login)) {
-                new WarningAlert(
-                        DUPLICATED_ERROR,
-                        PRODUCT_CODE_DUPLICATED,
-                        ""
-                ).showAndWait();
-            } else {
-                // Save new data.
-                sql.preparedStatement(QueryBuilder.create()
-                        .insert(Product.TABLE_NAME, DataPairList.create()
-                                .add(Product.PRODUCT_CODE, getProductCode())
-                                .add(Product.PRODUCT_NAME, getProductName())
-                                .add(Product.SIZE_COLOR, getSizeColor())
-                                .add(Product.MODEL_NUMBER, getModelNumber())
-                                .add(Product.ANOTHER_NAME, getAnotherName())
-                                .add(Product.CATALOG_PRICE, getCatalogPrice())
-                                .add(Product.UNIT_CODE, getUnit().getUnitCode())
-                                .add(Product.STANDARD_UNIT_PRICE, getStandardUnitPrice())
-                                .add(Product.STOCK_QUANTITY, getStockQuantity())
-                                .add(Product.CUTTING_CONSTANT, getCuttingConstant())
-                                .add(Product.FUNCTION_CONSTANT, getFunctionConstant())
-                                .add(Product.MEMO, getMemo())
-                                .add(Product.PROCESSED, isProcessed())
-                                .add(Product.DELETED, isDeleted()))
-                        .terminate());
-                sql.executeUpdate();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean saveNewData(SQL sql) throws SQLException {
+        // レコードが存在する時、エラーメッセージを表示する。
+        if (isExisted(sql)) {
+            new WarningAlert(
+                    DUPLICATED_ERROR,
+                    PRODUCT_CODE_DUPLICATED,
+                    ""
+            ).showAndWait();
+        } else {
+            // Save new data.
+            sql.preparedStatement(QueryBuilder.create()
+                    .insert(Product.TABLE_NAME, DataPairList.create()
+                            .add(Product.PRODUCT_CODE, getProductCode())
+                            .add(Product.PRODUCT_NAME, getProductName())
+                            .add(Product.SIZE_COLOR, getSizeColor())
+                            .add(Product.MODEL_NUMBER, getModelNumber())
+                            .add(Product.ANOTHER_NAME, getAnotherName())
+                            .add(Product.CATALOG_PRICE, getCatalogPrice())
+                            .add(Product.UNIT_CODE, getUnit().getUnitCode())
+                            .add(Product.STANDARD_UNIT_PRICE, getStandardUnitPrice())
+                            .add(Product.STOCK_QUANTITY, getStockQuantity())
+                            .add(Product.CUTTING_CONSTANT, getCuttingConstant())
+                            .add(Product.FUNCTION_CONSTANT, getFunctionConstant())
+                            .add(Product.MEMO, getMemo())
+                            .add(Product.PROCESSED, isProcessed())
+                            .add(Product.DELETED, isDeleted()))
+                    .terminate());
+            sql.executeUpdate();
+            return true;
         }
-
         return false;
     }
 
-    public void saveEditedData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            // レコードが存在するならば、更新する。
-            if (isExisted(login)) {
-                // Save update data.
-                sql.preparedStatement(QueryBuilder.create()
-                        .update(Product.TABLE_NAME,
-                                Product.PRODUCT_CODE, getProductCode())
-                        .addSet(Product.PRODUCT_NAME, getProductName())
-                        .addSet(Product.SIZE_COLOR, getSizeColor())
-                        .addSet(Product.MODEL_NUMBER, getModelNumber())
-                        .addSet(Product.ANOTHER_NAME, getAnotherName())
-                        .addSet(Product.CATALOG_PRICE, getCatalogPrice())
-                        .addSet(Product.UNIT_CODE, getUnit().getUnitCode())
-                        .addSet(Product.STANDARD_UNIT_PRICE, getStandardUnitPrice())
-                        .addSet(Product.STOCK_QUANTITY, getStockQuantity())
-                        .addSet(Product.CUTTING_CONSTANT, getCuttingConstant())
-                        .addSet(Product.FUNCTION_CONSTANT, getFunctionConstant())
-                        .addSet(Product.MEMO, getMemo())
-                        .addSet(Product.PROCESSED, isProcessed())
-                        .addSet(Product.DELETED, isDeleted())
-                        .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
-                        .terminate());
-                sql.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (sql != null) {
-            sql.close();
+    public void saveEditedData(SQL sql) throws SQLException {
+        // レコードが存在するならば、更新する。
+        if (isExisted(sql)) {
+            // Save update data.
+            sql.preparedStatement(QueryBuilder.create()
+                    .update(Product.TABLE_NAME,
+                            Product.PRODUCT_CODE, getProductCode())
+                    .addSet(Product.PRODUCT_NAME, getProductName())
+                    .addSet(Product.SIZE_COLOR, getSizeColor())
+                    .addSet(Product.MODEL_NUMBER, getModelNumber())
+                    .addSet(Product.ANOTHER_NAME, getAnotherName())
+                    .addSet(Product.CATALOG_PRICE, getCatalogPrice())
+                    .addSet(Product.UNIT_CODE, getUnit().getUnitCode())
+                    .addSet(Product.STANDARD_UNIT_PRICE, getStandardUnitPrice())
+                    .addSet(Product.STOCK_QUANTITY, getStockQuantity())
+                    .addSet(Product.CUTTING_CONSTANT, getCuttingConstant())
+                    .addSet(Product.FUNCTION_CONSTANT, getFunctionConstant())
+                    .addSet(Product.MEMO, getMemo())
+                    .addSet(Product.PROCESSED, isProcessed())
+                    .addSet(Product.DELETED, isDeleted())
+                    .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
+                    .terminate());
+            sql.executeUpdate();
         }
     }
 
-    private Boolean isExisted(LoginInfo login) throws SQLException {
-        SQL sql = new SQL(login.getConnection());
-
+    private Boolean isExisted(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Product.PRODUCT_CODE)
                 .from(Product.TABLE_NAME)

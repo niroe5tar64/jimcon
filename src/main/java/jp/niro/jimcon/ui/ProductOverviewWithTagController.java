@@ -1,5 +1,7 @@
 package jp.niro.jimcon.ui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,14 +16,13 @@ import javafx.util.Callback;
 import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.customcomponents.ListTagCell;
 import jp.niro.jimcon.customcomponents.flowlistview.FlowListView;
-import jp.niro.jimcon.datamodel.Product;
-import jp.niro.jimcon.datamodel.Products;
-import jp.niro.jimcon.datamodel.Tag;
-import jp.niro.jimcon.datamodel.TagMaps;
+import jp.niro.jimcon.datamodel.*;
 import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/04/21.
@@ -32,7 +33,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
     public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
 
     private Products products = new Products();
-    private TagMaps tagMaps = new TagMaps();
+    private TagMaps tagMaps = TagMaps.getInstance();
     private Stage ownerStage;
 
     public Stage getOwnerStage() {
@@ -89,7 +90,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
     @FXML
     private TextArea memoArea;
     @FXML
-    private ListView<Tag> tagList;
+    private ListView<Tag> tagListView;
     @FXML
     private CheckBox processedCheckBox;
     @FXML
@@ -132,7 +133,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     if (event.getCode() == KeyCode.DELETE) {
                         tagFlowList.getItems().remove(tagFlowList.selectedItemProperty().get());
                     }
-        });
+                });
 
     }
 
@@ -150,17 +151,39 @@ public class ProductOverviewWithTagController implements TagSearchable {
     @FXML
     private void handleNewProduct() {
         Product tempProduct = new Product();
-        boolean isClosableDialog = false;
-        while (!isClosableDialog) {
-            boolean okClicked = showProductEditDialog(tempProduct, true);
-            if (okClicked) {
-                // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempProduct.saveNewData(LoginInfo.getInstance());
-                // データテーブルをリロード
-                products.loadProducts(LoginInfo.getInstance());
-            } else {
-                isClosableDialog = true;
+        ObservableList<Tag> tempTagList = FXCollections.observableArrayList();
+        SQL sql = null;
+        try {
+            sql = new SQL(LoginInfo.getInstance().getConnection());
+            boolean isClosableDialog = false;
+            boolean successSaveProduct;
+            boolean successSaveTagMap = true;
+            while (!isClosableDialog) {
+                boolean okClicked = showProductEditDialog(tempProduct, tempTagList, true);
+                if (okClicked) {
+                    // DBにデータ登録し、新規か否かの状態を取得する。
+                    sql.beginTransaction(); // トランザクション開始
+                    successSaveProduct = tempProduct.saveNewData(sql);
+
+                    TagMap tagMap = null;
+                    for (Tag tag : tempTagList) {
+                        tagMap = TagMap.create(LoginInfo.getInstance(), tag, tempProduct);
+                        if (tagMap != null) {
+                            successSaveTagMap = tagMap.saveNewData(sql);
+                        }
+                        if (!successSaveTagMap) break;
+                    }
+                    isClosableDialog = successSaveProduct && successSaveTagMap;
+                    sql.commit();   // コミット
+                    // データテーブルをリロード
+                    products.loadProducts(LoginInfo.getInstance());
+                } else {
+                    isClosableDialog = true;
+                }
             }
+        } catch (SQLException e) {
+            sql.rollback();
+            e.printStackTrace();
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
@@ -168,26 +191,34 @@ public class ProductOverviewWithTagController implements TagSearchable {
     @FXML
     private void handleEditProduct() {
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
-        if (selectedProduct != null) {
-            boolean okClicked = showProductEditDialog(selectedProduct, false);
-            if (okClicked) {
-                selectedProduct.saveEditedData(LoginInfo.getInstance());
-                products.loadProducts(LoginInfo.getInstance());
-            }
+        ObservableList<Tag> selectedTagList = tagListView.getItems();
+        SQL sql = null;
+        try {
+            sql = new SQL(LoginInfo.getInstance().getConnection());
+            if (selectedProduct != null) {
+                boolean okClicked = showProductEditDialog(selectedProduct, selectedTagList, false);
+                if (okClicked) {
+                    selectedProduct.saveEditedData(sql);
+                    products.loadProducts(LoginInfo.getInstance());
+                }
 
-        } else {
-            // Nothing selected.
-            new WarningAlert(
-                    NO_SELECTION_ERROR,
-                    Product.NO_SELECTION,
-                    ""
-            ).showAndWait();
+            } else {
+                // Nothing selected.
+                new WarningAlert(
+                        NO_SELECTION_ERROR,
+                        Product.NO_SELECTION,
+                        ""
+                ).showAndWait();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleDeleteProduct() {
+
     }
 
     private void showProductDetails(Product product) {
@@ -204,8 +235,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
             cuttingConstantLabel.setText(Double.toString(product.getCuttingConstant()));
             functionConstantLabel.setText(Double.toString(product.getFunctionConstant()));
             memoArea.setText(product.getMemo());
-            tagList.setItems(tagMaps.getTagsData(LoginInfo.getInstance(), product.getProductCode()));
-            tagList.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
+            tagListView.setItems(tagMaps.getTagsData(LoginInfo.getInstance(), product.getProductCode()));
+            tagListView.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
                 @Override
                 public ListCell<Tag> call(ListView<Tag> arg0) {
                     return new ListTagCell();
@@ -231,7 +262,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
         }
     }
 
-    private boolean showProductEditDialog(Product product, boolean isNew) {
+    private boolean showProductEditDialog(Product product, ObservableList<Tag> tagList, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pup-up dialog.
             URL location = WindowManager.class.getResource(ProductEditDialogWithTagController.FXML_NAME);
@@ -252,6 +283,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             ProductEditDialogWithTagController controller = loader.getController();
             controller.setOwnerStage(dialogStage);
             controller.setProduct(product);
+            controller.setTagList(tagList);
 
             // 新規の場合、商品コードを編集不可にする。
             controller.getProductCodeField().editableProperty().set(isNew);

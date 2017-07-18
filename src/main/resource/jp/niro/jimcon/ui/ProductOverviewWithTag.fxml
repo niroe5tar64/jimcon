@@ -288,7 +288,7 @@
                                         <TextArea fx:id="memoArea" editable="false" maxHeight="1.7976931348623157E308"
                                                   maxWidth="1.7976931348623157E308" text="Label"
                                                   GridPane.columnIndex="1" GridPane.rowIndex="11"/>
-                                        <ListView fx:id="tagList" GridPane.columnIndex="1" GridPane.rowIndex="12"/>
+                                        <ListView fx:id="tagListView" GridPane.columnIndex="1" GridPane.rowIndex="12"/>
                                         <CheckBox fx:id="processedCheckBox" disable="true" text=""
                                                   GridPane.columnIndex="1" GridPane.rowIndex="13"/>
                                         <CheckBox fx:id="deletedCheckBox" disable="true" text=""

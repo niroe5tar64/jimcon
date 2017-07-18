@@ -1,10 +1,8 @@
 package jp.niro.jimcon.datamodel;
 
 import javafx.beans.property.*;
-import jp.niro.jimcon.dbaccess.ColumnNameList;
-import jp.niro.jimcon.dbaccess.LoginInfo;
-import jp.niro.jimcon.dbaccess.QueryBuilder;
-import jp.niro.jimcon.dbaccess.SQL;
+import jp.niro.jimcon.commons.WarningAlert;
+import jp.niro.jimcon.dbaccess.*;
 
 import java.sql.SQLException;
 
@@ -52,6 +50,37 @@ public class TagMap {
             if (sql.next()) {
                 TagMap tagMap = new TagMap();
                 tagMap.tagMapId.set(tagMapIdPK);
+                tagMap.tagId.set(sql.getLong(TagMap.TAG_ID));
+                tagMap.productCode.set(sql.getString(TagMap.PRODUCT_CODE));
+                tagMap.deleted.set(sql.getBoolean(TagMap.DELETED));
+                return tagMap;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static TagMap create(LoginInfo login, Tag tag, Product product) {
+        SQL sql = null;
+        try {
+            sql = new SQL(login.getConnection());
+
+            sql.preparedStatement(QueryBuilder.create()
+                    .select(ColumnNameList.create()
+                            .add(TagMap.TAG_MAP_ID)
+                            .add(TagMap.TAG_ID)
+                            .add(TagMap.PRODUCT_CODE)
+                            .add(TagMap.DELETED))
+                    .from(TagMap.TABLE_NAME)
+                    .where(TagMap.TAG_ID).isEqualTo(tag.getTagId())
+                    .and(TagMap.PRODUCT_CODE).isEqualTo(product.getProductCode())
+                    .terminate());
+            sql.executeQuery();
+
+            if (sql.next()) {
+                TagMap tagMap = new TagMap();
+                tagMap.tagMapId.set(sql.getLong(TagMap.TAG_MAP_ID));
                 tagMap.tagId.set(sql.getLong(TagMap.TAG_ID));
                 tagMap.productCode.set(sql.getString(TagMap.PRODUCT_CODE));
                 tagMap.deleted.set(sql.getBoolean(TagMap.DELETED));
@@ -113,6 +142,42 @@ public class TagMap {
 
     public Product getProduct(LoginInfo login){
         return ProductFactory.getInstance().getProduct(login, getProductCode());
+    }
+
+    public boolean saveNewData(SQL sql) throws SQLException {
+        // レコードが存在する時、エラーメッセージを表示する。
+        if (isExisted(new SQL())) {
+            new WarningAlert(
+                    Tag.DUPLICATED_ERROR,
+                    Tag.TAG_ID_DUPLICATED,
+                    ""
+            ).showAndWait();
+        } else {
+            // Save new data.
+            sql.preparedStatement(QueryBuilder.create()
+                    .insert(TagMap.TABLE_NAME, DataPairList.create()
+                            .add(TagMap.TAG_MAP_ID, getTagMapId())
+                            .add(TagMap.TAG_ID, getTagId())
+                            .add(TagMap.PRODUCT_CODE, getProductCode())
+                            .add(TagMap.DELETED, isDeleted()))
+                    .terminate());
+            sql.executeUpdate();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isExisted (SQL sql) throws SQLException {
+
+        sql.preparedStatement(QueryBuilder.create()
+                .select(TagMap.TAG_MAP_ID)
+                .from(TagMap.TABLE_NAME)
+                .where(TagMap.PRODUCT_CODE).isEqualTo(getProductCode())
+                .and(TagMap.TAG_ID).isEqualTo(getTagId())
+                .terminate());
+        sql.executeQuery();
+
+        return sql.next();
     }
 
 }

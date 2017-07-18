@@ -1,17 +1,17 @@
 package jp.niro.jimcon.ui;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.datamodel.Product;
-import jp.niro.jimcon.datamodel.Unit;
-import jp.niro.jimcon.datamodel.UnitFactory;
+import jp.niro.jimcon.datamodel.*;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 
 import java.io.IOException;
@@ -20,13 +20,15 @@ import java.net.URL;
 /**
  * Created by niro on 2017/05/16.
  */
-public class ProductEditDialogWithTagController implements UnitSearchable {
+public class ProductEditDialogWithTagController implements UnitSearchable, TagSearchable {
     public static final String FXML_NAME = "ProductEditDialogWithTag.fxml";
     public static final String TITLE_NAME = "商品編集";
     public static final String INVALID_FIELDS = "Invalid Fields Error";
     public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
 
     private Product product;
+    private ObservableList<Tag> tagList;
+    private TagMaps tagMaps = TagMaps.getInstance();
     private Stage ownerStage;
     private boolean okClicked;
 
@@ -39,7 +41,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
         modelNumberField.setText(product.getModelNumber());
         anotherNameField.setText(product.getAnotherName());
         catalogPriceField.setText(String.valueOf(product.getCatalogPrice()));
-        unitCodeField.setText(String.valueOf(product.getUnit().getUnitCode()));
+        unitSearchField.setText(String.valueOf(product.getUnit().getUnitCode()));
         unitNameLabel.setText(product.getUnit().getUnitName());
         standardUnitPriceField.setText(String.valueOf(product.getStandardUnitPrice()));
         stockQuantityField.setText(String.valueOf(product.getStockQuantity()));
@@ -47,6 +49,12 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
         functionConstantField.setText(String.valueOf(product.getFunctionConstant()));
         textArea.setText(product.getMemo());
         processedCheckBox.setSelected(product.isProcessed());
+    }
+
+    public void setTagList(ObservableList<Tag> tagList){
+        this.tagList = tagList;
+
+        tagListView.setItems(tagList);
     }
 
     public Stage getOwnerStage() {
@@ -68,7 +76,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
     @Override
     public void updateDisplay(Unit unit) {
         if (Validator.isNotNull(unit)) {
-            unitCodeField.setText(String.valueOf(unit.getUnitCode()));
+            unitSearchField.setText(String.valueOf(unit.getUnitCode()));
             unitNameLabel.setText(unit.getUnitName());
         } else {
             updateDisplay(new Unit());
@@ -88,7 +96,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
     @FXML
     private TextField catalogPriceField;
     @FXML
-    private TextField unitCodeField;
+    private TextField unitSearchField;
     @FXML
     private Label unitNameLabel;
     @FXML
@@ -104,18 +112,26 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
     @FXML
     private TextArea textArea;
     @FXML
+    private TextField tagField;
+    @FXML
+    private Button tagSearch;
+    @FXML
+    private ListView<Tag> tagListView;
+    @FXML
     private CheckBox processedCheckBox;
 
     @FXML
     private void initialize() {
         // 単位コードフィールドのフォーカス喪失時、
-        unitCodeField.focusedProperty().addListener(
+        unitSearchField.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (!newValue) {
                         updateDisplay(getUnitWithInputValid());
                     }
                 }
         );
+
+
     }
 
     @FXML
@@ -148,6 +164,35 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
     }
 
     @FXML
+    private void handleSearchTag() {
+        try {
+            URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
+            BorderPane pane = loader.load();
+
+            // Create the dialog stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(TagSearchDialogController.TITLE_NAME);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(ownerStage);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // Set the Product into the controller.
+            TagSearchDialogController controller = loader.getController();
+            controller.setOwnerStage(dialogStage);
+            // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
+            controller.setTagSearchable(this);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleOK() {
         if (isInputValid()) {
             product.setProductCode(productCodeField.getText());
@@ -157,7 +202,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
             product.setAnotherName(anotherNameField.getText());
             product.setCatalogPrice(Double.parseDouble(catalogPriceField.getText()));
             product.setUnit(
-                    Integer.parseInt(unitCodeField.getText()),
+                    Integer.parseInt(unitSearchField.getText()),
                     unitNameLabel.getText());
             product.setStandardUnitPrice(Double.parseDouble(standardUnitPriceField.getText()));
             product.setStockQuantity(Double.parseDouble(stockQuantityField.getText()));
@@ -165,6 +210,8 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
             product.setFunctionConstant(Double.parseDouble(functionConstantField.getText()));
             product.setMemo(textArea.getText());
             product.setProcessed(processedCheckBox.isSelected());
+
+            ObservableList<Tag> tagsData = tagMaps.getTagsData(LoginInfo.getInstance(), product.getProductCode());
 
             okClicked = true;
             ownerStage.close();
@@ -192,7 +239,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
             errorMessage.append(Product.PRODUCT_CODE_IS_NOT_INTEGER);
         }
 
-        if (Validator.isEmpty(unitCodeField.getText())) {
+        if (Validator.isEmpty(unitSearchField.getText())) {
             errorMessage.append(Unit.UNIT_CODE_IS_EMPTY);
         }
 
@@ -212,7 +259,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
         StringBuilder errorMessage = new StringBuilder();
         Unit tempUnit = null;
         try {
-            int unitCodePK = Integer.parseInt(unitCodeField.getText());
+            int unitCodePK = Integer.parseInt(unitSearchField.getText());
             // unitCodeFieldに入力されたデータがDBに保存されているかどうか
             tempUnit = UnitFactory.getInstance().getUnit(LoginInfo.getInstance(), unitCodePK);
             if (Validator.isNull(tempUnit)) {
@@ -234,5 +281,21 @@ public class ProductEditDialogWithTagController implements UnitSearchable {
             ).showAndWait();
         }
         return tempUnit;
+    }
+
+    @Override
+    public void updateDisplay(Tag tag) {
+        // TODO tagListView.addNonDuplication(E items)
+        // addNonDuplication(Tag tag)
+        if (tagListView.getItems().contains(tag)) {
+            System.out.println(tag.getLabelName() + "は既に選択済みです。");
+        } else {
+            tagListView.getItems().add(tag);
+        }
+    }
+
+    @Override
+    public String getSearchValue() {
+        return null;
     }
 }
