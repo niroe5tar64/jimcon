@@ -21,11 +21,11 @@ public class TagMap {
     private final StringProperty productCode;
     private final BooleanProperty deleted;
 
-    public TagMap(){
-        this(0,0,"0000000000", false);
+    public TagMap() {
+        this(0, 0, "0000000000", false);
     }
 
-    public TagMap(long tagMapId, long tagId, String productCode, boolean deleted){
+    public TagMap(long tagMapId, long tagId, String productCode, boolean deleted) {
         this.tagMapId = new SimpleLongProperty(tagMapId);
         this.tagId = new SimpleLongProperty(tagId);
         this.productCode = new SimpleStringProperty(productCode);
@@ -58,48 +58,27 @@ public class TagMap {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return new TagMap();
     }
 
-    public static TagMap create(LoginInfo login, Tag tag, Product product) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(ColumnNameList.create()
-                            .add(TagMap.TAG_MAP_ID)
-                            .add(TagMap.TAG_ID)
-                            .add(TagMap.PRODUCT_CODE)
-                            .add(TagMap.DELETED))
-                    .from(TagMap.TABLE_NAME)
-                    .where(TagMap.TAG_ID).isEqualTo(tag.getTagId())
-                    .and(TagMap.PRODUCT_CODE).isEqualTo(product.getProductCode())
-                    .terminate());
-            sql.executeQuery();
-
-            if (sql.next()) {
-                TagMap tagMap = new TagMap();
-                tagMap.tagMapId.set(sql.getLong(TagMap.TAG_MAP_ID));
-                tagMap.tagId.set(sql.getLong(TagMap.TAG_ID));
-                tagMap.productCode.set(sql.getString(TagMap.PRODUCT_CODE));
-                tagMap.deleted.set(sql.getBoolean(TagMap.DELETED));
-                return tagMap;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static TagMap create(LoginInfo login, Tag tag, Product product) throws SQLException {
+        TagMap tagMap = new TagMap();
+        tagMap.tagId.set(tag.getTagId());
+        tagMap.productCode.set(product.getProductCode());
+        tagMap.deleted.set(false);
+        return tagMap;
     }
 
     // The getter and setter of "tagMapId"
     public long getTagMapId() {
         return tagMapId.get();
     }
+
     public void setTagMapId(long tagMapId) {
         this.tagMapId.set(tagMapId);
     }
-    public LongProperty tagMapIdProperty(){
+
+    public LongProperty tagMapIdProperty() {
         return tagMapId;
     }
 
@@ -107,9 +86,11 @@ public class TagMap {
     public long getTagId() {
         return tagId.get();
     }
+
     public void setTagId(long tagId) {
         this.tagId.set(tagId);
     }
+
     public LongProperty tagIdProperty() {
         return tagId;
     }
@@ -118,35 +99,39 @@ public class TagMap {
     public String getProductCode() {
         return productCode.get();
     }
+
     public void setProductCode(String productCode) {
         this.productCode.set(productCode);
     }
+
     public StringProperty productCodeProperty() {
         return productCode;
     }
 
     // The getter and setter of "deleted"
-    public boolean isDeleted(){
+    public boolean isDeleted() {
         return deleted.get();
     }
-    public void setDeleted(boolean deleted){
+
+    public void setDeleted(boolean deleted) {
         this.deleted.set(deleted);
     }
+
     public BooleanProperty deletedProperty() {
         return deleted;
     }
 
-    public Tag getTag(LoginInfo login){
+    public Tag getTag(LoginInfo login) {
         return TagFactory.getInstance().getTag(login, getTagId());
     }
 
-    public Product getProduct(LoginInfo login){
+    public Product getProduct(LoginInfo login) {
         return ProductFactory.getInstance().getProduct(login, getProductCode());
     }
 
     public boolean saveNewData(SQL sql) throws SQLException {
         // レコードが存在する時、エラーメッセージを表示する。
-        if (isExisted(new SQL())) {
+        if (isExisted(sql)) {
             new WarningAlert(
                     Tag.DUPLICATED_ERROR,
                     Tag.TAG_ID_DUPLICATED,
@@ -156,7 +141,6 @@ public class TagMap {
             // Save new data.
             sql.preparedStatement(QueryBuilder.create()
                     .insert(TagMap.TABLE_NAME, DataPairList.create()
-                            .add(TagMap.TAG_MAP_ID, getTagMapId())
                             .add(TagMap.TAG_ID, getTagId())
                             .add(TagMap.PRODUCT_CODE, getProductCode())
                             .add(TagMap.DELETED, isDeleted()))
@@ -167,13 +151,32 @@ public class TagMap {
         return false;
     }
 
-    private boolean isExisted (SQL sql) throws SQLException {
+    public boolean saveEditData(SQL sql) throws SQLException {
+        // レコードが存在するならば、更新する。
+        if (isExisted(sql)) {
+
+        } else {
+            // Save update data.
+            sql.preparedStatement(QueryBuilder.create()
+                    .update(TagMap.TABLE_NAME,
+                            TagMap.TAG_MAP_ID, getTagMapId())
+                    .addSet(TagMap.TAG_ID, getTagId())
+                    .addSet(TagMap.PRODUCT_CODE, getProductCode())
+                    .addSet(TagMap.DELETED, isDeleted())
+                    .terminate());
+            sql.executeUpdate();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isExisted(SQL sql) throws SQLException {
 
         sql.preparedStatement(QueryBuilder.create()
                 .select(TagMap.TAG_MAP_ID)
                 .from(TagMap.TABLE_NAME)
-                .where(TagMap.PRODUCT_CODE).isEqualTo(getProductCode())
-                .and(TagMap.TAG_ID).isEqualTo(getTagId())
+                .where(TagMap.TAG_ID).isEqualTo(getTagId())
+                .and(TagMap.PRODUCT_CODE).isEqualTo(getProductCode())
                 .terminate());
         sql.executeQuery();
 

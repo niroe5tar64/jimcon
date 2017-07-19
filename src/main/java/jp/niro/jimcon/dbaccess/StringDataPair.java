@@ -1,5 +1,7 @@
 package jp.niro.jimcon.dbaccess;
 
+import jp.niro.jimcon.commons.Validator;
+
 /**
  * Created by niro on 2017/04/15.
  */
@@ -20,10 +22,17 @@ public class StringDataPair implements DataPair {
     @Override
     public String getValue() {
         StringBuilder builder = new StringBuilder();
-        return builder
-                .append("'")
-                .append(String.valueOf(value))
-                .append("'")
-                .toString();
+        if (Validator.isEqual(value, "?")) {
+            return builder
+                    .append(String.valueOf(value))
+                    .toString();
+        } else {
+            return builder
+                    .append("'")
+                    .append(String.valueOf(value))
+                    .append("'")
+                    .toString();
+        }
+
     }
 }

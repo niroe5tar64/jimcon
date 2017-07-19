@@ -427,7 +427,7 @@ public class Product {
         return false;
     }
 
-    public void saveEditedData(SQL sql) throws SQLException {
+    public boolean saveEditedData(SQL sql) throws SQLException {
         // レコードが存在するならば、更新する。
         if (isExisted(sql)) {
             // Save update data.
@@ -450,7 +450,9 @@ public class Product {
                     .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
                     .terminate());
             sql.executeUpdate();
+            return true;
         }
+        return false;
     }
 
     private Boolean isExisted(SQL sql) throws SQLException {

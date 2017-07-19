@@ -28,7 +28,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
 
     private Product product;
     private ObservableList<Tag> tagList;
-    private TagMaps tagMaps = TagMaps.getInstance();
+    private TagMapPool tagMapPool = TagMapPool.getInstance();
     private Stage ownerStage;
     private boolean okClicked;
 
@@ -211,7 +211,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             product.setMemo(textArea.getText());
             product.setProcessed(processedCheckBox.isSelected());
 
-            ObservableList<Tag> tagsData = tagMaps.getTagsData(LoginInfo.getInstance(), product.getProductCode());
+            ObservableList<Tag> tagsData = tagMapPool.getTagsData(LoginInfo.getInstance(), product.getProductCode());
 
             okClicked = true;
             ownerStage.close();

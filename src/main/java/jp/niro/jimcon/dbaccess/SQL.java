@@ -72,6 +72,10 @@ public class SQL {
         preparedStatement.setInt(parameterIndex, x);
     }
 
+    public void setLong(int parameterIndex, long x) throws SQLException {
+        preparedStatement.setLong(parameterIndex, x);
+    }
+
     public void setDouble(int parameterIndex, double x) throws SQLException {
         preparedStatement.setDouble(parameterIndex, x);
     }

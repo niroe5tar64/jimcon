@@ -67,10 +67,19 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
-    /*public QueryBuilder update(String tableName, DataPairList list) {
-        builder.append(" UPDATE ").append(tableName);
+    public QueryBuilder update(String tableName, DataPairList list) {
+        builder.append(" UPDATE ").append(tableName)
+                .append(" SET ");
+        for (DataPair pair: list.getDataPairList()) {
+            builder
+                    .append(pair.getColumnName())
+                    .append(" = ")
+                    .append(pair.getValue())
+                    .append(" , ");
+        }
+        builder.delete(builder.lastIndexOf(" , "), builder.length());
         return new QueryBuilder(builder);
-    }*/
+    }
 
     public QueryBuilder update(String tableName, String columnName, String data) {
         builder.append(" UPDATE ").append(tableName)
@@ -79,6 +88,12 @@ public class QueryBuilder {
     }
 
     public QueryBuilder update(String tableName, String columnName, int data) {
+        builder.append(" UPDATE ").append(tableName)
+                .append(" SET ").append(columnName).append(" = ").append(data);
+        return new QueryBuilder(builder);
+    }
+
+    public QueryBuilder update(String tableName, String columnName, long data) {
         builder.append(" UPDATE ").append(tableName)
                 .append(" SET ").append(columnName).append(" = ").append(data);
         return new QueryBuilder(builder);
@@ -105,6 +120,11 @@ public class QueryBuilder {
         return new QueryBuilder(builder);
     }
 
+    public QueryBuilder addSet(String columnName, long data) {
+        builder.append(" , ").append(columnName).append(" = ").append(data);
+        return new QueryBuilder(builder);
+    }
+
     public QueryBuilder addSet(String columnName, double data) {
         builder.append(" , ").append(columnName).append(" = ").append(data);
         return new QueryBuilder(builder);
@@ -127,6 +147,32 @@ public class QueryBuilder {
 
     public QueryBuilder whereClause(String whereClause) {
         builder.append(" WHERE ").append(whereClause);
+        return new QueryBuilder(builder);
+    }
+
+    public QueryBuilder whereAnd(DataPairList list) {
+        builder.append(" WHERE ");
+        for (DataPair pair: list.getDataPairList()) {
+            builder
+                    .append(pair.getColumnName())
+                    .append(" = ")
+                    .append(pair.getValue())
+                    .append(" AND ");
+        }
+        builder.delete(builder.lastIndexOf(" AND "), builder.length());
+        return new QueryBuilder(builder);
+    }
+
+    public QueryBuilder whereOr(DataPairList list) {
+        builder.append(" WHERE ");
+        for (DataPair pair: list.getDataPairList()) {
+            builder
+                    .append(pair.getColumnName())
+                    .append(" = ")
+                    .append(pair.getValue())
+                    .append(" OR ");
+        }
+        builder.delete(builder.lastIndexOf(" OR "), builder.length());
         return new QueryBuilder(builder);
     }
 

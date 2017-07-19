@@ -1,7 +1,11 @@
 package jp.niro.jimcon.datamodel;
 
+import jp.niro.jimcon.dbaccess.ColumnNameList;
 import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.QueryBuilder;
+import jp.niro.jimcon.dbaccess.SQL;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,5 +28,27 @@ public class TagMapFactory {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
         return pool.computeIfAbsent(tagMapId,
                 k -> TagMap.create(login, tagMapId));
+    }
+
+    public synchronized TagMap getTagMapWithSave(LoginInfo login, Tag tag, Product product) throws SQLException {
+        SQL sql = new SQL(login.getConnection());
+
+        sql.preparedStatement(QueryBuilder.create()
+                .select(ColumnNameList.create()
+                        .add(TagMap.TAG_MAP_ID)
+                        .add(TagMap.TAG_ID)
+                        .add(TagMap.PRODUCT_CODE)
+                        .add(TagMap.DELETED))
+                .from(TagMap.TABLE_NAME)
+                .where(TagMap.TAG_ID).isEqualTo(tag.getTagId())
+                .and(TagMap.PRODUCT_CODE).isEqualTo(product.getProductCode())
+                .terminate());
+        sql.executeQuery();
+
+        if (sql.next()) {
+            return getTagMap(login,sql.getLong(TagMap.TAG_MAP_ID));
+        } else {
+            return TagMap.create(login, tag, product);
+        }
     }
 }

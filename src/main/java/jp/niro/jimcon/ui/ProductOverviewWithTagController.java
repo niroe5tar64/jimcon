@@ -33,7 +33,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
     public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
 
     private Products products = new Products();
-    private TagMaps tagMaps = TagMaps.getInstance();
+    private TagMapPool tagMapPool = TagMapPool.getInstance();
     private Stage ownerStage;
 
     public Stage getOwnerStage() {
@@ -108,14 +108,15 @@ public class ProductOverviewWithTagController implements TagSearchable {
         modelNumberColumn.setCellValueFactory(cellData -> cellData.getValue().modelNumberProperty());
         anotherNameColumn.setCellValueFactory(cellData -> cellData.getValue().anotherNameProperty());
 
-        // tagListの初期設定
-        tagMaps.loadTagMaps(LoginInfo.getInstance());
-
-        showProductDetails(null);
-
         productTable.getSelectionModel().selectedItemProperty().addListener(
                 ((observable, oldValue, newValue) -> showProductDetails(newValue))
         );
+
+        // tagMapPoolの初期設定
+        tagMapPool.loadTagMaps(LoginInfo.getInstance());
+
+        showProductDetails(null);
+
 
         // タグ検索用テキストボックス選択時のキー操作
         tagSearchField.setOnKeyReleased(
@@ -165,16 +166,14 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     sql.beginTransaction(); // トランザクション開始
                     successSaveProduct = tempProduct.saveNewData(sql);
 
-                    TagMap tagMap = null;
                     for (Tag tag : tempTagList) {
-                        tagMap = TagMap.create(LoginInfo.getInstance(), tag, tempProduct);
-                        if (tagMap != null) {
-                            successSaveTagMap = tagMap.saveNewData(sql);
-                        }
+                        successSaveTagMap = TagMap
+                                .create(LoginInfo.getInstance(), tag, tempProduct)
+                                .saveNewData(sql);
                         if (!successSaveTagMap) break;
                     }
                     isClosableDialog = successSaveProduct && successSaveTagMap;
-                    sql.commit();   // コミット
+                    sql.commit();           // コミット
                     // データテーブルをリロード
                     products.loadProducts(LoginInfo.getInstance());
                 } else {
@@ -182,26 +181,45 @@ public class ProductOverviewWithTagController implements TagSearchable {
                 }
             }
         } catch (SQLException e) {
-            sql.rollback();
             e.printStackTrace();
+            sql.rollback();                 // ロールバック
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleEditProduct() {
+        // メソッド内において取り扱うProduct及びList<Tag>の対応付け。
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
         ObservableList<Tag> selectedTagList = tagListView.getItems();
+        // データベース操作
         SQL sql = null;
         try {
             sql = new SQL(LoginInfo.getInstance().getConnection());
+            boolean isClosableDialog = false;
+            boolean successSaveProduct;
+            boolean successSaveTagMap = true;
             if (selectedProduct != null) {
+                // 編集ダイアログ表示
                 boolean okClicked = showProductEditDialog(selectedProduct, selectedTagList, false);
                 if (okClicked) {
-                    selectedProduct.saveEditedData(sql);
-                    products.loadProducts(LoginInfo.getInstance());
-                }
+                    sql.beginTransaction(); // トランザクション開始
+                    // Productの保存
+                    successSaveProduct = selectedProduct.saveEditedData(sql);
 
+                    // TagMapの保存
+                    TagMaps tagMaps = new TagMaps();
+                    for (Tag tag : selectedTagList) {
+                        tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(LoginInfo.getInstance(), tag, selectedProduct));
+                    }
+                    successSaveTagMap = tagMaps.save(sql);
+
+                    isClosableDialog = successSaveProduct && successSaveTagMap;
+                    sql.commit();           // コミット
+                    // データテーブルをリロード
+                    products.loadProducts(LoginInfo.getInstance());
+                    tagMapPool.loadTagMaps(LoginInfo.getInstance());
+                }
             } else {
                 // Nothing selected.
                 new WarningAlert(
@@ -212,6 +230,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            sql.rollback();                 // ロールバック
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
@@ -235,7 +254,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
             cuttingConstantLabel.setText(Double.toString(product.getCuttingConstant()));
             functionConstantLabel.setText(Double.toString(product.getFunctionConstant()));
             memoArea.setText(product.getMemo());
-            tagListView.setItems(tagMaps.getTagsData(LoginInfo.getInstance(), product.getProductCode()));
+            tagListView.setItems(tagMapPool.getTagsData(LoginInfo.getInstance(), product.getProductCode()));
             tagListView.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
                 @Override
                 public ListCell<Tag> call(ListView<Tag> arg0) {
@@ -257,6 +276,13 @@ public class ProductOverviewWithTagController implements TagSearchable {
             cuttingConstantLabel.setText("");
             functionConstantLabel.setText("");
             memoArea.setText("");
+            tagListView.setItems(null);
+            tagListView.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
+                @Override
+                public ListCell<Tag> call(ListView<Tag> arg0) {
+                    return new ListTagCell();
+                }
+            });
             processedCheckBox.setSelected(false);
             deletedCheckBox.setSelected(false);
         }
