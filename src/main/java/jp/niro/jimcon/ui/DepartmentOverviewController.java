@@ -13,10 +13,11 @@ import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.datamodel.Department;
 import jp.niro.jimcon.datamodel.DepartmentFactory;
 import jp.niro.jimcon.datamodel.Departments;
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/05/09.
@@ -58,55 +59,80 @@ public class DepartmentOverviewController {
 
     @FXML
     private void initialize() {
-        departments.loadDepartments(LoginInfo.getInstance());
-        departmentTable.setItems(departments.getObservableList());
+        SQL sql = null;
+        try {
+            sql = SQL.create();
 
-        departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
-        departmentNameColumn.setCellValueFactory(cellData -> cellData.getValue().departmentNameProperty());
+            // departmentTableの初期設定
+            departments.loadDepartments(sql);
+            departmentTable.setItems(departments.getObservableList());
+            departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
+            departmentNameColumn.setCellValueFactory(cellData -> cellData.getValue().departmentNameProperty());
 
-        showDepartmentDetails(null);
+            showDepartmentDetails(null);
+            departmentTable.getSelectionModel().selectedItemProperty().addListener(
+                    ((observable, oldValue, newValue) -> showDepartmentDetails(newValue))
+            );
 
-        departmentTable.getSelectionModel().selectedItemProperty().addListener(
-                ((observable, oldValue, newValue) -> showDepartmentDetails(newValue))
-        );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
+
     }
 
     @FXML
     private void handleNewDepartment() {
         Department tempDepartment = new Department();
-        boolean isClosableDialog = false;
-        while (!isClosableDialog) {
-            boolean okClicked = showDepartmentEditDialog(tempDepartment, true);
-            if (okClicked) {
-                // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempDepartment.saveNewData(LoginInfo.getInstance());
-                // データテーブルをリロード
-                departments.loadDepartments(LoginInfo.getInstance());
-            } else {
-                isClosableDialog = true;
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            boolean isClosableDialog = false;
+            while (!isClosableDialog) {
+                boolean okClicked = showDepartmentEditDialog(tempDepartment, true);
+                if (okClicked) {
+                    // DBにデータ登録し、新規か否かの状態を取得する。
+                    isClosableDialog = tempDepartment.saveNewData(sql);
+                    // データテーブルをリロード
+                    departments.loadDepartments(sql);
+                } else {
+                    isClosableDialog = true;
+                }
             }
+        } catch (SQLException e) {
+            e.getStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleEditDepartment() {
         Department selectedDepartment = departmentTable.getSelectionModel().getSelectedItem();
-        if (selectedDepartment != null) {
-            boolean okClicked = showDepartmentEditDialog(selectedDepartment, false);
-            if (okClicked) {
-                selectedDepartment.saveEditedData(LoginInfo.getInstance());
-                departments.loadDepartments(LoginInfo.getInstance());
-            }
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            if (selectedDepartment != null) {
+                boolean okClicked = showDepartmentEditDialog(selectedDepartment, false);
+                if (okClicked) {
+                    selectedDepartment.saveEditedData(sql);
+                    departments.loadDepartments(sql);
+                }
 
-        } else {
-            // Nothing selected.
-            new WarningAlert(
-                    Department.NO_SELECTION_ERROR,
-                    Department.NO_SELECTION,
-                    ""
-            ).showAndWait();
+            } else {
+                // Nothing selected.
+                new WarningAlert(
+                        Department.NO_SELECTION_ERROR,
+                        Department.NO_SELECTION,
+                        ""
+                ).showAndWait();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
 
@@ -171,5 +197,4 @@ public class DepartmentOverviewController {
         }
         return true;
     }
-
 }

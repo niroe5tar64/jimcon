@@ -12,10 +12,11 @@ import javafx.stage.Stage;
 import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.datamodel.Unit;
 import jp.niro.jimcon.datamodel.Units;
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/04/17.
@@ -50,55 +51,77 @@ public class UnitOverviewController {
 
     @FXML
     private void initialize() {
-        units.loadUnits(LoginInfo.getInstance());
-        unitTable.setItems(units.getUnits());
+        SQL sql = null;
+        try {
+            sql = SQL.create();
 
-        unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
-        unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
+            units.loadUnits(sql);
+            unitTable.setItems(units.getUnits());
+            unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
+            unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
 
-        showUnitDetails(null);
-
-        unitTable.getSelectionModel().selectedItemProperty().addListener(
-                ((observable, oldValue, newValue) -> showUnitDetails(newValue))
-        );
+            showUnitDetails(null);
+            unitTable.getSelectionModel().selectedItemProperty().addListener(
+                    ((observable, oldValue, newValue) -> showUnitDetails(newValue))
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
     }
 
     @FXML
     private void handleNewUnit() {
         Unit tempUnit = new Unit();
         boolean isClosableDialog = false;
-        while (!isClosableDialog) {
-            boolean okClicked = showUnitEditDialog(tempUnit, true);
-            if (okClicked) {
-                // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempUnit.saveNewData(LoginInfo.getInstance());
-                // データテーブルをリロード
-                units.loadUnits(LoginInfo.getInstance());
-            } else {
-                isClosableDialog = true;
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            while (!isClosableDialog) {
+                boolean okClicked = showUnitEditDialog(tempUnit, true);
+                if (okClicked) {
+                    // DBにデータ登録し、新規か否かの状態を取得する。
+                    isClosableDialog = tempUnit.saveNewData(sql);
+                    // データテーブルをリロード
+                    units.loadUnits(sql);
+                } else {
+                    isClosableDialog = true;
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleEditUnit() {
         Unit selectedUnit = unitTable.getSelectionModel().getSelectedItem();
-        if (selectedUnit != null) {
-            boolean okClicked = showUnitEditDialog(selectedUnit, false);
-            if (okClicked) {
-                selectedUnit.saveEditedData(LoginInfo.getInstance());
-                units.loadUnits(LoginInfo.getInstance());
-            }
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            if (selectedUnit != null) {
+                boolean okClicked = showUnitEditDialog(selectedUnit, false);
+                if (okClicked) {
+                    selectedUnit.saveEditedData(sql);
+                    units.loadUnits(sql);
+                }
 
-        } else {
-            // Nothing selected.
-            new WarningAlert(
-                    NO_SELECTION_ERROR,
-                    Unit.NO_SELECTION,
-                    ""
-            ).showAndWait();
+            } else {
+                // Nothing selected.
+                new WarningAlert(
+                        NO_SELECTION_ERROR,
+                        Unit.NO_SELECTION,
+                        ""
+                ).showAndWait();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
     }
 

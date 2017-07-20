@@ -41,7 +41,6 @@ public class TagMaps {
 
         if (sql.next()) {
             sourceList.add(TagMapFactory.getInstance().getTagMap(
-                    LoginInfo.getInstance(),
                     sql.getLong(TagMap.TAG_MAP_ID))
             );
         }
@@ -114,16 +113,16 @@ public class TagMaps {
                 "nirosama26");
         TagMaps maps = new TagMaps();
         ArrayList<TagMap> tag1 = new ArrayList<>();
-        tag1.add(TagMapFactory.getInstance().getTagMap(login, 1));
-        tag1.add(TagMapFactory.getInstance().getTagMap(login, 2));
-        tag1.add(TagMapFactory.getInstance().getTagMap(login, 3));
-        tag1.add(TagMapFactory.getInstance().getTagMap(login, 4));
-        tag1.add(TagMapFactory.getInstance().getTagMap(login, 5));
+        tag1.add(TagMapFactory.getInstance().getTagMap(1));
+        tag1.add(TagMapFactory.getInstance().getTagMap(2));
+        tag1.add(TagMapFactory.getInstance().getTagMap(3));
+        tag1.add(TagMapFactory.getInstance().getTagMap(4));
+        tag1.add(TagMapFactory.getInstance().getTagMap(5));
 
         ArrayList<TagMap> tag2 = new ArrayList<>();
-        tag2.add(TagMapFactory.getInstance().getTagMap(login, 2));
-        tag2.add(TagMapFactory.getInstance().getTagMap(login, 4));
-        tag2.add(TagMapFactory.getInstance().getTagMap(login, 6));
+        tag2.add(TagMapFactory.getInstance().getTagMap(2));
+        tag2.add(TagMapFactory.getInstance().getTagMap(4));
+        tag2.add(TagMapFactory.getInstance().getTagMap(6));
 
         Collection<TagMap> a = maps.subtract(tag1, tag2);
         Collection<TagMap> b = maps.subtract(tag2, tag1);

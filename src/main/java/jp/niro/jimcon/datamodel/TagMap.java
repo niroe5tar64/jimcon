@@ -1,8 +1,9 @@
 package jp.niro.jimcon.datamodel;
 
 import javafx.beans.property.*;
-import jp.niro.jimcon.commons.WarningAlert;
-import jp.niro.jimcon.dbaccess.*;
+import jp.niro.jimcon.dbaccess.ColumnNameList;
+import jp.niro.jimcon.dbaccess.QueryBuilder;
+import jp.niro.jimcon.dbaccess.SQL;
 
 import java.sql.SQLException;
 
@@ -32,36 +33,29 @@ public class TagMap {
         this.deleted = new SimpleBooleanProperty(deleted);
     }
 
-    public static TagMap create(LoginInfo login, long tagMapIdPK) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
+    public static TagMap create(SQL sql, long tagMapIdPK) throws SQLException {
+        sql.preparedStatement(QueryBuilder.create()
+                .select(ColumnNameList.create()
+                        .add(TagMap.TAG_ID)
+                        .add(TagMap.PRODUCT_CODE)
+                        .add(TagMap.DELETED))
+                .from(TagMap.TABLE_NAME)
+                .where(TagMap.TAG_MAP_ID).isEqualTo(tagMapIdPK)
+                .terminate());
+        sql.executeQuery();
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(ColumnNameList.create()
-                            .add(TagMap.TAG_ID)
-                            .add(TagMap.PRODUCT_CODE)
-                            .add(TagMap.DELETED))
-                    .from(TagMap.TABLE_NAME)
-                    .where(TagMap.TAG_MAP_ID).isEqualTo(tagMapIdPK)
-                    .terminate());
-            sql.executeQuery();
-
-            if (sql.next()) {
-                TagMap tagMap = new TagMap();
-                tagMap.tagMapId.set(tagMapIdPK);
-                tagMap.tagId.set(sql.getLong(TagMap.TAG_ID));
-                tagMap.productCode.set(sql.getString(TagMap.PRODUCT_CODE));
-                tagMap.deleted.set(sql.getBoolean(TagMap.DELETED));
-                return tagMap;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sql.next()) {
+            TagMap tagMap = new TagMap();
+            tagMap.tagMapId.set(tagMapIdPK);
+            tagMap.tagId.set(sql.getLong(TagMap.TAG_ID));
+            tagMap.productCode.set(sql.getString(TagMap.PRODUCT_CODE));
+            tagMap.deleted.set(sql.getBoolean(TagMap.DELETED));
+            return tagMap;
         }
         return new TagMap();
     }
 
-    public static TagMap create(LoginInfo login, Tag tag, Product product) throws SQLException {
+    public static TagMap create(Tag tag, Product product) throws SQLException {
         TagMap tagMap = new TagMap();
         tagMap.tagId.set(tag.getTagId());
         tagMap.productCode.set(product.getProductCode());
@@ -121,53 +115,12 @@ public class TagMap {
         return deleted;
     }
 
-    public Tag getTag(LoginInfo login) {
-        return TagFactory.getInstance().getTag(login, getTagId());
+    public Tag getTag() {
+        return TagFactory.getInstance().getTag(getTagId());
     }
 
-    public Product getProduct(LoginInfo login) {
-        return ProductFactory.getInstance().getProduct(login, getProductCode());
-    }
-
-    public boolean saveNewData(SQL sql) throws SQLException {
-        // レコードが存在する時、エラーメッセージを表示する。
-        if (isExisted(sql)) {
-            new WarningAlert(
-                    Tag.DUPLICATED_ERROR,
-                    Tag.TAG_ID_DUPLICATED,
-                    ""
-            ).showAndWait();
-        } else {
-            // Save new data.
-            sql.preparedStatement(QueryBuilder.create()
-                    .insert(TagMap.TABLE_NAME, DataPairList.create()
-                            .add(TagMap.TAG_ID, getTagId())
-                            .add(TagMap.PRODUCT_CODE, getProductCode())
-                            .add(TagMap.DELETED, isDeleted()))
-                    .terminate());
-            sql.executeUpdate();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean saveEditData(SQL sql) throws SQLException {
-        // レコードが存在するならば、更新する。
-        if (isExisted(sql)) {
-
-        } else {
-            // Save update data.
-            sql.preparedStatement(QueryBuilder.create()
-                    .update(TagMap.TABLE_NAME,
-                            TagMap.TAG_MAP_ID, getTagMapId())
-                    .addSet(TagMap.TAG_ID, getTagId())
-                    .addSet(TagMap.PRODUCT_CODE, getProductCode())
-                    .addSet(TagMap.DELETED, isDeleted())
-                    .terminate());
-            sql.executeUpdate();
-            return true;
-        }
-        return false;
+    public Product getProduct() {
+        return ProductFactory.getInstance().getProduct(getProductCode());
     }
 
     private boolean isExisted(SQL sql) throws SQLException {

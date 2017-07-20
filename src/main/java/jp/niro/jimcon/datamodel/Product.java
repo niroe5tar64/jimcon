@@ -144,7 +144,7 @@ public class Product {
                 modelNumber,
                 anotherName,
                 catalogPrice,
-                UnitFactory.getInstance().getUnit(login, unitCode),
+                UnitFactory.getInstance().getUnit(unitCode),
                 standardUnitPrice,
                 stockQuantity,
                 cuttingConstant,
@@ -154,53 +154,46 @@ public class Product {
                 deleted);
     }
 
-    public static Product create(LoginInfo login, String productCodePK) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
+    public static Product create(SQL sql, String productCodePK) throws SQLException {
+        sql.preparedStatement(QueryBuilder.create()
+                .select(ColumnNameList.create()
+                        .add(Product.PRODUCT_CODE)
+                        .add(Product.PRODUCT_NAME)
+                        .add(Product.SIZE_COLOR)
+                        .add(Product.MODEL_NUMBER)
+                        .add(Product.ANOTHER_NAME)
+                        .add(Product.CATALOG_PRICE)
+                        .add(Product.UNIT_CODE)
+                        .add(Product.STANDARD_UNIT_PRICE)
+                        .add(Product.STOCK_QUANTITY)
+                        .add(Product.CUTTING_CONSTANT)
+                        .add(Product.FUNCTION_CONSTANT)
+                        .add(Product.MEMO)
+                        .add(Product.PROCESSED)
+                        .add(Product.DELETED))
+                .from(Product.TABLE_NAME)
+                .where(Product.PRODUCT_CODE).isEqualTo(productCodePK)
+                .terminate());
+        sql.executeQuery();
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(ColumnNameList.create()
-                            .add(Product.PRODUCT_CODE)
-                            .add(Product.PRODUCT_NAME)
-                            .add(Product.SIZE_COLOR)
-                            .add(Product.MODEL_NUMBER)
-                            .add(Product.ANOTHER_NAME)
-                            .add(Product.CATALOG_PRICE)
-                            .add(Product.UNIT_CODE)
-                            .add(Product.STANDARD_UNIT_PRICE)
-                            .add(Product.STOCK_QUANTITY)
-                            .add(Product.CUTTING_CONSTANT)
-                            .add(Product.FUNCTION_CONSTANT)
-                            .add(Product.MEMO)
-                            .add(Product.PROCESSED)
-                            .add(Product.DELETED))
-                    .from(Product.TABLE_NAME)
-                    .where(Product.PRODUCT_CODE).isEqualTo(productCodePK)
-                    .terminate());
-            sql.executeQuery();
-
-            if (sql.next()) {
-                Product product = new Product();
-                product.productCode.set(productCodePK);
-                product.productName.set(sql.getString(Product.PRODUCT_NAME));
-                product.sizeColor.set(sql.getString(Product.SIZE_COLOR));
-                product.modelNumber.set(sql.getString(Product.MODEL_NUMBER));
-                product.anotherName.set(sql.getString(Product.ANOTHER_NAME));
-                product.catalogPrice.set(sql.getDouble(Product.CATALOG_PRICE));
-                product.unit.set(UnitFactory.getInstance().getUnit(LoginInfo.getInstance(),
-                        sql.getInt(Product.UNIT_CODE)));
-                product.standardUnitPrice.set(sql.getDouble(Product.STANDARD_UNIT_PRICE));
-                product.stockQuantity.set(sql.getDouble(Product.STOCK_QUANTITY));
-                product.cuttingConstant.set(sql.getDouble(Product.CUTTING_CONSTANT));
-                product.functionConstant.set(sql.getDouble(Product.FUNCTION_CONSTANT));
-                product.memo.set(sql.getString(Product.MEMO));
-                product.processed.set(sql.getBoolean(Product.PROCESSED));
-                product.deleted.set(sql.getBoolean(Product.DELETED));
-                return product;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sql.next()) {
+            Product product = new Product();
+            product.productCode.set(productCodePK);
+            product.productName.set(sql.getString(Product.PRODUCT_NAME));
+            product.sizeColor.set(sql.getString(Product.SIZE_COLOR));
+            product.modelNumber.set(sql.getString(Product.MODEL_NUMBER));
+            product.anotherName.set(sql.getString(Product.ANOTHER_NAME));
+            product.catalogPrice.set(sql.getDouble(Product.CATALOG_PRICE));
+            product.unit.set(UnitFactory.getInstance()
+                    .getUnit(sql.getInt(Product.UNIT_CODE)));
+            product.standardUnitPrice.set(sql.getDouble(Product.STANDARD_UNIT_PRICE));
+            product.stockQuantity.set(sql.getDouble(Product.STOCK_QUANTITY));
+            product.cuttingConstant.set(sql.getDouble(Product.CUTTING_CONSTANT));
+            product.functionConstant.set(sql.getDouble(Product.FUNCTION_CONSTANT));
+            product.memo.set(sql.getString(Product.MEMO));
+            product.processed.set(sql.getBoolean(Product.PROCESSED));
+            product.deleted.set(sql.getBoolean(Product.DELETED));
+            return product;
         }
         return null;
     }

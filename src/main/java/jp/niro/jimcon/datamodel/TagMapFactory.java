@@ -1,7 +1,6 @@
 package jp.niro.jimcon.datamodel;
 
 import jp.niro.jimcon.dbaccess.ColumnNameList;
-import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.QueryBuilder;
 import jp.niro.jimcon.dbaccess.SQL;
 
@@ -24,15 +23,20 @@ public class TagMapFactory {
         return singleton;
     }
 
-    public synchronized TagMap getTagMap(LoginInfo login, long tagMapId) {
+    public synchronized TagMap getTagMap(long tagMapId) {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
         return pool.computeIfAbsent(tagMapId,
-                k -> TagMap.create(login, tagMapId));
+                k -> {
+                    try {
+                        return TagMap.create(SQL.create(), tagMapId);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
     }
 
-    public synchronized TagMap getTagMapWithSave(LoginInfo login, Tag tag, Product product) throws SQLException {
-        SQL sql = new SQL(login.getConnection());
-
+    public synchronized TagMap getTagMapWithSave(SQL sql, Tag tag, Product product) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(ColumnNameList.create()
                         .add(TagMap.TAG_MAP_ID)
@@ -46,10 +50,11 @@ public class TagMapFactory {
         sql.executeQuery();
 
         if (sql.next()) {
-            return getTagMap(login,sql.getLong(TagMap.TAG_MAP_ID));
+            //
+            return getTagMap(sql.getLong(TagMap.TAG_MAP_ID));
         } else {
-            System.out.println("Debug:新規TagMap作成");
-            return TagMap.create(login, tag, product);
+            // データベースに存在しない場合、TagMapクラスを作成
+            return TagMap.create(tag, product);
         }
     }
 }

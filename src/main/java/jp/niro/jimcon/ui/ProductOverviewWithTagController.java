@@ -98,24 +98,31 @@ public class ProductOverviewWithTagController implements TagSearchable {
 
     @FXML
     private void initialize() {
-        // productTableの初期設定
-        products.loadProducts(LoginInfo.getInstance());
-        productTable.setItems(products.getProducts());
+        SQL sql = null;
+        try {
+            sql = SQL.create();
 
-        productCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productCodeProperty());
-        productNameColumn.setCellValueFactory(cellData -> cellData.getValue().productNameProperty());
-        sizeColorColumn.setCellValueFactory(cellData -> cellData.getValue().sizeColorProperty());
-        modelNumberColumn.setCellValueFactory(cellData -> cellData.getValue().modelNumberProperty());
-        anotherNameColumn.setCellValueFactory(cellData -> cellData.getValue().anotherNameProperty());
+            // productTableの初期設定
+            products.loadProducts(sql);
+            productTable.setItems(products.getProducts());
+            productCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productCodeProperty());
+            productNameColumn.setCellValueFactory(cellData -> cellData.getValue().productNameProperty());
+            sizeColorColumn.setCellValueFactory(cellData -> cellData.getValue().sizeColorProperty());
+            modelNumberColumn.setCellValueFactory(cellData -> cellData.getValue().modelNumberProperty());
+            anotherNameColumn.setCellValueFactory(cellData -> cellData.getValue().anotherNameProperty());
 
-        productTable.getSelectionModel().selectedItemProperty().addListener(
-                ((observable, oldValue, newValue) -> showProductDetails(newValue))
-        );
+            showProductDetails(null);
+            productTable.getSelectionModel().selectedItemProperty().addListener(
+                    ((observable, oldValue, newValue) -> showProductDetails(newValue))
+            );
 
-        // tagMapPoolの初期設定
-        tagMapPool.loadTagMaps(LoginInfo.getInstance());
+            // tagMapPoolの初期設定
+            tagMapPool.loadTagMaps(sql);
 
-        showProductDetails(null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
 
 
         // タグ検索用テキストボックス選択時のキー操作
@@ -145,8 +152,15 @@ public class ProductOverviewWithTagController implements TagSearchable {
 
     @FXML
     private void handleSearchProduct() {
-        products.loadProducts(LoginInfo.getInstance(), tagFlowList.getItems());
-        productTable.setItems(products.getProducts());
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            products.loadProducts(sql, tagFlowList.getItems());
+            productTable.setItems(products.getProducts());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
     }
 
     @FXML
@@ -155,7 +169,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
         ObservableList<Tag> tempTagList = FXCollections.observableArrayList();
         SQL sql = null;
         try {
-            sql = new SQL(LoginInfo.getInstance().getConnection());
+            sql = SQL.create();
             boolean isClosableDialog = false;
             boolean successSaveProduct;
             boolean successSaveTagMap;
@@ -171,7 +185,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     // TagMapの保存
                     TagMaps tagMaps = new TagMaps();
                     for (Tag tag : tempTagList) {
-                        tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(LoginInfo.getInstance(), tag, tempProduct));
+                        tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(sql, tag, tempProduct));
                     }
                     successSaveTagMap = tagMaps.save(sql);
                     isClosableDialog = successSaveProduct && successSaveTagMap;
@@ -179,8 +193,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     sql.commit();
 
                     // データテーブルをリロード
-                    products.loadProducts(LoginInfo.getInstance());
-                    tagMapPool.loadTagMaps(LoginInfo.getInstance());
+                    products.loadProducts(sql);
+                    tagMapPool.loadTagMaps(sql);
                 } else {
                     isClosableDialog = true;
                     // ********** ロールバック **********
@@ -192,6 +206,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
             // ********** ロールバック **********
             sql.rollback();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
@@ -203,7 +219,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
         // データベース操作
         SQL sql = null;
         try {
-            sql = new SQL(LoginInfo.getInstance().getConnection());
+            sql = SQL.create();;
             boolean isClosableDialog = false;
             boolean successSaveProduct;
             boolean successSaveTagMap;
@@ -219,7 +235,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     // TagMapの保存
                     TagMaps tagMaps = new TagMaps();
                     for (Tag tag : selectedTagList) {
-                        tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(LoginInfo.getInstance(), tag, selectedProduct));
+                        tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(sql, tag, selectedProduct));
                     }
                     successSaveTagMap = tagMaps.save(sql);
 
@@ -228,8 +244,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     sql.commit();
 
                     // データテーブルをリロード
-                    products.loadProducts(LoginInfo.getInstance());
-                    tagMapPool.loadTagMaps(LoginInfo.getInstance());
+                    products.loadProducts(sql);
+                    tagMapPool.loadTagMaps(sql);
                 }
             } else {
                 // Nothing selected.
@@ -246,6 +262,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
             // ********** ロールバック **********
             sql.rollback();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
@@ -257,7 +275,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
         // データベース操作
         SQL sql = null;
         try {
-            sql = new SQL(LoginInfo.getInstance().getConnection());
+            sql = SQL.create();;
             boolean isClosableDialog = false;
             boolean successDeleteProduct;
             boolean successDeleteTagMap;
@@ -270,7 +288,7 @@ public class ProductOverviewWithTagController implements TagSearchable {
                 // TagMapの保存
                 TagMaps tagMaps = new TagMaps();
                 for (Tag tag : selectedTagList) {
-                    tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(LoginInfo.getInstance(), tag, selectedProduct));
+                    tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(sql, tag, selectedProduct));
                 }
                 successDeleteTagMap = tagMaps.delete(sql);
 
@@ -279,8 +297,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
                 sql.commit();
 
                 // データテーブルをリロード
-                products.loadProducts(LoginInfo.getInstance());
-                tagMapPool.loadTagMaps(LoginInfo.getInstance());
+                products.loadProducts(sql);
+                tagMapPool.loadTagMaps(sql);
             } else {
                 // Nothing selected.
                 new WarningAlert(
@@ -296,6 +314,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
             // ********** ロールバック **********
             sql.rollback();
         }
+        if (sql != null) sql.close(); // 接続切断
+
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 

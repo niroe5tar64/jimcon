@@ -1,7 +1,8 @@
 package jp.niro.jimcon.datamodel;
 
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +21,16 @@ public class TagFactory {
         return singleton;
     }
 
-    public synchronized Tag getTag(LoginInfo login, long tagId) {
+    public synchronized Tag getTag(long tagId) {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
         return pool.computeIfAbsent(tagId,
-                k -> Tag.create(login, tagId));
+                k -> {
+                    try {
+                        return Tag.create(SQL.create(), tagId);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
     }
 }

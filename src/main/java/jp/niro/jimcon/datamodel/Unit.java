@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.dbaccess.DataPairList;
-import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.QueryBuilder;
 import jp.niro.jimcon.dbaccess.SQL;
 
@@ -51,26 +50,19 @@ public class Unit {
         this.unitName = new SimpleStringProperty(unitName);
     }
 
-    public static Unit create(LoginInfo login, int unitCodePK) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
+    public static Unit create(SQL sql, int unitCodePK) throws SQLException {
+        sql.preparedStatement(QueryBuilder.create()
+                .select(Unit.UNIT_NAME)
+                .from(Unit.TABLE_NAME)
+                .where(Unit.UNIT_CODE).isEqualTo(unitCodePK)
+                .terminate());
+        sql.executeQuery();
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(Unit.UNIT_NAME)
-                    .from(Unit.TABLE_NAME)
-                    .where(Unit.UNIT_CODE).isEqualTo(unitCodePK)
-                    .terminate());
-            sql.executeQuery();
-
-            if (sql.next()) {
-                Unit unit = new Unit();
-                unit.unitCode.set(unitCodePK);
-                unit.unitName.set(sql.getString(Unit.UNIT_NAME));
-                return unit;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sql.next()) {
+            Unit unit = new Unit();
+            unit.unitCode.set(unitCodePK);
+            unit.unitName.set(sql.getString(Unit.UNIT_NAME));
+            return unit;
         }
         return null;
     }
@@ -103,59 +95,44 @@ public class Unit {
 
 
     // Save new data.
-    public boolean saveNewData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            // レコードが既に存在する場合、エラーメッセージを表示する。
-            if (isExisted(login)) {
-                new WarningAlert(
-                        DUPLICATED_ERROR,
-                        UNIT_CODE_DUPLICATED,
-                        "")
-                .showAndWait();
-            } else {
-                // Save new data
-                sql.preparedStatement(QueryBuilder.create()
-                        .insert(Unit.TABLE_NAME, DataPairList.create()
-                                .add(Unit.UNIT_CODE, getUnitCode())
-                                .add(Unit.UNIT_NAME, getUnitName()))
-                        .terminate());
-                sql.executeUpdate();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean saveNewData(SQL sql) throws SQLException {
+        // レコードが既に存在する場合、エラーメッセージを表示する。
+        if (isExisted(sql)) {
+            new WarningAlert(
+                    DUPLICATED_ERROR,
+                    UNIT_CODE_DUPLICATED,
+                    "")
+                    .showAndWait();
+        } else {
+            // Save new data
+            sql.preparedStatement(QueryBuilder.create()
+                    .insert(Unit.TABLE_NAME, DataPairList.create()
+                            .add(Unit.UNIT_CODE, getUnitCode())
+                            .add(Unit.UNIT_NAME, getUnitName()))
+                    .terminate());
+            sql.executeUpdate();
+            return true;
         }
-
         return false;
     }
 
-    public void saveEditedData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            // レコードが存在するならば、更新する。
-            if (isExisted(login)) {
-                // Save update data.
-                sql.preparedStatement(QueryBuilder.create()
-                        .update(Unit.TABLE_NAME,
-                                Unit.UNIT_CODE, getUnitCode())
-                        .addSet(Unit.UNIT_NAME, getUnitName())
-                        .where(Unit.UNIT_CODE).isEqualTo(getUnitCode())
-                        .terminate());
-                sql.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean saveEditedData(SQL sql) throws SQLException {
+        // レコードが存在するならば、更新する。
+        if (isExisted(sql)) {
+            // Save update data.
+            sql.preparedStatement(QueryBuilder.create()
+                    .update(Unit.TABLE_NAME,
+                            Unit.UNIT_CODE, getUnitCode())
+                    .addSet(Unit.UNIT_NAME, getUnitName())
+                    .where(Unit.UNIT_CODE).isEqualTo(getUnitCode())
+                    .terminate());
+            sql.executeUpdate();
+            return true;
         }
+        return false;
     }
 
-    private Boolean isExisted(LoginInfo login) throws SQLException {
-        SQL sql = new SQL(login.getConnection());
-
+    private Boolean isExisted(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Unit.UNIT_CODE)
                 .from(Unit.TABLE_NAME)

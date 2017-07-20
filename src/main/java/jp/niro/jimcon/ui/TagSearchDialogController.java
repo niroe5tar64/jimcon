@@ -11,7 +11,9 @@ import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.Tags;
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
+
+import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/05/01.
@@ -108,13 +110,20 @@ public class TagSearchDialogController {
     }
 
     public void load() {
-        // タグロード
-        tags.loadTags(LoginInfo.getInstance(), tagSearchField.getText().trim());
-        tagTable.setItems(tags.getTags());
-        if (Validator.isNotEmpty(tags.getTags())) {
-            tagTable.requestFocus();
-            tagTable.getSelectionModel().selectFirst();
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            // タグロード
+            tags.loadTags(sql, tagSearchField.getText().trim());
+            tagTable.setItems(tags.getTags());
+            if (Validator.isNotEmpty(tags.getTags())) {
+                tagTable.requestFocus();
+                tagTable.getSelectionModel().selectFirst();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
     }
 
     public void setTagSearchField(String searchValue) {

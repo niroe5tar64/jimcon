@@ -1,7 +1,8 @@
 package jp.niro.jimcon.datamodel;
 
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,10 +21,16 @@ public class DepartmentFactory {
         return singleton;
     }
 
-    public synchronized Department getDepartment(LoginInfo login, int departmentCode) {
+    public synchronized Department getDepartment(int departmentCode) {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
         return pool.computeIfAbsent(departmentCode,
-                k -> Department.create(login, departmentCode));
+                k -> {
+                    try {
+                        return Department.create(SQL.create(), departmentCode);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
     }
-
 }

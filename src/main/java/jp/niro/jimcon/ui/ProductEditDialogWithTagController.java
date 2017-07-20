@@ -14,7 +14,6 @@ import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.customcomponents.ListTagCell;
 import jp.niro.jimcon.datamodel.*;
-import jp.niro.jimcon.dbaccess.LoginInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -269,7 +268,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
         try {
             int unitCodePK = Integer.parseInt(unitSearchField.getText());
             // unitCodeFieldに入力されたデータがDBに保存されているかどうか
-            tempUnit = UnitFactory.getInstance().getUnit(LoginInfo.getInstance(), unitCodePK);
+            tempUnit = UnitFactory.getInstance().getUnit(unitCodePK);
             if (Validator.isNull(tempUnit)) {
                 errorMessage.append(Unit.UNIT_CODE_HAS_NOT_BEEN_REGISTERED);
             }

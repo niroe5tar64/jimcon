@@ -16,7 +16,7 @@ public class Tag implements FlowListViewItem {
     public static final String TAG_ID_DUPLICATED = "このタグＩＤは既に使われています。\n";
     public static final String TAG_ID_HAS_NOT_BEEN_REGISTERED = "このタグＩＤは登録されていません。\n";
 
-    public static final String  TAG_ID_IS_EMPTY = "タグＩＤが空欄です。\n";
+    public static final String TAG_ID_IS_EMPTY = "タグＩＤが空欄です。\n";
     public static final String TAG_NAME_IS_EMPTY = "タグ名が空欄です。\n";
 
     public static final String NO_SELECTION = "タグを選択して下さい。";
@@ -41,32 +41,23 @@ public class Tag implements FlowListViewItem {
         this.deleted = new SimpleBooleanProperty(deleted);
     }
 
-    public static Tag create(LoginInfo login, long tagIdPK) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
+    public static Tag create(SQL sql, long tagIdPK) throws SQLException {
+        sql.preparedStatement(QueryBuilder.create()
+                .select(ColumnNameList.create()
+                        .add(Tag.TAG_NAME)
+                        .add(Tag.DELETED))
+                .from(Tag.TABLE_NAME)
+                .where(Tag.TAG_ID).isEqualTo(tagIdPK)
+                .terminate());
+        sql.executeQuery();
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(ColumnNameList.create()
-                            .add(Tag.TAG_NAME)
-                            .add(Tag.DELETED))
-                    .from(Tag.TABLE_NAME)
-                    .where(Tag.TAG_ID).isEqualTo(tagIdPK)
-                    .terminate());
-            sql.executeQuery();
-
-            if (sql.next()) {
-                Tag tag = new Tag();
-                tag.tagId.set(tagIdPK);
-                tag.tagName.set(sql.getString(Tag.TAG_NAME));
-                tag.deleted.set(sql.getBoolean(Tag.DELETED));
-                return tag;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sql.next()) {
+            Tag tag = new Tag();
+            tag.tagId.set(tagIdPK);
+            tag.tagName.set(sql.getString(Tag.TAG_NAME));
+            tag.deleted.set(sql.getBoolean(Tag.DELETED));
+            return tag;
         }
-
         return null;
     }
 
@@ -110,59 +101,42 @@ public class Tag implements FlowListViewItem {
     }
 
     // Save new data.
-    public boolean saveNewData(LoginInfo login){
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            // レコードが既に存在する場合、エラーメッセージを表示する。
-            if (isExisted(login)) {
-                new WarningAlert(
-                        DUPLICATED_ERROR,
-                        TAG_ID_DUPLICATED,
-                        ""
-                ).showAndWait();
-            } else {
-                // Save new data
-                sql.preparedStatement(QueryBuilder.create()
-                        .insert(Tag.TABLE_NAME, DataPairList.create()
-                                .add(Tag.TAG_ID, getTagId())
-                                .add(Tag.TAG_NAME, getTagName()))
-                        .terminate());
-                sql.executeUpdate();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean saveNewData(SQL sql) throws SQLException {
+        // レコードが既に存在する場合、エラーメッセージを表示する。
+        if (isExisted(sql)) {
+            new WarningAlert(
+                    DUPLICATED_ERROR,
+                    TAG_ID_DUPLICATED,
+                    ""
+            ).showAndWait();
+        } else {
+            // Save new data
+            sql.preparedStatement(QueryBuilder.create()
+                    .insert(Tag.TABLE_NAME, DataPairList.create()
+                            .add(Tag.TAG_ID, getTagId())
+                            .add(Tag.TAG_NAME, getTagName()))
+                    .terminate());
+            sql.executeUpdate();
+            return true;
         }
-
         return false;
     }
 
-    public void saveEditedData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
-
-            // レコードが存在するならば、更新する。
-            if (isExisted(login)) {
-                // Save update data.
-                sql.preparedStatement(QueryBuilder.create()
-                        .update(Tag.TABLE_NAME,
-                                Tag.TAG_ID, getTagId())
-                        .addSet(Tag.TAG_NAME, getTagName())
-                        .where(Tag.TAG_ID).isEqualTo(getTagId())
-                        .terminate());
-                sql.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void saveEditedData(SQL sql) throws SQLException {
+        // レコードが存在するならば、更新する。
+        if (isExisted(sql)) {
+            // Save update data.
+            sql.preparedStatement(QueryBuilder.create()
+                    .update(Tag.TABLE_NAME,
+                            Tag.TAG_ID, getTagId())
+                    .addSet(Tag.TAG_NAME, getTagName())
+                    .where(Tag.TAG_ID).isEqualTo(getTagId())
+                    .terminate());
+            sql.executeUpdate();
         }
     }
 
-    private Boolean isExisted(LoginInfo login) throws SQLException {
-        SQL sql = new SQL(login.getConnection());
-
+    private Boolean isExisted(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Tag.TAG_ID)
                 .from(Tag.TABLE_NAME)

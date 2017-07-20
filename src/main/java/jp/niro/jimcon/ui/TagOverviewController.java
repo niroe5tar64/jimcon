@@ -13,10 +13,11 @@ import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.Tags;
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/05/15.
@@ -51,54 +52,80 @@ public class TagOverviewController {
 
     @FXML
     private void initialize() {
-        tags.loadTags(LoginInfo.getInstance());
-        tagTable.setItems(tags.getTags());
+        SQL sql =null;
+        try {
+            sql = SQL.create();
 
-        tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
-        tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
+            // tagTableの初期設定
+            tags.loadTags(sql);
+            tagTable.setItems(tags.getTags());
+            tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
+            tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
 
-        showTagDetails(null);
+            showTagDetails(null);
+            tagTable.getSelectionModel().selectedItemProperty().addListener(
+                    ((observable, oldValue, newValue) -> showTagDetails(newValue))
+            );
 
-        tagTable.getSelectionModel().selectedItemProperty().addListener(
-                ((observable, oldValue, newValue) -> showTagDetails(newValue))
-        );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
+
     }
 
     @FXML
     private void handleNewTag() {
         Tag tempTag = new Tag();
         boolean isClosableDialog = false;
-        while (!isClosableDialog) {
-            boolean okClicked = showTagEditDialog(tempTag, true);
-            if (okClicked) {
-                // DBにデータ登録し、新規か否かの状態を取得する。
-                isClosableDialog = tempTag.saveNewData(LoginInfo.getInstance());
-                // データテーブルをリロード
-                tags.loadTags(LoginInfo.getInstance());
-            } else {
-                isClosableDialog = true;
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            while (!isClosableDialog) {
+                // 編集ダイアログ表示
+                boolean okClicked = showTagEditDialog(tempTag, true);
+                if (okClicked) {
+                    // DBにデータ登録し、新規か否かの状態を取得する。
+                    isClosableDialog = tempTag.saveNewData(sql);
+                    // データテーブルをリロード
+                    tags.loadTags(sql);
+                } else {
+                    isClosableDialog = true;
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
+
+        showTagDetails(tagTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleEditTag() {
         Tag selectedTag = tagTable.getSelectionModel().getSelectedItem();
-        if (selectedTag != null) {
-            boolean okClicked = showTagEditDialog(selectedTag, false);
-            if (okClicked) {
-                selectedTag.saveEditedData(LoginInfo.getInstance());
-                tags.loadTags(LoginInfo.getInstance());
-            }
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            if (selectedTag != null) {
+                boolean okClicked = showTagEditDialog(selectedTag, false);
+                if (okClicked) {
+                    selectedTag.saveEditedData(sql);
+                    tags.loadTags(sql);
+                }
 
-        } else {
-            // Nothing selected.
-            new WarningAlert(
-                    NO_SELECTION_ERROR,
-                    Tag.NO_SELECTION,
-                    ""
-            ).showAndWait();
+            } else {
+                // Nothing selected.
+                new WarningAlert(
+                        NO_SELECTION_ERROR,
+                        Tag.NO_SELECTION,
+                        ""
+                ).showAndWait();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        if (sql != null) sql.close(); // 接続切断
     }
 
     @FXML
@@ -111,7 +138,7 @@ public class TagOverviewController {
         ).showAndWait();
     }
 
-    private void showTagDetails(Tag tag){
+    private void showTagDetails(Tag tag) {
         if (Validator.isNotNull(tag)) {
             tagIdLabel.setText(Long.toString(tag.getTagId()));
             tagNameLabel.setText(tag.getTagName());
@@ -121,7 +148,7 @@ public class TagOverviewController {
         }
     }
 
-    private boolean showTagEditDialog(Tag tag, boolean isNew){
+    private boolean showTagEditDialog(Tag tag, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(TagEditDialogController.FXML_NAME);

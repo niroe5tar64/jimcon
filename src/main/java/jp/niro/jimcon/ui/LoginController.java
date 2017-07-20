@@ -89,7 +89,7 @@ public class LoginController {
         // ログインチェック
         SQL sql = null;
         try {
-            sql = new SQL(loginInfo.getConnection());
+            sql = SQL.create();
 
             // メニュー画面を開く
             this.setMenu();

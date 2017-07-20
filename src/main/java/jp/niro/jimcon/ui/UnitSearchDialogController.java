@@ -9,7 +9,9 @@ import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.datamodel.Unit;
 import jp.niro.jimcon.datamodel.Units;
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
+
+import java.sql.SQLException;
 
 /**
  * Created by niro on 2017/05/01.
@@ -47,12 +49,20 @@ public class UnitSearchDialogController {
 
     @FXML
     private void initialize() {
-        // 単位ロード＆テーブルカラムにセット
-        units.loadUnits(LoginInfo.getInstance());
-        unitTable.setItems(units.getUnits());
+        SQL sql = null;
+        try {
+            sql = SQL.create();
 
-        unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
-        unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
+            // unitTableの初期設定
+            units.loadUnits(sql);
+            unitTable.setItems(units.getUnits());
+            unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
+            unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
 
         unitTable.setOnKeyReleased(
                 event -> {

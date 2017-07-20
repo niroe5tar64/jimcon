@@ -1,7 +1,8 @@
 package jp.niro.jimcon.datamodel;
 
-import jp.niro.jimcon.dbaccess.LoginInfo;
+import jp.niro.jimcon.dbaccess.SQL;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +21,16 @@ public class ProductFactory {
         return singleton;
     }
 
-    public synchronized Product getProduct(LoginInfo login, String productCode) {
+    public synchronized Product getProduct(String productCode) {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
         return pool.computeIfAbsent(productCode,
-                k -> Product.create(login, productCode));
+                k -> {
+                    try {
+                        return Product.create(SQL.create(), productCode);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
     }
 }

@@ -17,9 +17,10 @@ public class TagMapPool {
 
     private static TagMapPool singleton = new TagMapPool();
 
-    private TagMapPool() {}
+    private TagMapPool() {
+    }
 
-    public static TagMapPool getInstance(){
+    public static TagMapPool getInstance() {
         return singleton;
     }
 
@@ -29,42 +30,30 @@ public class TagMapPool {
         return tagMapsData;
     }
 
-    public void loadTagMaps(LoginInfo login) {
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
+    public void loadTagMaps(SQL sql) throws SQLException {
+        String querySelect = QueryBuilder.create()
+                .select(TagMap.TAG_MAP_ID)
+                .from(TagMap.TABLE_NAME)
+                .where(TagMap.DELETED).isFalse()
+                .orderByASC(TagMap.TAG_MAP_ID)
+                .terminate();
+        sql.preparedStatement(querySelect);
+        sql.executeQuery();
 
-            String querySelect = QueryBuilder.create()
-                    .select(TagMap.TAG_MAP_ID)
-                    .from(TagMap.TABLE_NAME)
-                    .where(TagMap.DELETED).isFalse()
-                    .orderByASC(TagMap.TAG_MAP_ID)
-                    .terminate();
-            sql.preparedStatement(querySelect);
-            sql.executeQuery();
-
-            // データリストを空にしてから、Selectの結果を追加する。
-            tagMapsData.clear();
-            TagMap tagMap = null;
-            while (sql.next()) {
-                tagMap = TagMapFactory.getInstance().getTagMap(LoginInfo.getInstance(),
-                        sql.getLong(TagMap.TAG_MAP_ID));
-                tagMapsData.put(tagMap.getTagId(), tagMap.getProductCode(), tagMap);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (sql != null) {
-            sql.close();
+        // データリストを空にしてから、Selectの結果を追加する。
+        tagMapsData.clear();
+        TagMap tagMap = null;
+        while (sql.next()) {
+            tagMap = TagMapFactory.getInstance().getTagMap(
+                    sql.getLong(TagMap.TAG_MAP_ID));
+            tagMapsData.put(tagMap.getTagId(), tagMap.getProductCode(), tagMap);
         }
     }
 
     public ObservableList<Tag> getTagsData(LoginInfo login, String productCode) {
         ObservableList<Tag> tagsData = FXCollections.observableArrayList();
         tagMapsData.getColumn(productCode).forEach((tagId, tagMap) -> {
-            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag(login));
+            if (Validator.isNotNull(tagMap)) tagsData.add(tagMap.getTag());
         });
         return tagsData;
     }
@@ -72,7 +61,7 @@ public class TagMapPool {
     public ObservableList<Product> getProductsData(LoginInfo login, long tagId) {
         ObservableList<Product> productsData = FXCollections.observableArrayList();
         tagMapsData.getRow(tagId).forEach((productCode, tagMap) -> {
-            if (Validator.isNotNull(tagMap)) productsData.add(tagMap.getProduct(login));
+            if (Validator.isNotNull(tagMap)) productsData.add(tagMap.getProduct());
         });
         return productsData;
     }

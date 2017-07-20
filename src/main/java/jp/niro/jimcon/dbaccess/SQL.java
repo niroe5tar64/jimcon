@@ -8,12 +8,14 @@ public class SQL {
     ResultSet resultSet = null;
     PreparedStatement preparedStatement = null;
 
-    public SQL(Connection connection) {
-        this.connection = connection;
+    public static SQL create() throws SQLException {
+        return new SQL(LoginInfo.getInstance().getConnection());
     }
 
-    public SQL() throws SQLException {
-        new SQL(LoginInfo.getInstance().getConnection());
+    private SQL() throws SQLException {}
+
+    private SQL(Connection connection) {
+        this.connection = connection;
     }
 
     public Connection getConnection() {

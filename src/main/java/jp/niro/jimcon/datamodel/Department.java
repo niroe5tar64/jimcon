@@ -71,35 +71,28 @@ public class Department {
         this.faxNumber = new SimpleStringProperty(faxNumber);
     }
 
-    public static Department create(LoginInfo login, int departmentCodePK) {
+    public static Department create(SQL sql, int departmentCodePK) throws SQLException {
         Department department = new Department();
-        SQL sql = null;
-        try {
-            sql = new SQL(login.getConnection());
+        sql.preparedStatement(QueryBuilder.create()
+                .select(ColumnNameList.create()
+                        .add(Department.DEPARTMENT_NAME)
+                        .add(Department.POSTCODE)
+                        .add(Department.ADDRESS)
+                        .add(Department.TEL_NUMBER)
+                        .add(Department.FAX_NUMBER))
+                .from(Department.TABLE_NAME)
+                .where(Department.DEPARTMENT_CODE).isEqualTo(departmentCodePK)
+                .terminate());
+        sql.executeQuery();
 
-            sql.preparedStatement(QueryBuilder.create()
-                    .select(ColumnNameList.create()
-                            .add(Department.DEPARTMENT_NAME)
-                            .add(Department.POSTCODE)
-                            .add(Department.ADDRESS)
-                            .add(Department.TEL_NUMBER)
-                            .add(Department.FAX_NUMBER))
-                    .from(Department.TABLE_NAME)
-                    .where(Department.DEPARTMENT_CODE).isEqualTo(departmentCodePK)
-                    .terminate());
-            sql.executeQuery();
-
-            if (sql.next()) {
-                department.departmentCode.set(departmentCodePK);
-                department.departmentName.set(sql.getString(Department.DEPARTMENT_NAME));
-                department.postcode.set(sql.getString(Department.POSTCODE));
-                department.address.set(sql.getString(Department.ADDRESS));
-                department.telNumber.set(sql.getString(Department.TEL_NUMBER));
-                department.faxNumber.set(sql.getString(Department.FAX_NUMBER));
-                return department;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sql.next()) {
+            department.departmentCode.set(departmentCodePK);
+            department.departmentName.set(sql.getString(Department.DEPARTMENT_NAME));
+            department.postcode.set(sql.getString(Department.POSTCODE));
+            department.address.set(sql.getString(Department.ADDRESS));
+            department.telNumber.set(sql.getString(Department.TEL_NUMBER));
+            department.faxNumber.set(sql.getString(Department.FAX_NUMBER));
+            return department;
         }
         return null;
     }
@@ -176,65 +169,50 @@ public class Department {
         return faxNumber;
     }
 
-    public boolean saveNewData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            // レコードが既に存在する場合、エラーメッセージを表示する。
-            if (isExisted(login)) {
-                new WarningAlert(
-                        DUPLICATED_ERROR,
-                        DEPARTMENT_CODE_DUPLICATED,
-                        ""
-                ).showAndWait();
-            } else {
-                // Save new data
-                sql = new SQL(login.getConnection());
-                sql.preparedStatement(QueryBuilder.create()
-                        .insert(Department.TABLE_NAME, DataPairList.create()
-                                .add(Department.DEPARTMENT_CODE, getDepartmentCode())
-                                .add(Department.DEPARTMENT_NAME, getDepartmentName())
-                                .add(Department.POSTCODE, getPostcode())
-                                .add(Department.ADDRESS, getAddress())
-                                .add(Department.TEL_NUMBER, getTelNumber())
-                                .add(Department.FAX_NUMBER, getFaxNumber()))
-                        .terminate());
-                sql.executeUpdate();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean saveNewData(SQL sql) throws SQLException {
+        // レコードが既に存在する場合、エラーメッセージを表示する。
+        if (isExisted(sql)) {
+            new WarningAlert(
+                    DUPLICATED_ERROR,
+                    DEPARTMENT_CODE_DUPLICATED,
+                    ""
+            ).showAndWait();
+        } else {
+            // Save new data
+            sql.preparedStatement(QueryBuilder.create()
+                    .insert(Department.TABLE_NAME, DataPairList.create()
+                            .add(Department.DEPARTMENT_CODE, getDepartmentCode())
+                            .add(Department.DEPARTMENT_NAME, getDepartmentName())
+                            .add(Department.POSTCODE, getPostcode())
+                            .add(Department.ADDRESS, getAddress())
+                            .add(Department.TEL_NUMBER, getTelNumber())
+                            .add(Department.FAX_NUMBER, getFaxNumber()))
+                    .terminate());
+            sql.executeUpdate();
+            return true;
         }
-
         return false;
     }
 
-    public void saveEditedData(LoginInfo login) {
-        SQL sql = null;
-        try {
-            // レコードが存在するならば、更新する。
-            if (isExisted(login)) {
-                sql = new SQL(login.getConnection());
-                sql.preparedStatement(QueryBuilder.create()
-                        .update(Department.TABLE_NAME,
-                                Department.DEPARTMENT_CODE, getDepartmentCode())
-                        .addSet(Department.DEPARTMENT_NAME, getDepartmentName())
-                        .addSet(Department.POSTCODE, getPostcode())
-                        .addSet(Department.ADDRESS, getAddress())
-                        .addSet(Department.TEL_NUMBER, getTelNumber())
-                        .addSet(Department.FAX_NUMBER, getFaxNumber())
-                        .where(Department.DEPARTMENT_CODE).isEqualTo(getDepartmentCode())
-                        .terminate());
-                sql.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void saveEditedData(SQL sql) throws SQLException {
+        // レコードが存在するならば、更新する。
+        if (isExisted(sql)) {
+            ;
+            sql.preparedStatement(QueryBuilder.create()
+                    .update(Department.TABLE_NAME,
+                            Department.DEPARTMENT_CODE, getDepartmentCode())
+                    .addSet(Department.DEPARTMENT_NAME, getDepartmentName())
+                    .addSet(Department.POSTCODE, getPostcode())
+                    .addSet(Department.ADDRESS, getAddress())
+                    .addSet(Department.TEL_NUMBER, getTelNumber())
+                    .addSet(Department.FAX_NUMBER, getFaxNumber())
+                    .where(Department.DEPARTMENT_CODE).isEqualTo(getDepartmentCode())
+                    .terminate());
+            sql.executeUpdate();
         }
     }
 
-    private Boolean isExisted(LoginInfo login) throws SQLException {
-        SQL sql = new SQL(login.getConnection());
-
+    private Boolean isExisted(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Department.DEPARTMENT_CODE)
                 .from(Department.TABLE_NAME)
