@@ -9,8 +9,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
+import jp.niro.jimcon.customcomponents.ListTagCell;
 import jp.niro.jimcon.datamodel.*;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 
@@ -112,7 +114,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
     @FXML
     private TextArea textArea;
     @FXML
-    private TextField tagField;
+    private TextField tagSearchField;
     @FXML
     private Button tagSearch;
     @FXML
@@ -122,6 +124,13 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
 
     @FXML
     private void initialize() {
+        // tagListViewの表示にListTagCellを設定する。
+        tagListView.setCellFactory(new Callback<ListView<Tag>, ListCell<Tag>>() {
+            @Override
+            public ListCell<Tag> call(ListView<Tag> arg0) {
+                return new ListTagCell();
+            }
+        });
         // 単位コードフィールドのフォーカス喪失時、
         unitSearchField.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -130,7 +139,6 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
                     }
                 }
         );
-
 
     }
 
@@ -185,6 +193,8 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             controller.setOwnerStage(dialogStage);
             // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
             controller.setTagSearchable(this);
+            controller.setTagSearchField(getSearchValue());
+            controller.load();
 
             dialogStage.showAndWait();
         } catch (IOException e) {
@@ -210,8 +220,6 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             product.setFunctionConstant(Double.parseDouble(functionConstantField.getText()));
             product.setMemo(textArea.getText());
             product.setProcessed(processedCheckBox.isSelected());
-
-            ObservableList<Tag> tagsData = tagMapPool.getTagsData(LoginInfo.getInstance(), product.getProductCode());
 
             okClicked = true;
             ownerStage.close();
@@ -296,6 +304,6 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
 
     @Override
     public String getSearchValue() {
-        return null;
+        return tagSearchField.getText().trim();
     }
 }

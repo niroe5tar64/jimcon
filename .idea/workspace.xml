@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd555660-51c7-4fd2-bdaf-9b1787e37662" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/jp/niro/jimcon/ui/ProductEditDialogWithTagController.class" afterPath="$PROJECT_DIR$/target/classes/jp/niro/jimcon/ui/ProductEditDialogWithTagController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Product.java" afterPath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Product.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMapFactory.java" afterPath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMapFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMaps.java" afterPath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMaps.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/ValueList.java" afterPath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/ValueList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java" afterPath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java" afterPath="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,122 +22,7 @@
     <favorites_list name="jimcon" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ProductEditDialogWithTagController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-280">
-              <caret line="123" column="17" lean-forward="false" selection-start-line="123" selection-start-column="17" selection-end-line="123" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProductOverviewWithTagController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="299" column="0" lean-forward="false" selection-start-line="299" selection-start-column="0" selection-end-line="299" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FXMLLoader.java" pinned="false" current-in-tab="true">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="1766" column="17" lean-forward="true" selection-start-line="1766" selection-start-column="17" selection-end-line="1766" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Product.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Product.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="601">
-              <caret line="462" column="75" lean-forward="false" selection-start-line="462" selection-start-column="75" selection-end-line="462" selection-end-column="75" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginInfo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/LoginInfo.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding>
-                <element signature="e#617#618#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TagMaps.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMaps.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="92" column="47" lean-forward="true" selection-start-line="92" selection-start-column="47" selection-end-line="92" selection-end-column="47" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="QueryComparisonOperation.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/QueryComparisonOperation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="124" column="34" lean-forward="true" selection-start-line="124" selection-start-column="34" selection-end-line="124" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Validator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/commons/Validator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#685#686#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TagMapFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMapFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding>
-                <element signature="e#593#594#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="20" column="2" lean-forward="true" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
-              <folding>
-                <element signature="e#353#354#0" expanded="true" />
-                <element signature="e#381#382#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -157,6 +39,9 @@
       <find>update</find>
       <find>FILE</find>
       <find>A</find>
+      <find>getTagName</find>
+      <find>ListTag</find>
+      <find>tagList</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -206,7 +91,6 @@
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/LoginController.java" />
         <option value="$PROJECT_DIR$/src/main/resource/jp/niro/jimcon/TextName.properties" />
         <option value="$PROJECT_DIR$/src/main/resource/jp/niro/jimcon/ui/ProductEditDialogWithTag.fxml" />
-        <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java" />
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/QueryComparisonOperation.java" />
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Unit.java" />
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/QueryBuilder.java" />
@@ -220,6 +104,7 @@
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMaps.java" />
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java" />
         <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/ValueList.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java" />
       </list>
     </option>
   </component>
@@ -771,7 +656,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -783,18 +668,18 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14517877" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14517877" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20788912" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20788912" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23076923" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23076923" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -808,14 +693,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java</url>
-          <line>271</line>
-          <properties />
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="44" />
     </breakpoint-manager>
     <watches-manager />
@@ -825,37 +702,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/beans/property/BooleanProperty.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="58" column="22" lean-forward="false" selection-start-line="58" selection-start-column="22" selection-end-line="58" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/TagSearchable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/DepartmentOverviewController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1746">
-          <caret line="21" column="33" lean-forward="true" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/DepartmentEditDialogController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/TagEditDialogController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -1001,34 +847,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMapPool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-64">
-          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
           <caret line="950" column="14" lean-forward="false" selection-start-line="950" selection-start-column="14" selection-end-line="950" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="43" column="26" lean-forward="true" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/TagSearchDialogController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="106" column="52" lean-forward="false" selection-start-line="106" selection-start-column="52" selection-end-line="106" selection-end-column="52" />
           <folding />
         </state>
       </provider>
@@ -1141,47 +963,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-280">
-          <caret line="123" column="17" lean-forward="false" selection-start-line="123" selection-start-column="17" selection-end-line="123" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="20" column="2" lean-forward="true" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
-          <folding>
-            <element signature="e#353#354#0" expanded="true" />
-            <element signature="e#381#382#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/LoginInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="e#617#618#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Products.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Product.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="601">
-          <caret line="462" column="75" lean-forward="false" selection-start-line="462" selection-start-column="75" selection-end-line="462" selection-end-column="75" />
           <folding />
         </state>
       </provider>
@@ -1201,8 +986,8 @@
         <state relative-caret-position="234">
           <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#685#686#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#685#686#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1233,20 +1018,115 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="299" column="0" lean-forward="false" selection-start-line="299" selection-start-column="0" selection-end-line="299" selection-end-column="0" />
+        <state relative-caret-position="698">
+          <caret line="1755" column="40" lean-forward="true" selection-start-line="1755" selection-start-column="40" selection-end-line="1755" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Product.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="601">
+          <caret line="462" column="75" lean-forward="false" selection-start-line="462" selection-start-column="75" selection-end-line="462" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/dbaccess/LoginInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#617#618#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/TagMapPool.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="1766" column="17" lean-forward="true" selection-start-line="1766" selection-start-column="17" selection-end-line="1766" selection-end-column="17" />
+        <state relative-caret-position="394">
+          <caret line="63" column="31" lean-forward="false" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/customcomponents/flowlistview/FlowListView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="75" column="16" lean-forward="false" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resource/jp/niro/jimcon/ui/ProductEditDialogWithTag.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="61" column="41" lean-forward="true" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/datamodel/Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="152" column="56" lean-forward="false" selection-start-line="152" selection-start-column="46" selection-end-line="152" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/customcomponents/ListTagCell.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="11" column="14" lean-forward="false" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="20" column="2" lean-forward="true" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/TagSearchDialogController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="106" column="57" lean-forward="true" selection-start-line="106" selection-start-column="57" selection-end-line="106" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductOverviewWithTagController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="409" column="38" lean-forward="true" selection-start-line="409" selection-start-column="38" selection-end-line="409" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#15868#15869#0" expanded="true" />
+            <element signature="e#15922#15923#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/TagSearchable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="28" lean-forward="false" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jp/niro/jimcon/ui/ProductEditDialogWithTagController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="30" column="28" lean-forward="true" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
           <folding />
         </state>
       </provider>
