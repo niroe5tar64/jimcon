@@ -48,6 +48,7 @@ public class TagMapFactory {
         if (sql.next()) {
             return getTagMap(login,sql.getLong(TagMap.TAG_MAP_ID));
         } else {
+            System.out.println("Debug:新規TagMap作成");
             return TagMap.create(login, tag, product);
         }
     }

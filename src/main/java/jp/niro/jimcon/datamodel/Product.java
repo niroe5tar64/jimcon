@@ -455,6 +455,19 @@ public class Product {
         return false;
     }
 
+    public boolean deleteData(SQL sql) throws SQLException {
+        if (isExisted(sql)) {
+            // Delete data
+            sql.preparedStatement(QueryBuilder.create()
+                    .deleteFrom(Product.TABLE_NAME)
+                    .where(Product.PRODUCT_CODE).isEqualTo(getProductCode())
+                    .terminate());
+            sql.executeUpdate();
+            return true;
+        }
+        return false;
+    }
+
     private Boolean isExisted(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Product.PRODUCT_CODE)

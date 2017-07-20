@@ -158,31 +158,39 @@ public class ProductOverviewWithTagController implements TagSearchable {
             sql = new SQL(LoginInfo.getInstance().getConnection());
             boolean isClosableDialog = false;
             boolean successSaveProduct;
-            boolean successSaveTagMap = true;
+            boolean successSaveTagMap;
             while (!isClosableDialog) {
+                // 編集ダイアログ表示
                 boolean okClicked = showProductEditDialog(tempProduct, tempTagList, true);
                 if (okClicked) {
-                    // DBにデータ登録し、新規か否かの状態を取得する。
-                    sql.beginTransaction(); // トランザクション開始
+                    // ****** トランザクション開始 ******
+                    sql.beginTransaction();
+                    // Productが新規か否かの状態を取得し、DBにデータ登録する。
                     successSaveProduct = tempProduct.saveNewData(sql);
 
+                    // TagMapの保存
+                    TagMaps tagMaps = new TagMaps();
                     for (Tag tag : tempTagList) {
-                        successSaveTagMap = TagMap
-                                .create(LoginInfo.getInstance(), tag, tempProduct)
-                                .saveNewData(sql);
-                        if (!successSaveTagMap) break;
+                        tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(LoginInfo.getInstance(), tag, tempProduct));
                     }
+                    successSaveTagMap = tagMaps.save(sql);
                     isClosableDialog = successSaveProduct && successSaveTagMap;
-                    sql.commit();           // コミット
+                    // *********** コミット ***********
+                    sql.commit();
+
                     // データテーブルをリロード
                     products.loadProducts(LoginInfo.getInstance());
+                    tagMapPool.loadTagMaps(LoginInfo.getInstance());
                 } else {
                     isClosableDialog = true;
+                    // ********** ロールバック **********
+                    sql.rollback();
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            sql.rollback();                 // ロールバック
+            // ********** ロールバック **********
+            sql.rollback();
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
@@ -198,12 +206,13 @@ public class ProductOverviewWithTagController implements TagSearchable {
             sql = new SQL(LoginInfo.getInstance().getConnection());
             boolean isClosableDialog = false;
             boolean successSaveProduct;
-            boolean successSaveTagMap = true;
+            boolean successSaveTagMap;
             if (selectedProduct != null) {
                 // 編集ダイアログ表示
                 boolean okClicked = showProductEditDialog(selectedProduct, selectedTagList, false);
                 if (okClicked) {
-                    sql.beginTransaction(); // トランザクション開始
+                    // ****** トランザクション開始 ******
+                    sql.beginTransaction();
                     // Productの保存
                     successSaveProduct = selectedProduct.saveEditedData(sql);
 
@@ -215,7 +224,9 @@ public class ProductOverviewWithTagController implements TagSearchable {
                     successSaveTagMap = tagMaps.save(sql);
 
                     isClosableDialog = successSaveProduct && successSaveTagMap;
-                    sql.commit();           // コミット
+                    // *********** コミット ***********
+                    sql.commit();
+
                     // データテーブルをリロード
                     products.loadProducts(LoginInfo.getInstance());
                     tagMapPool.loadTagMaps(LoginInfo.getInstance());
@@ -227,17 +238,65 @@ public class ProductOverviewWithTagController implements TagSearchable {
                         Product.NO_SELECTION,
                         ""
                 ).showAndWait();
+                // ********** ロールバック **********
+                sql.rollback();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            sql.rollback();                 // ロールバック
+            // ********** ロールバック **********
+            sql.rollback();
         }
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     private void handleDeleteProduct() {
+        // メソッド内において取り扱うProduct及びList<Tag>の対応付け。
+        Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
+        ObservableList<Tag> selectedTagList = tagListView.getItems();
+        // データベース操作
+        SQL sql = null;
+        try {
+            sql = new SQL(LoginInfo.getInstance().getConnection());
+            boolean isClosableDialog = false;
+            boolean successDeleteProduct;
+            boolean successDeleteTagMap;
+            if (selectedProduct != null) {
+                // ****** トランザクション開始 ******
+                sql.beginTransaction();
+                // Productの削除
+                successDeleteProduct = selectedProduct.deleteData(sql);
 
+                // TagMapの保存
+                TagMaps tagMaps = new TagMaps();
+                for (Tag tag : selectedTagList) {
+                    tagMaps.add(TagMapFactory.getInstance().getTagMapWithSave(LoginInfo.getInstance(), tag, selectedProduct));
+                }
+                successDeleteTagMap = tagMaps.delete(sql);
+
+                isClosableDialog = successDeleteProduct && successDeleteTagMap;
+                // *********** コミット ***********
+                sql.commit();
+
+                // データテーブルをリロード
+                products.loadProducts(LoginInfo.getInstance());
+                tagMapPool.loadTagMaps(LoginInfo.getInstance());
+            } else {
+                // Nothing selected.
+                new WarningAlert(
+                        NO_SELECTION_ERROR,
+                        Product.NO_SELECTION,
+                        ""
+                ).showAndWait();
+                // ********** ロールバック **********
+                sql.rollback();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // ********** ロールバック **********
+            sql.rollback();
+        }
+        showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     private void showProductDetails(Product product) {

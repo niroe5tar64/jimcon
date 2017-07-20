@@ -30,6 +30,11 @@ public class ValueList {
         return new ValueList(list);
     }
 
+    public ValueList add(long value) {
+        list.add(String.valueOf(value));
+        return new ValueList(list);
+    }
+
     public ValueList add(double value) {
         list.add(String.valueOf(value));
         return new ValueList(list);

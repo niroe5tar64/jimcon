@@ -31,7 +31,7 @@ public class TagMaps {
     public boolean save(SQL sql) throws SQLException {
         // 現在、データベースに保存されているTagMapをリスト化する。
         ObservableList<TagMap> sourceList = FXCollections.observableArrayList();
-        ;
+
         sql.preparedStatement(QueryBuilder.create()
                 .select(TagMap.TAG_MAP_ID)
                 .from(TagMap.TABLE_NAME)
@@ -63,26 +63,35 @@ public class TagMaps {
         // 新規リストを作成後、TagMapを作成する。 差集合（新規リスト ＝ 現行リスト － 既存リスト）
         Collection<TagMap> createList = subtract(tagMapData, sourceList);
 
-        sql.preparedStatement(QueryBuilder.create()
-                .insert(TagMap.TABLE_NAME,
-                        DataPairList.create()
-                                .add(TagMap.TAG_ID, "?")
-                                .add(TagMap.PRODUCT_CODE, "?")
-                                .add(TagMap.DELETED, "?"))
-                .terminate());
+        if (Validator.isNotEmpty(createList)) {
+            sql.preparedStatement(QueryBuilder.create()
+                    .insert(TagMap.TABLE_NAME,
+                            DataPairList.create()
+                                    .add(TagMap.TAG_ID, "?")
+                                    .add(TagMap.PRODUCT_CODE, "?")
+                                    .add(TagMap.DELETED, "?"))
+                    .terminate());
 
-        System.out.println(QueryBuilder.create()
-                .insert(TagMap.TABLE_NAME,
-                        DataPairList.create()
-                                .add(TagMap.TAG_ID, "?")
-                                .add(TagMap.PRODUCT_CODE, "?")
-                                .add(TagMap.DELETED, "?"))
-                .terminate());
+            for (TagMap tagMap : createList) {
+                sql.setLong(1, tagMap.getTagId());
+                sql.setString(2, tagMap.getProductCode());
+                sql.setBoolean(3, tagMap.isDeleted());
+                sql.executeUpdate();
+            }
+        }
+        return true;
+    }
 
-        for (TagMap tagMap : createList) {
-            sql.setLong(1, tagMap.getTagId());
-            sql.setString(2, tagMap.getProductCode());
-            sql.setBoolean(3, tagMap.isDeleted());
+    public boolean delete(SQL sql) throws SQLException {
+        // 削除リストを作成後、TagMapを削除する。（削除リスト ＝ 現行リスト）
+        if (Validator.isNotEmpty(tagMapData)) {
+            ValueList deleteValueList = ValueList.create();
+            tagMapData.forEach(item -> deleteValueList.add(item.getTagMapId()));
+
+            sql.preparedStatement(QueryBuilder.create()
+                    .deleteFrom(TagMap.TABLE_NAME)
+                    .where(TagMap.TAG_MAP_ID).in(deleteValueList)
+                    .terminate());
             sql.executeUpdate();
         }
         return true;
