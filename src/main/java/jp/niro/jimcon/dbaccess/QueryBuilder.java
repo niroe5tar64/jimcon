@@ -31,7 +31,7 @@ public class QueryBuilder {
     }
 
     public QueryBuilder select(ColumnNameList list) {
-        builder.append("SELECT ").append(list.enumerate(", ","",""));
+        builder.append("SELECT ").append(list.enumerate());
         return new QueryBuilder(builder);
     }
 

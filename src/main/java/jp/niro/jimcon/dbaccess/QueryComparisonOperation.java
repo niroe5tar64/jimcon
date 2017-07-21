@@ -123,7 +123,7 @@ public class QueryComparisonOperation {
     }
 
     public QueryBuilder in(ValueList list) {
-        return new QueryBuilder(builder.append(" IN ").append(list.enumerate(", ", "(", ")")));
+        return new QueryBuilder(builder.append(" IN ").append(list.enumerate()));
     }
 
     public QueryBuilder between(int a, int b) {

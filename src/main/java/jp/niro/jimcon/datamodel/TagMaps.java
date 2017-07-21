@@ -8,7 +8,6 @@ import jp.niro.jimcon.dbaccess.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Created by niro on 2017/07/18.
@@ -96,10 +95,10 @@ public class TagMaps {
         return true;
     }
 
-    private Collection<TagMap> subtract(final Collection a, final Collection b) {
+    private Collection<TagMap> subtract(final Collection<TagMap> a, final Collection<TagMap> b) {
         ArrayList<TagMap> list = new ArrayList<TagMap>(a);
-        for (Iterator it = b.iterator(); it.hasNext(); ) {
-            list.remove(it.next());
+        for (TagMap aB : b) {
+            list.remove(aB);
         }
         return list;
     }

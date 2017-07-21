@@ -7,7 +7,7 @@ import java.util.List;
  * Created by niro on 2017/04/15.
  */
 public class DataPairList {
-    List<DataPair> dataPairList = new ArrayList();
+    private List<DataPair> dataPairList = new ArrayList<>();
 
     private DataPairList() {
     }
@@ -45,7 +45,7 @@ public class DataPairList {
         return new DataPairList(dataPairList);
     }
 
-    public List<DataPair> getDataPairList() {
+    List<DataPair> getDataPairList() {
         return this.dataPairList;
     }
 

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * Created by niro on 2017/04/15.
  */
 public class ValueList {
-    List<String> list = new ArrayList();
+    private List<String> list = new ArrayList<>();
 
     private ValueList() {
     }
@@ -49,7 +49,7 @@ public class ValueList {
         return list;
     }
 
-    public String enumerate(String delimiter, String prefix, String suffix){
-        return list.stream().collect(Collectors.joining(delimiter,prefix,suffix));
+    String enumerate(){
+        return list.stream().collect(Collectors.joining(", ", "(", ")"));
     }
 }
