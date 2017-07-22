@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  */
 public class ResourceBundleWithUtf8 {
     public static final String TEXT_NAME = "TextName";
-    private static File dicDir = Paths.get(System.getProperty("user.dir"), "\\src\\main\\resource\\jp\\niro\\jimcon").toFile();
+    private static File dicDir = Paths.get(System.getProperty("user.dir"), "\\src\\main\\resources\\jp\\niro\\jimcon").toFile();
     private static URLClassLoader urlLoader;
 
     static ResourceBundle.Control UTF8_ENCODING_CONTROL = new ResourceBundle.Control() {

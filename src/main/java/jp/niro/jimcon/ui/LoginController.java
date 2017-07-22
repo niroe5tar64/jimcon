@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.FXRobotController;
+import jp.niro.jimcon.controlhelper.NodeCatcher;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
 
@@ -49,15 +50,23 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        /*try {
-            Class classInstance = Class.forName(pane.getScene().getFocusOwner().getClass().getName());
-            Method method = classInstance.getMethod("setOnAction");
-            //method.invoke(classInstance, );
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
+
+
+        /*pane.getChildren().forEach(node -> {
+            System.out.println(node.getClass().getName() + " : " + node.getId());
+            Class<? extends Node> classInstance = node.getClass();
+
+
+            Method[] methods = classInstance.getMethods();
+            for (Method method : methods) {
+                if (Validator.isEqual(method.getName(), "setOnAction")) System.out.println(method.getName());
+                if (Validator.isEqual(method.getName(), "getChildren")) System.out.println(method.getName());
+            }
+        });*/
+
+
+        //method.invoke(classInstance, );
+
 
 
 
@@ -70,11 +79,10 @@ public class LoginController {
         });*/
 
         // テスト用
-        userNameField.setOnAction(event -> {
+        //userNameField.setOnAction((ActionEvent event) -> System.out.println("aaa"));
 
-                System.out.println("aaa");
-
-        });
+        NodeCatcher catcher = new NodeCatcher();
+        catcher.start(pane);
     }
 
     @FXML
