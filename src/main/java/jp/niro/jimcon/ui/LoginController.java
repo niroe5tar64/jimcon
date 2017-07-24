@@ -1,19 +1,21 @@
 package jp.niro.jimcon.ui;
 
+import com.sun.javafx.robot.FXRobot;
+import com.sun.javafx.robot.FXRobotFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import jp.niro.jimcon.commons.FXRobotController;
-import jp.niro.jimcon.controlhelper.NodeCatcher;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
+import jp.niro.jimcon.eventhelper.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +30,7 @@ public class LoginController {
     public static final String ACCESS_DENIED_MESSAGE = "ユーザー名 パスワードが違います。";
     public static final int ACCESS_DENIED = 1045;
 
-    private FXRobotController robotController;
+    private FXRobot robot;
     private Stage primaryStage;
 
     public Stage getPrimaryStage() {
@@ -37,6 +39,16 @@ public class LoginController {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    public void setEvent() {
+        robot = FXRobotFactory.createRobot(primaryStage.getScene());
+
+        EventBeen focusNext = EventBeen.create(new RobotKeyPress(robot, KeyCode.TAB));
+        EventBeen executeLogin = EventBeen.create(new ExecuteLogin(this));
+
+        userNameField.setOnAction(focusNext);
+        passwordField.setOnAction(executeLogin);
     }
 
     @FXML
@@ -50,43 +62,15 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-
-
-        /*pane.getChildren().forEach(node -> {
-            System.out.println(node.getClass().getName() + " : " + node.getId());
-            Class<? extends Node> classInstance = node.getClass();
-
-
-            Method[] methods = classInstance.getMethods();
-            for (Method method : methods) {
-                if (Validator.isEqual(method.getName(), "setOnAction")) System.out.println(method.getName());
-                if (Validator.isEqual(method.getName(), "getChildren")) System.out.println(method.getName());
-            }
-        });*/
-
-
-        //method.invoke(classInstance, );
-
-
-
-
-
-        /*pane.setOnKeyPressed(event -> {
-            robotController = FXRobotController.create(pane.getScene(), event);
-            robotController.addEnableClassList(TextField.class);
-            robotController.addEnableClassList(PasswordField.class);
-            robotController.keyPress(KeyCode.ENTER ,KeyCode.TAB);
-        });*/
-
-        // テスト用
-        //userNameField.setOnAction((ActionEvent event) -> System.out.println("aaa"));
-
-        NodeCatcher catcher = new NodeCatcher();
-        catcher.start(pane);
     }
 
     @FXML
     protected void handleSubmitButtonAction(ActionEvent event) {
+        this.executeLogin();
+    }
+
+    private void executeLogin() {
+
         LoginInfo loginInfo = LoginInfo.getInstance();
         loginInfo.setLoginInfo(
                 LoginInfo.DEFAULT_DRIVER,
@@ -117,7 +101,7 @@ public class LoginController {
         }
     }
 
-    private void setMenu() throws IOException {
+    void setMenu() throws IOException {
         // FXMLファイルをPaneにロードする。
         URL location = WindowManager.class.getResource(MenuController.FXML_NAME);
         FXMLLoader loader = new FXMLLoader(
@@ -131,5 +115,23 @@ public class LoginController {
         // コントローラーをセットする。
         MenuController controller = loader.getController();
         controller.setPrimaryStage(primaryStage);
+    }
+
+
+
+
+    private static class ExecuteLogin implements ActionBeen {
+        private ExecuteLogin(){}
+
+        LoginController controller;
+
+        ExecuteLogin(LoginController controller) {
+            this.controller = controller;
+        }
+
+        @Override
+        public void action() {
+            controller.executeLogin();
+        }
     }
 }

@@ -37,6 +37,7 @@ public class WindowManager {
             // Give the controller set on the primary stage.
             LoginController controller = loader.getController();
             controller.setPrimaryStage(primaryStage);
+            controller.setEvent();
 
         } catch (IOException e) {
             e.printStackTrace();
