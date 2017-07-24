@@ -6,6 +6,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="pane"
             fx:controller="jp.niro.jimcon.ui.DepartmentOverviewController">
     <children>
         <SplitPane dividerPositions="0.5080971659919028" layoutX="34.0" minHeight="-Infinity" minWidth="-Infinity"

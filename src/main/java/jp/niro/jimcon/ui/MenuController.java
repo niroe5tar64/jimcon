@@ -1,12 +1,17 @@
 package jp.niro.jimcon.ui;
 
+import com.sun.javafx.robot.FXRobot;
+import com.sun.javafx.robot.FXRobotFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jp.niro.jimcon.eventhelper.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +34,9 @@ public class MenuController {
     }
 
     @FXML
+    private BorderPane pane;
+
+    @FXML
     private Button departmentMasterButton;
     @FXML
     private Button unitMasterButton;
@@ -37,28 +45,28 @@ public class MenuController {
     @FXML
     private Button tagMasterButton;
 
+    public void setEvent() {
+        FXRobot robot = FXRobotFactory.createRobot(primaryStage.getScene());
+
+
+
+        departmentMasterButton.setOnAction(event -> showDepartmentMaster());
+        unitMasterButton.setOnAction(event -> showUnitMaster());
+        productMasterButton.setOnAction(event -> showProductMaster());
+        tagMasterButton.setOnAction(event -> showTagMaster());
+
+
+        NodeEventHelper helper = new NodeEventHelper();
+        KeyEventBeen sameOnAction = KeyEventBeen.setOnKeyReleased(KeyCode.ENTER, new SameOnAction());
+        helper.addNodeEvent(Button.class, sameOnAction);
+        helper.start(pane);
+        //departmentMasterButton.setOnKeyPressed(EventBeen.create(new RobotKeyPress(robot, KeyCode.ENTER)));
+    }
+
+
+
     @FXML
     private void initialize() {
-    }
-
-    @FXML
-    private void handleDepartmentMaster() {
-        showDepartmentMaster();
-    }
-
-    @FXML
-    private void handleUnitMaster() {
-        showUnitMaster();
-    }
-
-    @FXML
-    private void handleProductMaster() {
-        showProductMaster();
-    }
-
-    @FXML
-    private void handleTagMaster() {
-        showTagMaster();
     }
 
     private void showDepartmentMaster() {
@@ -81,6 +89,7 @@ public class MenuController {
             // コントローラーをセットする。
             DepartmentOverviewController controller = loader.getController();
             controller.setOwnerStage(dialogStage);
+            controller.setEvent();
             dialogStage.setResizable(false);
 
             dialogStage.showAndWait();

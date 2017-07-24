@@ -14,25 +14,22 @@ import java.util.Objects;
  * Created by niro on 2017/07/22.
  */
 public class NodeEventHelper {
-    private Collection<String> ignoreList = new ArrayList<>();
-    private Collection<NodeEvent> nodeEventList = new ArrayList<>();
+    private Collection<Node> ignoreList = new ArrayList<>();
+    private Collection<NodeTypeEvent> nodeTypeEventList = new ArrayList<>();
 
-    public boolean addIgnore(String name) {
-        return ignoreList.add(name);
+    public boolean addIgnore(Node node) {
+        return ignoreList.add(node);
     }
 
-    public boolean addNodeEvent(String nodeType, EventBeen eventBeen) {
-        return nodeEventList.add(new NodeEvent(nodeType, eventBeen));
-    }
-
-    public boolean addNodeEvent(Node node, EventBeen eventBeen) {
-        return nodeEventList.add(new NodeEvent(node.getId(), eventBeen));
+    public boolean addNodeEvent(Class<? extends Node> nodeType, EventBeen eventBeen) {
+        return nodeTypeEventList.add(new NodeTypeEvent(nodeType, eventBeen));
     }
 
     public void start(Pane pane) {
         nextLayer(pane.getChildren());
     }
 
+    @SuppressWarnings("unchecked")
     private void nextLayer(ObservableList<Node> nodes) {
         nodes.forEach(node -> {
             // ignoreListに無い場合
@@ -42,11 +39,11 @@ public class NodeEventHelper {
                 for (Method method : node.getClass().getMethods()) {
 
                     // ノードイベントリストをループして、メソッドが存在する場合
-                    nodeEventList.forEach(nodeEvent -> {
+                    nodeTypeEventList.forEach(nodeTypeEvent -> {
                         //
-                        if (isEnabled(nodeEvent, method, node)) {
+                        if (isEnabled(nodeTypeEvent, method, node)) {
                             try {
-                                method.invoke(node, nodeEvent.getEventBeen());
+                                method.invoke(node, nodeTypeEvent.getEventBeen(node));
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 e.printStackTrace();
                             }
@@ -69,19 +66,14 @@ public class NodeEventHelper {
 
 
     private boolean isNotIgnore(Node node) {
-        boolean containsNodeType = ignoreList.contains(node.getClass().getName());
-        boolean containsNodeId = ignoreList.contains(node.getId());
-
-        return !(containsNodeType || containsNodeId);
+        return !ignoreList.contains(node);
     }
 
-    private boolean isEnabled(NodeEvent nodeEvent, Method method, Node node) {
+    private boolean isEnabled(NodeTypeEvent nodeTypeEvent, Method method, Node node) {
         // メソッド名が一致する場合で、
-        if (Objects.equals(nodeEvent.getMethodName(), method.getName())) {
+        if (Objects.equals(nodeTypeEvent.getMethodName(), method.getName())) {
             // ノードタイプが一致するか、ノードIDが一致する
-            if (Objects.equals(nodeEvent.getNodeName(), node.getClass().getName())) {
-                return true;
-            } else if (Objects.equals(nodeEvent.getNodeName(), node.getId())) {
+            if (Objects.equals(nodeTypeEvent.getNodeType(), node.getClass())) {
                 return true;
             }
         }
@@ -92,4 +84,5 @@ public class NodeEventHelper {
     private boolean isExistedChildren(Method method) {
         return Objects.equals(method.getName(), "getChildren");
     }
+
 }

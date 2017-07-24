@@ -1,6 +1,7 @@
 package jp.niro.jimcon.eventhelper;
 
 import com.sun.javafx.robot.FXRobot;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 
 /**
@@ -17,10 +18,11 @@ public class RobotKeyPress implements ActionBeen {
     }
 
     @Override
-    public void action() {
+    public void action(Node node) {
         if (robot == null) {
             System.out.println("robot is null");
         } else {
+            System.out.println("a");
             robot.keyPress(keyCode);
         }
     }

@@ -1,11 +1,14 @@
 package jp.niro.jimcon.ui;
 
+import com.sun.javafx.robot.FXRobot;
+import com.sun.javafx.robot.FXRobotFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -14,6 +17,9 @@ import jp.niro.jimcon.datamodel.Department;
 import jp.niro.jimcon.datamodel.DepartmentFactory;
 import jp.niro.jimcon.datamodel.Departments;
 import jp.niro.jimcon.dbaccess.SQL;
+import jp.niro.jimcon.eventhelper.KeyEventBeen;
+import jp.niro.jimcon.eventhelper.NodeEventHelper;
+import jp.niro.jimcon.eventhelper.RobotKeyPress;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,6 +45,8 @@ public class DepartmentOverviewController {
     }
 
     @FXML
+    private AnchorPane pane;
+    @FXML
     private TableView<Department> departmentTable;
     @FXML
     private TableColumn<Department, Integer> departmentCodeColumn;
@@ -56,6 +64,16 @@ public class DepartmentOverviewController {
     private Label telNumberLabel;
     @FXML
     private Label faxNumberLabel;
+
+    public void setEvent() {
+        FXRobot robot = FXRobotFactory.createRobot(ownerStage.getScene());
+
+        KeyEventBeen openEdit = KeyEventBeen.setOnKeyPressed(KeyCode.ENTER, new RobotKeyPress(robot, KeyCode.UNDEFINED));
+        NodeEventHelper helper = new NodeEventHelper();
+        helper.addNodeEvent(TableView.class, openEdit);
+
+        helper.start(pane);
+    }
 
     @FXML
     private void initialize() {

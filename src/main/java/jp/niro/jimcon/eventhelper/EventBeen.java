@@ -1,36 +1,33 @@
 package jp.niro.jimcon.eventhelper;
 
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.scene.Node;
 
 /**
  * Created by niro on 2017/07/22.
  */
-public class EventBeen<T extends Event> implements EventHandler<T> {
+public class EventBeen {
 
-    private ActionBeen actionBeen;
-
+    ActionBeen actionBeen;
     private String methodName;
+    protected Node node;
 
-    private EventBeen(ActionBeen actionBeen, String methodName) {
+    EventBeen(ActionBeen actionBeen, String methodName) {
         this.actionBeen = actionBeen;
         this.methodName = methodName;
     }
 
-    public static EventBeen create(ActionBeen actionBeen) {
-        return new EventBeen(actionBeen, "this method is unimplemented.");
+    private EventBeen(ActionBeen actionBeen, String methodName, Node node) {
+        this.actionBeen = actionBeen;
+        this.methodName = methodName;
+        this.node = node;
     }
 
-    public static EventBeen setOnAction(ActionBeen actionBeen) {
-        return new EventBeen(actionBeen, "setOnAction");
+    EventBeen setThenGet(Node node) {
+        this.node = node;
+        return this;
     }
 
     String getMethodNeme() {
         return methodName;
-    }
-
-    @Override
-    public void handle(T event) {
-        actionBeen.action();
     }
 }
