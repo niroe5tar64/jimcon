@@ -1,7 +1,6 @@
 package jp.niro.jimcon.eventhelper;
 
 import com.sun.javafx.robot.FXRobot;
-import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 
 /**
@@ -38,7 +37,7 @@ public class RobotMouseClick implements ActionBeen {
     }
 
     @Override
-    public void action(Node node) {
+    public void action() {
         if (robot == null) {
             System.out.println("robot is null");
         } else {

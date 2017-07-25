@@ -2,32 +2,36 @@ package jp.niro.jimcon.eventhelper;
 
 import javafx.scene.Node;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 /**
  * Created by niro on 2017/07/22.
  */
 public class EventBeen {
 
     ActionBeen actionBeen;
-    private String methodName;
-    protected Node node;
+    String methodName;
 
     EventBeen(ActionBeen actionBeen, String methodName) {
         this.actionBeen = actionBeen;
         this.methodName = methodName;
     }
 
-    private EventBeen(ActionBeen actionBeen, String methodName, Node node) {
-        this.actionBeen = actionBeen;
-        this.methodName = methodName;
-        this.node = node;
-    }
-
-    EventBeen setThenGet(Node node) {
-        this.node = node;
-        return this;
-    }
-
     String getMethodNeme() {
         return methodName;
+    }
+
+
+    public void setEvent(Node node) {
+        // メソッド配列を取得してループ
+        try {
+            Method method = node.getClass().getMethod(methodName);
+            method.invoke(node, this);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException ignored) {
+
+        }
     }
 }

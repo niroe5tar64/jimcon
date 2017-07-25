@@ -43,7 +43,7 @@ public class NodeEventHelper {
                         //
                         if (isEnabled(nodeTypeEvent, method, node)) {
                             try {
-                                method.invoke(node, nodeTypeEvent.getEventBeen(node));
+                                method.invoke(node, nodeTypeEvent.getEventBeen());
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 e.printStackTrace();
                             }

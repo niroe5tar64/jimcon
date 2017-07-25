@@ -14,8 +14,8 @@ class NodeTypeEvent {
         this.eventBeen = eventBeen;
     }
 
-    EventBeen getEventBeen(Node node) {
-        return eventBeen.setThenGet(node);
+    EventBeen getEventBeen() {
+        return eventBeen;
     }
 
     Class<? extends Node> getNodeType() {

@@ -4,7 +4,6 @@ import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -139,7 +138,7 @@ public class LoginController {
         }
 
         @Override
-        public void action(Node node) {
+        public void action() {
             controller.executeLogin();
         }
     }

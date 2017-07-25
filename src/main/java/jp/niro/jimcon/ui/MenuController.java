@@ -4,6 +4,7 @@ import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -11,10 +12,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.eventhelper.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 
 /**
  * Created by niro on 2017/05/12.
@@ -49,20 +52,53 @@ public class MenuController {
         FXRobot robot = FXRobotFactory.createRobot(primaryStage.getScene());
 
 
-
         departmentMasterButton.setOnAction(event -> showDepartmentMaster());
         unitMasterButton.setOnAction(event -> showUnitMaster());
         productMasterButton.setOnAction(event -> showProductMaster());
         tagMasterButton.setOnAction(event -> showTagMaster());
 
 
-        NodeEventHelper helper = new NodeEventHelper();
-        KeyEventBeen sameOnAction = KeyEventBeen.setOnKeyReleased(KeyCode.ENTER, new SameOnAction());
-        helper.addNodeEvent(Button.class, sameOnAction);
-        helper.start(pane);
-        //departmentMasterButton.setOnKeyPressed(EventBeen.create(new RobotKeyPress(robot, KeyCode.ENTER)));
+        NodePickUpper pickUpper = new NodePickUpper();
+        Collection<Node> list = pickUpper.start(pane, Button.class);
+        list.forEach(node -> {
+            KeyEventBeen.setOnKeyPressed(KeyCode.ENTER, new ShowDialog(this, node)).setEvent(node);
+            KeyEventBeen.setOnKeyPressed(KeyCode.TAB, new Test()).setEvent(node);
+        });
     }
 
+    private static class Test implements ActionBeen {
+
+        @Override
+        public void action() {
+            System.out.println("aaaa");
+        }
+    }
+
+    private static class ShowDialog implements ActionBeen {
+        private ShowDialog() {
+        }
+
+        MenuController controller;
+        Node node;
+
+        ShowDialog(MenuController controller, Node node) {
+            this.node = node;
+            this.controller = controller;
+        }
+
+        @Override
+        public void action() {
+            if (Validator.isEqual(node, controller.departmentMasterButton)) {
+                controller.showDepartmentMaster();
+            } else if (Validator.isEqual(node, controller.unitMasterButton)) {
+                controller.showUnitMaster();
+            } else if (Validator.isEqual(node, controller.productMasterButton)) {
+                controller.showProductMaster();
+            } else if (Validator.isEqual(node, controller.tagMasterButton)) {
+                controller.showTagMaster();
+            }
+        }
+    }
 
 
     @FXML

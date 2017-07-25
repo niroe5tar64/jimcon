@@ -1,8 +1,12 @@
 package jp.niro.jimcon.eventhelper;
 
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Created by niro on 2017/07/24.
@@ -31,15 +35,15 @@ public class KeyEventBeen extends EventBeen implements EventHandler<KeyEvent> {
         this.shiftDown = shiftDown;
     }
 
-    public static KeyEventBeen setOnKeyPressed(KeyCode keyCode, ActionBeen actionBeen ) {
+    public static KeyEventBeen setOnKeyPressed(KeyCode keyCode, ActionBeen actionBeen) {
         return new KeyEventBeen(keyCode, actionBeen, "setOnKeyPressed");
     }
 
-    public static KeyEventBeen setOnKeyReleased(KeyCode keyCode, ActionBeen actionBeen ) {
+    public static KeyEventBeen setOnKeyReleased(KeyCode keyCode, ActionBeen actionBeen) {
         return new KeyEventBeen(keyCode, actionBeen, "setOnKeyReleased");
     }
 
-    public static KeyEventBeen setOnKeyTyped(KeyCode keyCode, ActionBeen actionBeen ) {
+    public static KeyEventBeen setOnKeyTyped(KeyCode keyCode, ActionBeen actionBeen) {
         return new KeyEventBeen(keyCode, actionBeen, "setOnKeyTyped");
     }
 
@@ -56,7 +60,7 @@ public class KeyEventBeen extends EventBeen implements EventHandler<KeyEvent> {
                                                 boolean altDown,
                                                 boolean shiftDown,
                                                 ActionBeen actionBeen) {
-        return new KeyEventBeen(keyCode,actionBeen, "setOnKeyReleased");
+        return new KeyEventBeen(keyCode, actionBeen, "setOnKeyReleased");
     }
 
     @Override
@@ -66,6 +70,19 @@ public class KeyEventBeen extends EventBeen implements EventHandler<KeyEvent> {
         if (shiftDown != event.isShiftDown()) return;
         if (keyCode != event.getCode()) return;
 
-        actionBeen.action(node);
+        actionBeen.action();
+    }
+
+    @Override
+    public void setEvent(Node node) {
+        // メソッド配列を取得してループ
+        try {
+            Method method = node.getClass().getMethod(methodName, EventHandler.class);
+            method.invoke(node, this);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException ignored) {
+
+        }
     }
 }
