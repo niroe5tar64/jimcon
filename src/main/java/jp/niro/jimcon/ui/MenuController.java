@@ -61,8 +61,9 @@ public class MenuController {
         NodePickUpper pickUpper = new NodePickUpper();
         Collection<Node> list = pickUpper.start(pane, Button.class);
         list.forEach(node -> {
-            KeyEventBeen.setOnKeyPressed(KeyCode.ENTER, new ShowDialog(this, node)).setEvent(node);
-            KeyEventBeen.setOnKeyPressed(KeyCode.TAB, new Test()).setEvent(node);
+            KeyEventBeen.setOnKeyPressed()
+                    .add(KeyCode.ENTER, new ShowDialog(this, node))
+                    .add(KeyCode.TAB, new Test()).setEvent(node);
         });
     }
 

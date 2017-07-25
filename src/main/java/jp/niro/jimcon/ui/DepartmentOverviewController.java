@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,9 +16,6 @@ import jp.niro.jimcon.datamodel.Department;
 import jp.niro.jimcon.datamodel.DepartmentFactory;
 import jp.niro.jimcon.datamodel.Departments;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventhelper.KeyEventBeen;
-import jp.niro.jimcon.eventhelper.NodeEventHelper;
-import jp.niro.jimcon.eventhelper.RobotKeyPress;
 
 import java.io.IOException;
 import java.net.URL;
@@ -68,11 +64,11 @@ public class DepartmentOverviewController {
     public void setEvent() {
         FXRobot robot = FXRobotFactory.createRobot(ownerStage.getScene());
 
-        KeyEventBeen openEdit = KeyEventBeen.setOnKeyPressed(KeyCode.ENTER, new RobotKeyPress(robot, KeyCode.UNDEFINED));
+        /*KeyEventBeen openEdit = KeyEventBeen.setOnKeyPressed(KeyCode.ENTER, new RobotKeyPress(robot, KeyCode.UNDEFINED));
         NodeEventHelper helper = new NodeEventHelper();
         helper.addNodeEvent(TableView.class, openEdit);
 
-        helper.start(pane);
+        helper.start(pane);*/
     }
 
     @FXML

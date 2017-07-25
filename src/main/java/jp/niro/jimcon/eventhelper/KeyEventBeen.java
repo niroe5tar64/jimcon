@@ -7,70 +7,66 @@ import javafx.scene.input.KeyEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by niro on 2017/07/24.
  */
 public class KeyEventBeen extends EventBeen implements EventHandler<KeyEvent> {
-    private KeyCode keyCode;
-    private boolean controlDown;
-    private boolean altDown;
-    private boolean shiftDown;
+    private Collection<KeyEventBeenElement> elements = new ArrayList<>();
 
-    private KeyEventBeen(KeyCode keyCode,
-                         ActionBeen actionBeen, String methodName) {
-        super(actionBeen, methodName);
-        this.keyCode = keyCode;
-        this.controlDown = false;
-        this.altDown = false;
-        this.shiftDown = false;
+    public KeyEventBeen add(KeyEventBeenElement element) {
+        elements.add(element);
+        return this;
     }
 
-    private KeyEventBeen(KeyCode keyCode, boolean controlDown, boolean altDown, boolean shiftDown,
-                         ActionBeen actionBeen, String methodName) {
-        super(actionBeen, methodName);
-        this.keyCode = keyCode;
-        this.controlDown = controlDown;
-        this.altDown = altDown;
-        this.shiftDown = shiftDown;
+    public KeyEventBeen add(KeyCode keyCode, ActionBeen actionBeen) {
+        elements.add(new KeyEventBeenElement(keyCode, actionBeen));
+        return this;
     }
 
-    public static KeyEventBeen setOnKeyPressed(KeyCode keyCode, ActionBeen actionBeen) {
-        return new KeyEventBeen(keyCode, actionBeen, "setOnKeyPressed");
+    public KeyEventBeen add(KeyCode keyCode,
+                            boolean controlDown,
+                            boolean altDown,
+                            boolean shiftDown,
+                            ActionBeen actionBeen) {
+        elements.add(
+                new KeyEventBeenElement(
+                        keyCode,
+                        controlDown,
+                        altDown,
+                        shiftDown,
+                        actionBeen));
+        return this;
     }
 
-    public static KeyEventBeen setOnKeyReleased(KeyCode keyCode, ActionBeen actionBeen) {
-        return new KeyEventBeen(keyCode, actionBeen, "setOnKeyReleased");
+    private KeyEventBeen(String methodName) {
+        super(new UndefinedActionBeen(), methodName);
     }
 
-    public static KeyEventBeen setOnKeyTyped(KeyCode keyCode, ActionBeen actionBeen) {
-        return new KeyEventBeen(keyCode, actionBeen, "setOnKeyTyped");
+    public static KeyEventBeen setOnKeyPressed() {
+        return new KeyEventBeen("setOnKeyPressed");
     }
 
-    public static KeyEventBeen setOnKeyPressed(KeyCode keyCode,
-                                               boolean controlDown,
-                                               boolean altDown,
-                                               boolean shiftDown,
-                                               ActionBeen actionBeen) {
-        return new KeyEventBeen(keyCode, actionBeen, "setOnKeyPressed");
+    public static KeyEventBeen setOnKeyReleased() {
+        return new KeyEventBeen("setOnKeyReleased");
     }
 
-    public static KeyEventBeen setOnKeyReleased(KeyCode keyCode,
-                                                boolean controlDown,
-                                                boolean altDown,
-                                                boolean shiftDown,
-                                                ActionBeen actionBeen) {
-        return new KeyEventBeen(keyCode, actionBeen, "setOnKeyReleased");
+    public static KeyEventBeen setOnKeyTyped() {
+        return new KeyEventBeen("setOnKeyTyped");
     }
 
     @Override
     public void handle(KeyEvent event) {
-        if (controlDown != event.isControlDown()) return;
-        if (altDown != event.isAltDown()) return;
-        if (shiftDown != event.isShiftDown()) return;
-        if (keyCode != event.getCode()) return;
-
-        actionBeen.action();
+        elements.forEach(element -> {
+            if (element.keyCode == event.getCode()
+                    && element.controlDown == event.isControlDown()
+                    && element.altDown == event.isAltDown()
+                    && element.shiftDown == event.isShiftDown()) {
+                element.actionBeen.action();
+            }
+        });
     }
 
     @Override
@@ -82,6 +78,14 @@ public class KeyEventBeen extends EventBeen implements EventHandler<KeyEvent> {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException ignored) {
+
+        }
+    }
+
+    static class UndefinedActionBeen implements ActionBeen {
+
+        @Override
+        public void action() {
 
         }
     }
