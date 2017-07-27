@@ -15,10 +15,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventhelper.ActionBeen;
-import jp.niro.jimcon.eventhelper.ActionEventBeen;
-import jp.niro.jimcon.eventhelper.KeyEventManager;
-import jp.niro.jimcon.eventhelper.RobotKeyPress;
+import jp.niro.jimcon.eventmanager.ActionBeen;
+import jp.niro.jimcon.eventmanager.ActionEventManager;
+import jp.niro.jimcon.eventmanager.KeyEventManager;
+import jp.niro.jimcon.eventmanager.RobotKeyPress;
 
 import java.io.IOException;
 import java.net.URL;
@@ -61,13 +61,13 @@ public class LoginController {
         // フォーカス移動用アクション
         ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
 
-        ActionEventBeen.setOnAction(focusNext)
+        ActionEventManager.setOnAction(focusNext)
                 .setEvent(userNameField);
 
         // ログイン処理実行用アクション
         ActionBeen executeLogin = new ExecuteLogin(this);
 
-        ActionEventBeen.setOnAction(executeLogin)
+        ActionEventManager.setOnAction(executeLogin)
                 .setEvent(passwordField)
                 .setEvent(loginButton);
 

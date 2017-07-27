@@ -1,4 +1,4 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 /**
  * Created by niro on 2017/07/22.

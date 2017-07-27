@@ -1,4 +1,4 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -11,16 +11,16 @@ import java.util.Collection;
 /**
  * Created by niro on 2017/07/24.
  */
-public class MouseEventBeen extends EventBeen implements EventHandler<MouseEvent> {
+public class MouseEventManager extends BaseEventManager implements EventHandler<MouseEvent> {
 
 
 
-    private MouseEventBeen(ActionBeen actionBeen, String methodName) {
+    private MouseEventManager(ActionBeen actionBeen, String methodName) {
         super(actionBeen, methodName);
     }
 
-    public static MouseEventBeen setOnMouseClicked(ActionBeen actionBeen){
-        return new MouseEventBeen(actionBeen, "setOnMouseClicked");
+    public static MouseEventManager setOnMouseClicked(ActionBeen actionBeen){
+        return new MouseEventManager(actionBeen, "setOnMouseClicked");
     }
 
     @Override
@@ -30,7 +30,7 @@ public class MouseEventBeen extends EventBeen implements EventHandler<MouseEvent
     }
 
     @Override
-    public EventBeen setEvent(Node node) {
+    public BaseEventManager setEvent(Node node) {
         // メソッド配列を取得してループ
         try {
             Method method = node.getClass().getMethod(methodName, EventHandler.class);

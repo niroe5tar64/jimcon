@@ -11,10 +11,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.eventhelper.ActionBeen;
-import jp.niro.jimcon.eventhelper.ActionEventBeen;
-import jp.niro.jimcon.eventhelper.KeyEventManager;
-import jp.niro.jimcon.eventhelper.NodePickUpper;
+import jp.niro.jimcon.eventmanager.ActionBeen;
+import jp.niro.jimcon.eventmanager.ActionEventManager;
+import jp.niro.jimcon.eventmanager.KeyEventManager;
+import jp.niro.jimcon.eventmanager.NodePickUpper;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +58,7 @@ public class MenuController {
             ActionBeen showDialog = new ShowDialog(this, button);
 
             // ボタンを押した場合
-            ActionEventBeen.setOnAction(showDialog)
+            ActionEventManager.setOnAction(showDialog)
                     .setEvent(button);
             // ボタンにフォーカスがある時にEnterを押した場合
             KeyEventManager.create()

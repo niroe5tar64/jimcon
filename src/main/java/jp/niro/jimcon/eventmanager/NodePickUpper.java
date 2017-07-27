@@ -1,4 +1,4 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;

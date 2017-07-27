@@ -1,11 +1,11 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 import javafx.scene.input.KeyCode;
 
 /**
  * Created by niro on 2017/07/25.
  */
-class KeyEventBeenElement {
+class KeyEventBeen {
     String methodName;
     KeyCode keyCode;
     boolean controlDown;
@@ -15,13 +15,13 @@ class KeyEventBeenElement {
 
     final boolean withPressed;
 
-    KeyEventBeenElement(String methodName,
-                        KeyCode keyCode,
-                        boolean controlDown,
-                        boolean altDown,
-                        boolean shiftDown,
-                        ActionBeen actionBeen,
-                        boolean withPressed) {
+    KeyEventBeen(String methodName,
+                 KeyCode keyCode,
+                 boolean controlDown,
+                 boolean altDown,
+                 boolean shiftDown,
+                 ActionBeen actionBeen,
+                 boolean withPressed) {
         this.methodName = methodName;
         this.keyCode = keyCode;
         this.controlDown = controlDown;

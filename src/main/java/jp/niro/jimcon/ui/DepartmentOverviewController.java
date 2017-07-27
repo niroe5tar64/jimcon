@@ -17,8 +17,8 @@ import jp.niro.jimcon.datamodel.Department;
 import jp.niro.jimcon.datamodel.DepartmentFactory;
 import jp.niro.jimcon.datamodel.Departments;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventhelper.ActionBeen;
-import jp.niro.jimcon.eventhelper.KeyEventManager;
+import jp.niro.jimcon.eventmanager.ActionBeen;
+import jp.niro.jimcon.eventmanager.KeyEventManager;
 
 import java.io.IOException;
 import java.net.URL;

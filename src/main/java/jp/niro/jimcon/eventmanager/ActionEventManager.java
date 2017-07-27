@@ -1,4 +1,4 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,14 +11,14 @@ import java.util.Collection;
 /**
  * Created by niro on 2017/07/24.
  */
-public class ActionEventBeen extends EventBeen implements EventHandler<ActionEvent> {
+public class ActionEventManager extends BaseEventManager implements EventHandler<ActionEvent> {
 
-    private ActionEventBeen(ActionBeen actionBeen, String methodName) {
+    private ActionEventManager(ActionBeen actionBeen, String methodName) {
         super(actionBeen, methodName);
     }
 
-    public static ActionEventBeen setOnAction(ActionBeen actionBeen) {
-        return new ActionEventBeen(actionBeen, "setOnAction");
+    public static ActionEventManager setOnAction(ActionBeen actionBeen) {
+        return new ActionEventManager(actionBeen, "setOnAction");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ActionEventBeen extends EventBeen implements EventHandler<ActionEve
     }
 
     @Override
-    public EventBeen setEvent(Node node) {
+    public BaseEventManager setEvent(Node node) {
         try {
             Method method = node.getClass().getMethod(methodName, EventHandler.class);
             method.invoke(node,this);

@@ -1,4 +1,4 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -10,13 +10,13 @@ import java.util.Collection;
 /**
  * Created by niro on 2017/07/22.
  */
-public class EventBeen {
+public class BaseEventManager {
     static boolean nowPressed = false;
 
     ActionBeen actionBeen;
     String methodName;
 
-    EventBeen(ActionBeen actionBeen, String methodName) {
+    BaseEventManager(ActionBeen actionBeen, String methodName) {
         this.actionBeen = actionBeen;
         this.methodName = methodName;
     }
@@ -26,7 +26,7 @@ public class EventBeen {
     }
 
 
-    public EventBeen setEvent(Node node) {
+    public BaseEventManager setEvent(Node node) {
         try {
             Method method = node.getClass().getMethod(methodName, EventHandler.class);
             method.invoke(node, this);

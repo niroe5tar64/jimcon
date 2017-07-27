@@ -1,4 +1,4 @@
-package jp.niro.jimcon.eventhelper;
+package jp.niro.jimcon.eventmanager;
 
 import com.sun.javafx.robot.FXRobot;
 import javafx.scene.input.KeyCode;
