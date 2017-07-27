@@ -6,31 +6,28 @@ import javafx.scene.input.KeyCode;
  * Created by niro on 2017/07/25.
  */
 class KeyEventBeenElement {
+    String methodName;
     KeyCode keyCode;
     boolean controlDown;
     boolean altDown;
-    boolean shiftDown;
     ActionBeen actionBeen;
+    boolean shiftDown;
 
+    final boolean withPressed;
 
-    KeyEventBeenElement(KeyCode keyCode,
-                        ActionBeen actionBeen) {
-        this.keyCode = keyCode;
-        this.controlDown = false;
-        this.altDown = false;
-        this.shiftDown = false;
-        this.actionBeen = actionBeen;
-    }
-
-    KeyEventBeenElement(KeyCode keyCode,
+    KeyEventBeenElement(String methodName,
+                        KeyCode keyCode,
                         boolean controlDown,
                         boolean altDown,
                         boolean shiftDown,
-                        ActionBeen actionBeen) {
+                        ActionBeen actionBeen,
+                        boolean withPressed) {
+        this.methodName = methodName;
         this.keyCode = keyCode;
         this.controlDown = controlDown;
         this.altDown = altDown;
         this.shiftDown = shiftDown;
         this.actionBeen = actionBeen;
+        this.withPressed = withPressed;
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.Node;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 /**
  * Created by niro on 2017/07/24.
@@ -23,18 +24,33 @@ public class ActionEventBeen extends EventBeen implements EventHandler<ActionEve
     @Override
     public void handle(ActionEvent event) {
         actionBeen.action();
+        nowPressed = false;
     }
 
     @Override
-    public void setEvent(Node node) {
-        // メソッド配列を取得してループ
+    public EventBeen setEvent(Node node) {
         try {
-            Method method = node.getClass().getMethod(methodName);
-            method.invoke(node, this);
+            Method method = node.getClass().getMethod(methodName, EventHandler.class);
+            method.invoke(node,this);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException ignored) {
 
         }
+        return this;
+    }
+
+    @Override
+    public void setEvent(Collection<Node> nodes) {
+        nodes.forEach(node -> {
+            try {
+                Method method = node.getClass().getMethod(methodName, EventHandler.class);
+                method.invoke(node, this);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException ignored) {
+
+            }
+        });
     }
 }

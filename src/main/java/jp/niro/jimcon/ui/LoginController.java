@@ -17,6 +17,7 @@ import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
 import jp.niro.jimcon.eventhelper.ActionBeen;
 import jp.niro.jimcon.eventhelper.ActionEventBeen;
+import jp.niro.jimcon.eventhelper.KeyEventManager;
 import jp.niro.jimcon.eventhelper.RobotKeyPress;
 
 import java.io.IOException;
@@ -57,21 +58,22 @@ public class LoginController {
     public void setEvent() {
         FXRobot robot = FXRobotFactory.createRobot(primaryStage.getScene());
 
-        ActionEventBeen focusNext = ActionEventBeen.setOnAction(new RobotKeyPress(robot, KeyCode.TAB));
-        ActionEventBeen executeLogin = ActionEventBeen.setOnAction(new ExecuteLogin(this));
+        // フォーカス移動用アクション
+        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
 
-        userNameField.setOnAction(focusNext);
-        passwordField.setOnAction(executeLogin);
-        loginButton.setOnAction(executeLogin);
+        ActionEventBeen.setOnAction(focusNext)
+                .setEvent(userNameField);
 
-        /*EventBeen focusNext = EventBeen.setOnAction(new RobotKeyPress(robot, KeyCode.TAB));
-        EventBeen executeLogin = EventBeen.setOnAction(new ExecuteLogin(this));
+        // ログイン処理実行用アクション
+        ActionBeen executeLogin = new ExecuteLogin(this);
 
-        NodeEventHelper helper = new NodeEventHelper();
-        helper.addNodeEvent(TextField.class, focusNext);
-        helper.addNodeEvent(PasswordField.class, executeLogin);
-        helper.addNodeEvent(Button.class, executeLogin);
-        helper.start(pane);*/
+        ActionEventBeen.setOnAction(executeLogin)
+                .setEvent(passwordField)
+                .setEvent(loginButton);
+
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, executeLogin, true)
+                .setEvent(loginButton);
     }
 
     // ログイン処理実行
@@ -126,10 +128,9 @@ public class LoginController {
     }
 
 
-
-
     private static class ExecuteLogin implements ActionBeen {
-        private ExecuteLogin(){}
+        private ExecuteLogin() {
+        }
 
         LoginController controller;
 
