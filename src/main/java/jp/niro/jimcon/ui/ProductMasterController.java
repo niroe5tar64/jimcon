@@ -19,6 +19,7 @@ import jp.niro.jimcon.customcomponents.flowlistview.FlowListView;
 import jp.niro.jimcon.datamodel.*;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
+import jp.niro.jimcon.eventmanager.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,21 +28,21 @@ import java.sql.SQLException;
 /**
  * Created by niro on 2017/04/21.
  */
-public class ProductOverviewWithTagController implements TagSearchable {
-    public static final String FXML_NAME = "ProductOverviewWithTag.fxml";
+public class ProductMasterController implements MasterController,TagSearchable {
+    public static final String FXML_NAME = "ProductMaster.fxml";
     public static final String TITLE_NAME = "商品一覧";
     public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
 
     private Products products = new Products();
     private TagMapPool tagMapPool = TagMapPool.getInstance();
-    private Stage ownerStage;
+    private Stage stage;
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @FXML
@@ -95,6 +96,39 @@ public class ProductOverviewWithTagController implements TagSearchable {
     private CheckBox processedCheckBox;
     @FXML
     private CheckBox deletedCheckBox;
+    @FXML
+    private Button newButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
+
+    public void setEvent(){
+        // 各ダイアログ表示用アクション
+        ActionBeen showNew = new ActionMasterDialog(ActionType.NEW, this);
+        ActionBeen showEdit = new ActionMasterDialog(ActionType.EDIT, this);
+        ActionBeen showDelete = new ActionMasterDialog(ActionType.DELETE,this);
+        ActionBeen closeDialog = new ActionMasterDialog(ActionType.CLOSE, this);
+
+        // テーブルにフォーカスがある時のキーイベント
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
+                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
+                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(productTable);
+
+        // ボタンが押された時
+        ActionEventManager.setOnAction(showNew).setEvent(newButton);
+        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
+        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
+
+        // その他にフォーカスがある時
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(pane);
+
+    }
 
     @FXML
     private void initialize() {
@@ -163,8 +197,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
         if (sql != null) sql.close(); // 接続切断
     }
 
-    @FXML
-    private void handleNewProduct() {
+    @Override
+    public void handleNew() {
         Product tempProduct = new Product();
         ObservableList<Tag> tempTagList = FXCollections.observableArrayList();
         SQL sql = null;
@@ -211,8 +245,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
-    @FXML
-    private void handleEditProduct() {
+    @Override
+    public void handleEdit() {
         // メソッド内において取り扱うProduct及びList<Tag>の対応付け。
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
         ObservableList<Tag> selectedTagList = tagListView.getItems();
@@ -267,8 +301,8 @@ public class ProductOverviewWithTagController implements TagSearchable {
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
-    @FXML
-    private void handleDeleteProduct() {
+    @Override
+    public void handleDelete() {
         // メソッド内において取り扱うProduct及びList<Tag>の対応付け。
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
         ObservableList<Tag> selectedTagList = tagListView.getItems();
@@ -317,6 +351,11 @@ public class ProductOverviewWithTagController implements TagSearchable {
         if (sql != null) sql.close(); // 接続切断
 
         showProductDetails(productTable.getSelectionModel().getSelectedItem());
+    }
+
+    @Override
+    public void handleClose() {
+        stage.close();
     }
 
     private void showProductDetails(Product product) {
@@ -370,25 +409,26 @@ public class ProductOverviewWithTagController implements TagSearchable {
     private boolean showProductEditDialog(Product product, ObservableList<Tag> tagList, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pup-up dialog.
-            URL location = WindowManager.class.getResource(ProductEditDialogWithTagController.FXML_NAME);
+            URL location = WindowManager.class.getResource(ProductMasterEditController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(ProductEditDialogWithTagController.TITLE_NAME);
+            dialogStage.setTitle(ProductMasterEditController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(ownerStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // Set the Product into the controller.
-            ProductEditDialogWithTagController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            ProductMasterEditController controller = loader.getController();
+            controller.setStage(dialogStage);
             controller.setProduct(product);
             controller.setTagList(tagList);
+            controller.setEvent();
 
             // 新規の場合、商品コードを編集不可にする。
             controller.getProductCodeField().editableProperty().set(isNew);
@@ -414,14 +454,14 @@ public class ProductOverviewWithTagController implements TagSearchable {
             Stage dialogStage = new Stage();
             dialogStage.setTitle(TagSearchDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(ownerStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // Set the Product into the controller.
             TagSearchDialogController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            controller.setStage(dialogStage);
             // TagSearchDialogControllerとProductOverviewControllerの紐付け
             controller.setTagSearchable(this);
             controller.setTagSearchField(getSearchValue());

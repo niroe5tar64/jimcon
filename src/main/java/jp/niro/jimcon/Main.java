@@ -16,10 +16,10 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage stage) throws Exception {
         try {
-            win.setPrimaryStage(primaryStage);
-            win.getPrimaryStage().setTitle(LoginController.TITLE_NAME);
+            win.setStage(stage);
+            win.getStage().setTitle(LoginController.TITLE_NAME);
 
             // Show the root layout.
             win.init();

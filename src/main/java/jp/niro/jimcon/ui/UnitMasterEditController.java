@@ -1,23 +1,32 @@
 package jp.niro.jimcon.ui;
 
+import com.sun.javafx.robot.FXRobot;
+import com.sun.javafx.robot.FXRobotFactory;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.datamodel.Unit;
+import jp.niro.jimcon.eventmanager.*;
+
+import java.util.Collection;
 
 /**
  * Created by niro on 2017/04/17.
  */
-public class UnitEditDialogController {
-    public static final String FXML_NAME = "UnitEditDialog.fxml";
+public class UnitMasterEditController implements MasterEditController{
+    public static final String FXML_NAME = "UnitMasterEdit.fxml";
     public static final String TITLE_NAME = "単位編集";
     public static final String INVALID_FIELDS = "Invalid Fields Error";
     public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
 
     private Unit unit;
-    private Stage ownerStage;
+    private Stage stage;
     private boolean okClicked;
 
     public void setUnit(Unit unit) {
@@ -27,12 +36,12 @@ public class UnitEditDialogController {
         unitNameField.setText(unit.getUnitName());
     }
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public boolean isOkClicked() {
@@ -44,29 +53,74 @@ public class UnitEditDialogController {
     }
 
     @FXML
-    private TextField unitCodeField;
+    private AnchorPane pane;
 
     @FXML
+    private TextField unitCodeField;
+    @FXML
     private TextField unitNameField;
+    @FXML
+    private Button okButton;
+    @FXML
+    private Button cancelButton;
 
     @FXML
     private void initialize() {
     }
 
-    @FXML
-    private void handleOK() {
+    public void setEvent() {
+        FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
+
+        // フォーカス移動用アクション
+        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
+        // ダイアログ用アクション
+        ActionBeen closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+
+        // 画面上の全てのTextFieldを取得して一括設定。
+        NodePickUpper pickUpper = new NodePickUpper();
+        Collection<Node> textFields = pickUpper.start(pane, TextField.class);
+
+        // KeyEvent
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog)
+                .setEvent(textFields);
+
+        textFields.forEach(textField ->
+                ActionEventManager.setOnAction(focusNext).setEvent(textField));
+
+
+        // [OK][Cancel]操作用アクション
+        ActionBeen executeOK = new ActionMasterEdit(ActionType.OK, this);
+        ActionBeen executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
+
+        // [OK][Cancel]ボタンの
+        ActionEventManager.setOnAction(executeOK).setEvent(okButton);
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, executeOK).setEvent(okButton);
+        ActionEventManager.setOnAction(executeCancel).setEvent(cancelButton);
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, executeCancel).setEvent(cancelButton);
+    }
+
+    @Override
+    public void handleOK() {
         if (isInputValid()) {
             unit.setUnitCode(Integer.parseInt(unitCodeField.getText()));
             unit.setUnitName(unitNameField.getText());
 
             okClicked = true;
-            ownerStage.close();
+            stage.close();
         }
     }
 
-    @FXML
-    private void handleCancel() {
-        ownerStage.close();
+    @Override
+    public void handleCancel() {
+        stage.close();
+    }
+
+    @Override
+    public void handleClose() {
+        stage.close();
     }
 
     private boolean isInputValid() {

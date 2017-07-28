@@ -22,7 +22,7 @@ public class UnitSearchDialogController {
 
     private Units units = new Units();
     private UnitSearchable unitSearchable;
-    private Stage ownerStage;
+    private Stage stage;
 
     void setUnitSearchable(UnitSearchable unitSearchable) {
         this.unitSearchable = unitSearchable;
@@ -32,12 +32,12 @@ public class UnitSearchDialogController {
         return unitSearchable;
     }
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @FXML
@@ -69,11 +69,11 @@ public class UnitSearchDialogController {
                     // Enterキーを押した時
                     if (event.getCode() == KeyCode.ENTER) {
                         selection();
-                        ownerStage.close();
+                        stage.close();
                     }
                     // Escapeキーを押した時
                     else if (event.getCode() == KeyCode.ESCAPE) {
-                        ownerStage.close();
+                        stage.close();
                     }
                 }
         );
@@ -86,7 +86,7 @@ public class UnitSearchDialogController {
                         // ダブルクリックした時
                         if (clickCount == Constant.System.CLICK_COUNT_DOUBLE) {
                             selection();
-                            ownerStage.close();
+                            stage.close();
                         }
                     }
                 }

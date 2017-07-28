@@ -6,14 +6,15 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
             prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jp.niro.jimcon.ui.TagEditDialogController">
+            fx:id="pane"
+            fx:controller="jp.niro.jimcon.ui.UnitMasterEditController">
     <children>
         <GridPane AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
-                <Label text="%tag.tagId"/>
-                <Label text="%tag.tagName" GridPane.rowIndex="1"/>
-                <TextField fx:id="tagIdField" GridPane.columnIndex="1"/>
-                <TextField fx:id="tagNameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="%unit.unitCode"/>
+                <Label text="%unit.unitName" GridPane.rowIndex="1"/>
+                <TextField fx:id="unitCodeField" GridPane.columnIndex="1"/>
+                <TextField fx:id="unitNameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.0" minWidth="10.0" prefWidth="197.0"/>
@@ -31,12 +32,12 @@
         <HBox layoutX="150.0" layoutY="272.0" spacing="10.0" AnchorPane.bottomAnchor="10.0"
               AnchorPane.rightAnchor="10.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#handleOK" prefWidth="80.0" text="%ok">
+                <Button fx:id="okButton" mnemonicParsing="false" prefWidth="80.0" text="%ok">
                     <HBox.margin>
                         <Insets/>
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#handleCancel" prefWidth="80.0" text="%cancel">
+                <Button fx:id="cancelButton" mnemonicParsing="false" prefWidth="80.0" text="%cancel">
                     <HBox.margin>
                         <Insets/>
                     </HBox.margin>

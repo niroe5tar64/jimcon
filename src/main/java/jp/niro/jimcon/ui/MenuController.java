@@ -27,14 +27,14 @@ public class MenuController {
     public static final String FXML_NAME = "Menu.fxml";
     public static final String TITLE_NAME = "メインメニュー";
 
-    private Stage primaryStage;
+    private Stage stage;
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @FXML
@@ -70,23 +70,23 @@ public class MenuController {
     private void showDepartmentMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(DepartmentOverviewController.FXML_NAME);
+            URL location = WindowManager.class.getResource(DepartmentMasterController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(DepartmentOverviewController.TITLE_NAME);
+            dialogStage.setTitle(DepartmentMasterController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。
-            DepartmentOverviewController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            DepartmentMasterController controller = loader.getController();
+            controller.setStage(dialogStage);
             controller.setEvent();
             dialogStage.setResizable(false);
 
@@ -100,24 +100,25 @@ public class MenuController {
     private void showUnitMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(UnitOverviewController.FXML_NAME);
+            URL location = WindowManager.class.getResource(UnitMasterController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(UnitOverviewController.TITLE_NAME);
+            dialogStage.setTitle(UnitMasterController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+            dialogStage.initOwner(stage);
             dialogStage.setResizable(false);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。
-            UnitOverviewController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            UnitMasterController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setEvent();
 
             dialogStage.showAndWait();
 
@@ -129,23 +130,24 @@ public class MenuController {
     private void showProductMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(ProductOverviewWithTagController.FXML_NAME);
+            URL location = WindowManager.class.getResource(ProductMasterController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(ProductOverviewWithTagController.TITLE_NAME);
+            dialogStage.setTitle(ProductMasterController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。
-            ProductOverviewWithTagController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            ProductMasterController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setEvent();
 
             dialogStage.showAndWait();
 
@@ -157,24 +159,24 @@ public class MenuController {
     private void showTagMaster() {
         try {
             // FXMLファイルをPaneにロードする。
-            URL location = WindowManager.class.getResource(TagOverviewController.FXML_NAME);
+            URL location = WindowManager.class.getResource(TagMasterController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             Pane pane = loader.load();
 
             // Stageを新たに生成する。
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(TagOverviewController.TITLE_NAME);
+            dialogStage.setTitle(TagMasterController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
+            dialogStage.initOwner(stage);
             dialogStage.setResizable(false);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // コントローラーをセットする。
-            TagOverviewController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            TagMasterController controller = loader.getController();
+            controller.setStage(dialogStage);
 
             dialogStage.showAndWait();
 

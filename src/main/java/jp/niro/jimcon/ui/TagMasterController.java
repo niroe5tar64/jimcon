@@ -3,9 +3,11 @@ package jp.niro.jimcon.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -14,6 +16,7 @@ import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.Tags;
 import jp.niro.jimcon.dbaccess.SQL;
+import jp.niro.jimcon.eventmanager.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,22 +25,25 @@ import java.sql.SQLException;
 /**
  * Created by niro on 2017/05/15.
  */
-public class TagOverviewController {
-    public static final String FXML_NAME = "TagOverview.fxml";
+public class TagMasterController implements MasterController {
+    public static final String FXML_NAME = "TagMaster.fxml";
     public static final String TITLE_NAME = "タグ一覧";
     public static final String NO_SELECTION_ERROR = "No Selection Error：タグＩＤ";
     public static final String DO_NOT_DELETE_ERROR = "Don't delete";
 
     private Tags tags = new Tags();
-    private Stage ownerStage;
+    private Stage stage;
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
+
+    @FXML
+    private AnchorPane pane;
 
     @FXML
     private TableView<Tag> tagTable;
@@ -49,10 +55,16 @@ public class TagOverviewController {
     private Label tagIdLabel;
     @FXML
     private Label tagNameLabel;
+    @FXML
+    private Button newButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private void initialize() {
-        SQL sql =null;
+        SQL sql = null;
         try {
             sql = SQL.create();
 
@@ -74,8 +86,34 @@ public class TagOverviewController {
 
     }
 
-    @FXML
-    private void handleNewTag() {
+    public void setEvent() {
+        // 各ダイアログ表示用アクション
+        ActionBeen showNew = new ActionMasterDialog(ActionType.NEW, this);
+        ActionBeen showEdit = new ActionMasterDialog(ActionType.EDIT,this);
+        ActionBeen showDelete = new ActionMasterDialog(ActionType.DELETE, this);
+        ActionBeen closeDialog = new ActionMasterDialog(ActionType.CLOSE, this);
+
+        // テーブルにフォーカスがある時のキーイベント
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
+                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
+                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(tagTable);
+
+        // ボタンが押された時
+        ActionEventManager.setOnAction(showNew).setEvent(newButton);
+        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
+        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
+
+        // その他にフォーカスがある時
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(pane);
+    }
+
+    @Override
+    public void handleNew() {
         Tag tempTag = new Tag();
         boolean isClosableDialog = false;
         SQL sql = null;
@@ -101,8 +139,8 @@ public class TagOverviewController {
         showTagDetails(tagTable.getSelectionModel().getSelectedItem());
     }
 
-    @FXML
-    private void handleEditTag() {
+    @Override
+    public void handleEdit() {
         Tag selectedTag = tagTable.getSelectionModel().getSelectedItem();
         SQL sql = null;
         try {
@@ -128,14 +166,19 @@ public class TagOverviewController {
         if (sql != null) sql.close(); // 接続切断
     }
 
-    @FXML
-    private void handleDeleteTag() {
+    @Override
+    public void handleDelete() {
         // Don't delete.
         new WarningAlert(
                 DO_NOT_DELETE_ERROR,
                 Tag.DO_NOT_DELETE,
                 ""
         ).showAndWait();
+    }
+
+    @Override
+    public void handleClose() {
+        stage.close();
     }
 
     private void showTagDetails(Tag tag) {
@@ -151,23 +194,24 @@ public class TagOverviewController {
     private boolean showTagEditDialog(Tag tag, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
-            URL location = WindowManager.class.getResource(TagEditDialogController.FXML_NAME);
+            URL location = WindowManager.class.getResource(TagMasterEditController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(TagEditDialogController.TITLE_NAME);
+            dialogStage.setTitle(TagMasterEditController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // Set the Tag into the controller.
-            TagEditDialogController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            TagMasterEditController controller = loader.getController();
+            controller.setStage(dialogStage);
             controller.setTag(tag);
+            controller.setEvent();
 
             // 新規の場合、タグIDを編集不可にする。
             controller.getTagIdField().editableProperty().set(isNew);

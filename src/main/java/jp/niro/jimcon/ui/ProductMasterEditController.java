@@ -1,10 +1,14 @@
 package jp.niro.jimcon.ui;
 
+import com.sun.javafx.robot.FXRobot;
+import com.sun.javafx.robot.FXRobotFactory;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -14,15 +18,17 @@ import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.customcomponents.ListTagCell;
 import jp.niro.jimcon.datamodel.*;
+import jp.niro.jimcon.eventmanager.*;
 
 import java.io.IOException;
 import java.net.URL;
-
+import java.util.Collection;
+//todo 登録処理
 /**
  * Created by niro on 2017/05/16.
  */
-public class ProductEditDialogWithTagController implements UnitSearchable, TagSearchable {
-    public static final String FXML_NAME = "ProductEditDialogWithTag.fxml";
+public class ProductMasterEditController implements MasterEditController,UnitSearchable, TagSearchable {
+    public static final String FXML_NAME = "ProductMasterEdit.fxml";
     public static final String TITLE_NAME = "商品編集";
     public static final String INVALID_FIELDS = "Invalid Fields Error";
     public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
@@ -30,7 +36,7 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
     private Product product;
     private ObservableList<Tag> tagList;
     private TagMapPool tagMapPool = TagMapPool.getInstance();
-    private Stage ownerStage;
+    private Stage stage;
     private boolean okClicked;
 
     public void setProduct(Product product) {
@@ -58,12 +64,12 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
         tagListView.setItems(tagList);
     }
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public boolean isOkClicked() {
@@ -83,6 +89,9 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             updateDisplay(new Unit());
         }
     }
+
+    @FXML
+    private AnchorPane pane;
 
     @FXML
     private TextField productCodeField;
@@ -120,6 +129,10 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
     private ListView<Tag> tagListView;
     @FXML
     private CheckBox processedCheckBox;
+    @FXML
+    private Button okButton;
+    @FXML
+    private Button cancelButton;
 
     @FXML
     private void initialize() {
@@ -141,6 +154,40 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
 
     }
 
+    public void setEvent(){
+        FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
+
+        // フォーカス移動用アクション
+        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
+        // ダイアログ用アクション
+        ActionBeen closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+
+        // 画面上の全てのTextFieldを取得して一括設定。
+        NodePickUpper pickUpper = new NodePickUpper();
+        Collection<Node> textFields = pickUpper.start(pane, TextField.class);
+
+        // KeyEvent
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog)
+                .setEvent(textFields);
+
+        textFields.forEach(textField ->
+                ActionEventManager.setOnAction(focusNext).setEvent(textField));
+
+
+        // [OK][Cancel]操作用アクション
+        ActionBeen executeOK = new ActionMasterEdit(ActionType.OK, this);
+        ActionBeen executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
+
+        // [OK][Cancel]ボタンの
+        ActionEventManager.setOnAction(executeOK).setEvent(okButton);
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, executeOK).setEvent(okButton);
+        ActionEventManager.setOnAction(executeCancel).setEvent(cancelButton);
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, executeCancel).setEvent(cancelButton);
+    }
+
     @FXML
     private void handleSearchUnit() {
         try {
@@ -153,14 +200,14 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             Stage dialogStage = new Stage();
             dialogStage.setTitle(UnitSearchDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(ownerStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // Set the Product into the controller.
             UnitSearchDialogController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            controller.setStage(dialogStage);
             // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
             controller.setUnitSearchable(this);
 
@@ -182,14 +229,14 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             Stage dialogStage = new Stage();
             dialogStage.setTitle(TagSearchDialogController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(ownerStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // Set the Product into the controller.
             TagSearchDialogController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            controller.setStage(dialogStage);
             // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
             controller.setTagSearchable(this);
             controller.setTagSearchField(getSearchValue());
@@ -201,8 +248,8 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
         }
     }
 
-    @FXML
-    private void handleOK() {
+    @Override
+    public void handleOK() {
         if (isInputValid()) {
             product.setProductCode(productCodeField.getText());
             product.setProductName(productNameField.getText());
@@ -221,13 +268,18 @@ public class ProductEditDialogWithTagController implements UnitSearchable, TagSe
             product.setProcessed(processedCheckBox.isSelected());
 
             okClicked = true;
-            ownerStage.close();
+            stage.close();
         }
     }
 
-    @FXML
-    private void handleCancel() {
-        ownerStage.close();
+    @Override
+    public void handleCancel() {
+        stage.close();
+    }
+
+    @Override
+    public void handleClose() {
+        stage.close();
     }
 
     private boolean isInputValid() {

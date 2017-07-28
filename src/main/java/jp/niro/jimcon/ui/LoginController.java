@@ -33,14 +33,14 @@ public class LoginController {
     private static final String ACCESS_DENIED_MESSAGE = "ユーザー名 パスワードが違います。";
     private static final int ACCESS_DENIED = 1045;
 
-    private Stage primaryStage;
+    private Stage stage;
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @FXML
@@ -56,7 +56,7 @@ public class LoginController {
     private Text actionTarget;
 
     public void setEvent() {
-        FXRobot robot = FXRobotFactory.createRobot(primaryStage.getScene());
+        FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
 
         // フォーカス移動用アクション
         ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
@@ -117,13 +117,13 @@ public class LoginController {
                 location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
         Pane pane = loader.load();
 
-        primaryStage.setTitle(MenuController.TITLE_NAME);
+        stage.setTitle(MenuController.TITLE_NAME);
         Scene scene = new Scene(pane);
-        primaryStage.setScene(scene);
+        stage.setScene(scene);
 
         // コントローラーをセットする。
         MenuController controller = loader.getController();
-        controller.setPrimaryStage(primaryStage);
+        controller.setStage(stage);
         controller.setEvent();
     }
 

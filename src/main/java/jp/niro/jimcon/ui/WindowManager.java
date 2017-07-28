@@ -13,14 +13,14 @@ import java.net.URL;
  * Created by niro on 2017/04/17.
  */
 public class WindowManager {
-    private Stage primaryStage;
+    private Stage stage;
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public void init() {
@@ -32,11 +32,11 @@ public class WindowManager {
             Pane login = loader.load();
 
             Scene scene = new Scene(login);
-            primaryStage.setScene(scene);
+            stage.setScene(scene);
 
             // Give the controller set on the primary stage.
             LoginController controller = loader.getController();
-            controller.setPrimaryStage(primaryStage);
+            controller.setStage(stage);
             controller.setEvent();
 
         } catch (IOException e) {
@@ -45,7 +45,7 @@ public class WindowManager {
     }
 
     public void show() {
-        primaryStage.show();
+        stage.show();
     }
 
 }

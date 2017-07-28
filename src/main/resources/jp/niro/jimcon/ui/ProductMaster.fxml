@@ -21,7 +21,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.102"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:id="pane"
-            fx:controller="jp.niro.jimcon.ui.ProductOverviewWithTagController">
+            fx:controller="jp.niro.jimcon.ui.ProductMasterController">
     <children>
         <SplitPane dividerPositions="0.11182108626198083" maxHeight="1.7976931348623157E308"
                    maxWidth="1.7976931348623157E308" orientation="VERTICAL">
@@ -304,11 +304,11 @@
                                 </GridPane>
                                 <HBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                                     <children>
-                                        <Button mnemonicParsing="false" onAction="#handleNewProduct" prefWidth="70.0"
+                                        <Button fx:id="newButton" mnemonicParsing="false" prefWidth="70.0"
                                                 text="%new"/>
-                                        <Button mnemonicParsing="false" onAction="#handleEditProduct" prefWidth="70.0"
+                                        <Button fx:id="editButton" mnemonicParsing="false" prefWidth="70.0"
                                                 text="%edit"/>
-                                        <Button mnemonicParsing="false" onAction="#handleDeleteProduct" prefWidth="70.0"
+                                        <Button fx:id="deleteButton" mnemonicParsing="false" prefWidth="70.0"
                                                 text="%delete"/>
                                     </children>
                                 </HBox>

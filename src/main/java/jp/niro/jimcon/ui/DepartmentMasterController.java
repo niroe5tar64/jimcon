@@ -1,10 +1,9 @@
 package jp.niro.jimcon.ui;
 
-import com.sun.javafx.robot.FXRobot;
-import com.sun.javafx.robot.FXRobotFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,8 +16,7 @@ import jp.niro.jimcon.datamodel.Department;
 import jp.niro.jimcon.datamodel.DepartmentFactory;
 import jp.niro.jimcon.datamodel.Departments;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventmanager.ActionBeen;
-import jp.niro.jimcon.eventmanager.KeyEventManager;
+import jp.niro.jimcon.eventmanager.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,24 +25,25 @@ import java.sql.SQLException;
 /**
  * Created by niro on 2017/05/09.
  */
-public class DepartmentOverviewController {
-    public static final String FXML_NAME = "DepartmentOverview.fxml";
+public class DepartmentMasterController implements MasterController {
+    public static final String FXML_NAME = "DepartmentMaster.fxml";
     public static final String TITLE_NAME = "部署一覧";
 
     private DepartmentFactory departmentFactory = DepartmentFactory.getInstance();
     private Departments departments = new Departments();
-    private Stage ownerStage;
+    private Stage stage;
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @FXML
     private AnchorPane pane;
+
     @FXML
     private TableView<Department> departmentTable;
     @FXML
@@ -63,28 +62,37 @@ public class DepartmentOverviewController {
     private Label telNumberLabel;
     @FXML
     private Label faxNumberLabel;
+    @FXML
+    private Button newButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     public void setEvent() {
-        FXRobot robot = FXRobotFactory.createRobot(ownerStage.getScene());
+        // 各ダイアログ表示用アクション
+        ActionBeen showNew = new ActionMasterDialog(ActionType.NEW, this);
+        ActionBeen showEdit = new ActionMasterDialog(ActionType.EDIT,this);
+        ActionBeen showDelete = new ActionMasterDialog(ActionType.DELETE, this);
+        ActionBeen closeDialog = new ActionMasterDialog(ActionType.CLOSE, this);
 
-        ActionBeen openEdit = new ShowDialog(this);
+        // テーブルにフォーカスがある時のキーイベント
         KeyEventManager.create()
-                .setOnKeyPressed(KeyCode.ENTER, openEdit)
+                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
+                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
+                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
                 .setEvent(departmentTable);
-    }
 
-    private static class ShowDialog implements ActionBeen {
+        // ボタンが押された時
+        ActionEventManager.setOnAction(showNew).setEvent(newButton);
+        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
+        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
 
-        DepartmentOverviewController controller;
-
-        ShowDialog(DepartmentOverviewController controller) {
-            this.controller = controller;
-        }
-
-        @Override
-        public void action() {
-            controller.handleEditDepartment();
-        }
+        // その他にフォーカスがある時
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(pane);
     }
 
 
@@ -112,8 +120,8 @@ public class DepartmentOverviewController {
 
     }
 
-    @FXML
-    private void handleNewDepartment() {
+    @Override
+    public void handleNew() {
         Department tempDepartment = new Department();
         SQL sql = null;
         try {
@@ -138,8 +146,8 @@ public class DepartmentOverviewController {
         showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
 
-    @FXML
-    private void handleEditDepartment() {
+    @Override
+    public void handleEdit() {
         Department selectedDepartment = departmentTable.getSelectionModel().getSelectedItem();
         SQL sql = null;
         try {
@@ -167,14 +175,19 @@ public class DepartmentOverviewController {
         showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
 
-    @FXML
-    private void handleDeleteDepartment() {
+    @Override
+    public void handleDelete() {
         // Don't delete.
         new WarningAlert(
                 Department.DO_NOT_DELETE_ERROR,
                 Department.DO_NOT_DELETE,
                 ""
         ).showAndWait();
+    }
+
+    @Override
+    public void handleClose() {
+        stage.close();
     }
 
     private void showDepartmentDetails(Department department) {
@@ -198,24 +211,25 @@ public class DepartmentOverviewController {
     private boolean showDepartmentEditDialog(Department department, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
-            URL location = WindowManager.class.getResource(DepartmentEditDialogController.FXML_FILE);
+            URL location = WindowManager.class.getResource(DepartmentMasterEditController.FXML_FILE);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(DepartmentEditDialogController.TITLE_NAME);
+            dialogStage.setTitle(DepartmentMasterEditController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(ownerStage);
+            dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
             // Set the Department into the controller.
-            DepartmentEditDialogController controller = loader.getController();
-            controller.setOwnerStage(dialogStage);
+            DepartmentMasterEditController controller = loader.getController();
+            controller.setStage(dialogStage);
             controller.setDepartment(department);
+            controller.setEvent();
 
             // 新規の場合、単位コードを編集不可にする。
             controller.getDepartmentCodeField().editableProperty().set(isNew);

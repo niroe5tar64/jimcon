@@ -185,6 +185,7 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
     @Override
     public void handle(KeyEvent event) {
 
+
         EventType<KeyEvent> eventType = event.getEventType();
 
         if (KEY_PRESSED == eventType) {

@@ -24,7 +24,7 @@ public class TagSearchDialogController {
 
     private Tags tags = new Tags();
     private TagSearchable tagSearchable;
-    private Stage ownerStage;
+    private Stage stage;
 
     void setTagSearchable(TagSearchable tagSearchable) {
         this.tagSearchable = tagSearchable;
@@ -34,12 +34,12 @@ public class TagSearchDialogController {
         return tagSearchable;
     }
 
-    public Stage getOwnerStage() {
-        return ownerStage;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @FXML
@@ -62,7 +62,7 @@ public class TagSearchDialogController {
                     // Enterキーを押した時
                     if (event.getCode() == KeyCode.ENTER) {
                         selection();
-                        ownerStage.close();
+                        stage.close();
                     }
                     // Escapeキーを押した時
                     else if (event.getCode() == KeyCode.ESCAPE) {
@@ -79,7 +79,7 @@ public class TagSearchDialogController {
                     }
                     // Escapeキーを押した時
                     else if (event.getCode() == KeyCode.ESCAPE) {
-                        ownerStage.close();
+                        stage.close();
                     }
                 }
         );
@@ -92,7 +92,7 @@ public class TagSearchDialogController {
                         // ダブルクリックした時
                         if (clickCount == Constant.System.CLICK_COUNT_DOUBLE) {
                             selection();
-                            ownerStage.close();
+                            stage.close();
                         }
                     }
                 }
