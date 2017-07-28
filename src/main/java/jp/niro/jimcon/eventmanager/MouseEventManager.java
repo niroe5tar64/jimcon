@@ -26,7 +26,7 @@ public class MouseEventManager extends BaseEventManager implements EventHandler<
     @Override
     public void handle(MouseEvent event) {
         actionBeen.action();
-        nowPressed = false;
+        KeyState.offPressed();
     }
 
     @Override

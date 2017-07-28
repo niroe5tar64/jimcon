@@ -24,7 +24,8 @@ public class ActionEventManager extends BaseEventManager implements EventHandler
     @Override
     public void handle(ActionEvent event) {
         actionBeen.action();
-        nowPressed = false;
+        KeyState.offPressed();
+        KeyState.onActionEvent();
     }
 
     @Override

@@ -185,19 +185,29 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
     @Override
     public void handle(KeyEvent event) {
 
-
         EventType<KeyEvent> eventType = event.getEventType();
 
-        if (KEY_PRESSED == eventType) {
-            action(event, keyPresses);
-            nowPressed = true;
-        }
-        if (KEY_TYPED == eventType) {
-            action(event, keyTypes);
-        }
-        if (KEY_RELEASED == eventType) {
-            action(event, keyReleases);
-            nowPressed = false;
+        /*
+        Action Event が使用後状態の時はキーイベント中でアクションを発生させない。
+        キーイベントの最後に一度だけ「KEY_RELEASED」が呼ばれるので
+        「KEY_RELEASED」の時に Action Event 使用後状態を解除する。
+        */
+        if (KeyState.isActionEvent()) {
+            // Action Event 使用後状態を解除
+            if (KEY_RELEASED == eventType) KeyState.offActionEvent();
+        } else {
+            if (KEY_PRESSED == eventType) {
+                action(event, keyPresses);
+                KeyState.onPressed();
+
+            }
+            if (KEY_TYPED == eventType) {
+                action(event, keyTypes);
+            }
+            if (KEY_RELEASED == eventType) {
+                action(event, keyReleases);
+                KeyState.offPressed();
+            }
         }
     }
 
@@ -205,12 +215,12 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
         beens.forEach(been -> {
             if (
                     been.keyCode == event.getCode()
-                    && been.controlDown == event.isControlDown()
-                    && been.altDown == event.isAltDown()
-                    && been.shiftDown == event.isShiftDown()) {
+                            && been.controlDown == event.isControlDown()
+                            && been.altDown == event.isAltDown()
+                            && been.shiftDown == event.isShiftDown()) {
 
                 if (been.withPressed) {
-                    if (nowPressed) {
+                    if (KeyState.isPressed()) {
                         been.actionBeen.action();
                     }
                 } else {
@@ -229,7 +239,7 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
     }
 
     @Override
-    public void setEvent(Collection<Node> nodes){
+    public void setEvent(Collection<Node> nodes) {
         nodes.forEach(node -> {
             node.setOnKeyPressed(this);
             node.setOnKeyReleased(this);

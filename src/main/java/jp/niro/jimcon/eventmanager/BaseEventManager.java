@@ -11,8 +11,6 @@ import java.util.Collection;
  * Created by niro on 2017/07/22.
  */
 public class BaseEventManager {
-    static boolean nowPressed = false;
-
     ActionBeen actionBeen;
     String methodName;
 
@@ -21,7 +19,7 @@ public class BaseEventManager {
         this.methodName = methodName;
     }
 
-    String getMethodNeme() {
+    String getMethodName() {
         return methodName;
     }
 
