@@ -6,7 +6,7 @@ import javafx.scene.input.KeyCode;
 /**
  * Created by niro on 2017/07/22.
  */
-public class RobotKeyPress implements ActionBeen {
+public class RobotKeyPress implements ActionBean {
 
     private FXRobot robot;
     private KeyCode keyCode;

@@ -36,7 +36,7 @@
                                         <Insets top="30.0"/>
                                     </HBox.margin>
                                 </TextField>
-                                <Button mnemonicParsing="false" onAction="#handleSearchTag" text="%tagSearch">
+                                <Button fx:id="searchTagButton" mnemonicParsing="false" text="%searchTag">
                                     <HBox.margin>
                                         <Insets top="30.0"/>
                                     </HBox.margin>
@@ -47,7 +47,7 @@
                                         <Insets top="18.0"/>
                                     </HBox.margin>
                                 </FlowListView>
-                                <Button mnemonicParsing="false" onAction="#handleSearchProduct" text="%productSearch">
+                                <Button fx:id="searchProductButton" mnemonicParsing="false" text="%searchProduct">
                                     <HBox.margin>
                                         <Insets top="30.0"/>
                                     </HBox.margin>

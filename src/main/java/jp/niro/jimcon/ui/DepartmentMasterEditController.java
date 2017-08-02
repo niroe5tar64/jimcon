@@ -76,17 +76,13 @@ public class DepartmentMasterEditController implements MasterEditController {
     @FXML
     private Button cancelButton;
 
-    @FXML
-    private void initialize() {
-    }
-
     public void setEvent() {
         FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
 
         // フォーカス移動用アクション
-        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
+        ActionBean focusNext = new RobotKeyPress(robot, KeyCode.TAB);
         // ダイアログ用アクション
-        ActionBeen closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+        ActionBean closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
 
         // 画面上の全てのTextFieldを取得して一括設定。
         NodePickUpper pickUpper = new NodePickUpper();
@@ -102,8 +98,8 @@ public class DepartmentMasterEditController implements MasterEditController {
 
 
         // [OK][Cancel]操作用アクション
-        ActionBeen executeOK = new ActionMasterEdit(ActionType.OK, this);
-        ActionBeen executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
+        ActionBean executeOK = new ActionMasterEdit(ActionType.OK, this);
+        ActionBean executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
 
         // [OK][Cancel]ボタンの
         ActionEventManager.setOnAction(executeOK).setEvent(okButton);

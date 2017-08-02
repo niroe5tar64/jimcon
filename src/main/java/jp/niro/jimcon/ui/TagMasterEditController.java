@@ -66,24 +66,22 @@ public class TagMasterEditController implements MasterEditController {
     @FXML
     private Button cancelButton;
 
-    @FXML
-    private void initialize() {
-    }
-
-
     public void setEvent() {
         FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
 
         // フォーカス移動用アクション
-        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
+        ActionBean focusNext = new RobotKeyPress(robot, KeyCode.TAB);
         // ダイアログ用アクション
-        ActionBeen closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+        ActionBean closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+        // [OK][Cancel]操作用アクション
+        ActionBean executeOK = new ActionMasterEdit(ActionType.OK, this);
+        ActionBean executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
 
         // 画面上の全てのTextFieldを取得して一括設定。
         NodePickUpper pickUpper = new NodePickUpper();
         Collection<Node> textFields = pickUpper.start(pane, TextField.class);
 
-        // KeyEvent
+        // キーイベント一括設定：フォーカス移動
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog)
                 .setEvent(textFields);
@@ -91,12 +89,7 @@ public class TagMasterEditController implements MasterEditController {
         textFields.forEach(textField ->
                 ActionEventManager.setOnAction(focusNext).setEvent(textField));
 
-
-        // [OK][Cancel]操作用アクション
-        ActionBeen executeOK = new ActionMasterEdit(ActionType.OK, this);
-        ActionBeen executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
-
-        // [OK][Cancel]ボタンの
+        // [OK][Cancel]ボタンの設定
         ActionEventManager.setOnAction(executeOK).setEvent(okButton);
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, executeOK).setEvent(okButton);

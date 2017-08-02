@@ -8,4 +8,5 @@ public interface MasterController {
     void handleEdit();
     void handleDelete();
     void handleClose();
+    void handleSearch();
 }

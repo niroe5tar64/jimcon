@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.eventmanager.ActionBeen;
+import jp.niro.jimcon.eventmanager.ActionBean;
 import jp.niro.jimcon.eventmanager.ActionEventManager;
 import jp.niro.jimcon.eventmanager.KeyEventManager;
 import jp.niro.jimcon.eventmanager.NodePickUpper;
@@ -55,7 +55,7 @@ public class MenuController {
         Collection<Node> buttons = pickUpper.start(pane, Button.class);
         buttons.forEach(button -> {
             // ダイアログ表示用アクション
-            ActionBeen showDialog = new ShowDialog(this, button);
+            ActionBean showDialog = new ShowDialog(this, button);
 
             // ボタンを押した場合
             ActionEventManager.setOnAction(showDialog)
@@ -185,7 +185,7 @@ public class MenuController {
         }
     }
 
-    private static class ShowDialog implements ActionBeen {
+    private static class ShowDialog implements ActionBean {
         MenuController controller;
         Node node;
 

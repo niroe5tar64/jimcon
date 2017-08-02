@@ -5,11 +5,11 @@ import jp.niro.jimcon.ui.MasterController;
 /**
  * Created by niro on 2017/07/27.
  */
-public class ActionMasterDialog implements ActionBeen {
-    ActionType type;
-    MasterController controller;
+public class ActionMaster implements ActionBean {
+    private ActionType type;
+    private MasterController controller;
 
-    public ActionMasterDialog(ActionType type, MasterController controller) {
+    public ActionMaster(ActionType type, MasterController controller) {
         this.type = type;
         this.controller = controller;
     }
@@ -31,6 +31,10 @@ public class ActionMasterDialog implements ActionBeen {
 
             case CLOSE:
                 controller.handleClose();
+                break;
+
+            case SEARCH:
+                controller.handleSearch();
                 break;
         }
     }

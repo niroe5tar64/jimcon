@@ -95,7 +95,7 @@ class ItemModel<E extends FlowListViewItem> implements ListChangeListener<E> {
             E oldItem = selectedItem.get();
 
             // if clicking the same item again then set the
-            // selection to null so once
+            // determine to null so once
             if(selectedItem.get() != null && oldItem.equals(item)) {
                 selectedItem.set(null);
             }

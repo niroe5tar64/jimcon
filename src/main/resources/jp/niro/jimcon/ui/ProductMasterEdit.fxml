@@ -49,7 +49,7 @@
                 <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <children>
                         <TextField fx:id="unitSearchField" prefWidth="60.0"/>
-                        <Button fx:id="unitSearch" mnemonicParsing="false" onAction="#handleSearchUnit" text="%search"/>
+                        <Button fx:id="searchUnitButton" mnemonicParsing="false" text="%search"/>
                         <Label fx:id="unitNameLabel" prefWidth="40.0"/>
                     </children>
                 </HBox>
@@ -70,7 +70,7 @@
                                 <Insets/>
                             </HBox.margin>
                         </TextField>
-                        <Button fx:id="tagSearch" mnemonicParsing="false" onAction="#handleSearchTag" text="%search"/>
+                        <Button fx:id="searchTagButton" mnemonicParsing="false" text="%search"/>
                         <ListView fx:id="tagListView" maxWidth="1.7976931348623157E308" prefWidth="208.0">
                         </ListView>
                     </children>

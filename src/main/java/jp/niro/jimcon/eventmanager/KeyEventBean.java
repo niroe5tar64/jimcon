@@ -5,29 +5,29 @@ import javafx.scene.input.KeyCode;
 /**
  * Created by niro on 2017/07/25.
  */
-class KeyEventBeen {
+class KeyEventBean {
     String methodName;
     KeyCode keyCode;
     boolean controlDown;
     boolean altDown;
-    ActionBeen actionBeen;
+    ActionBean actionBean;
     boolean shiftDown;
 
     final boolean withPressed;
 
-    KeyEventBeen(String methodName,
+    KeyEventBean(String methodName,
                  KeyCode keyCode,
                  boolean controlDown,
                  boolean altDown,
                  boolean shiftDown,
-                 ActionBeen actionBeen,
+                 ActionBean actionBean,
                  boolean withPressed) {
         this.methodName = methodName;
         this.keyCode = keyCode;
         this.controlDown = controlDown;
         this.altDown = altDown;
         this.shiftDown = shiftDown;
-        this.actionBeen = actionBeen;
+        this.actionBean = actionBean;
         this.withPressed = withPressed;
     }
 }

@@ -69,33 +69,6 @@ public class DepartmentMasterController implements MasterController {
     @FXML
     private Button deleteButton;
 
-    public void setEvent() {
-        // 各ダイアログ表示用アクション
-        ActionBeen showNew = new ActionMasterDialog(ActionType.NEW, this);
-        ActionBeen showEdit = new ActionMasterDialog(ActionType.EDIT,this);
-        ActionBeen showDelete = new ActionMasterDialog(ActionType.DELETE, this);
-        ActionBeen closeDialog = new ActionMasterDialog(ActionType.CLOSE, this);
-
-        // テーブルにフォーカスがある時のキーイベント
-        KeyEventManager.create()
-                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
-                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
-                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
-                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
-                .setEvent(departmentTable);
-
-        // ボタンが押された時
-        ActionEventManager.setOnAction(showNew).setEvent(newButton);
-        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
-        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
-
-        // その他にフォーカスがある時
-        KeyEventManager.create()
-                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
-                .setEvent(pane);
-    }
-
-
     @FXML
     private void initialize() {
         SQL sql = null;
@@ -118,6 +91,33 @@ public class DepartmentMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
+    }
+
+
+    public void setEvent() {
+        // 各ダイアログ表示用アクション
+        ActionBean showNew = new ActionMaster(ActionType.NEW, this);
+        ActionBean showEdit = new ActionMaster(ActionType.EDIT,this);
+        ActionBean showDelete = new ActionMaster(ActionType.DELETE, this);
+        ActionBean closeDialog = new ActionMaster(ActionType.CLOSE, this);
+
+        // テーブルにフォーカスがある時のキーイベント
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
+                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
+                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(departmentTable);
+
+        // ボタンが押された時
+        ActionEventManager.setOnAction(showNew).setEvent(newButton);
+        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
+        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
+
+        // その他にフォーカスがある時
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(pane);
     }
 
     @Override
@@ -188,6 +188,11 @@ public class DepartmentMasterController implements MasterController {
     @Override
     public void handleClose() {
         stage.close();
+    }
+
+    @Override
+    public void handleSearch() {
+        System.out.println("未実装");
     }
 
     private void showDepartmentDetails(Department department) {

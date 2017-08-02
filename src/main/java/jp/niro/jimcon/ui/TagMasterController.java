@@ -88,10 +88,10 @@ public class TagMasterController implements MasterController {
 
     public void setEvent() {
         // 各ダイアログ表示用アクション
-        ActionBeen showNew = new ActionMasterDialog(ActionType.NEW, this);
-        ActionBeen showEdit = new ActionMasterDialog(ActionType.EDIT,this);
-        ActionBeen showDelete = new ActionMasterDialog(ActionType.DELETE, this);
-        ActionBeen closeDialog = new ActionMasterDialog(ActionType.CLOSE, this);
+        ActionBean showNew = new ActionMaster(ActionType.NEW, this);
+        ActionBean showEdit = new ActionMaster(ActionType.EDIT,this);
+        ActionBean showDelete = new ActionMaster(ActionType.DELETE, this);
+        ActionBean closeDialog = new ActionMaster(ActionType.CLOSE, this);
 
         // テーブルにフォーカスがある時のキーイベント
         KeyEventManager.create()
@@ -179,6 +179,11 @@ public class TagMasterController implements MasterController {
     @Override
     public void handleClose() {
         stage.close();
+    }
+
+    @Override
+    public void handleSearch() {
+        System.out.println("未実装");
     }
 
     private void showTagDetails(Tag tag) {

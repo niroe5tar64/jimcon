@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.niro.jimcon.ui.UnitSearchDialogController">
     <children>
-            <TableView fx:id="unitTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleOnMouseClicked" scaleShape="false" style="-fx-background-color: null;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="unitTable" minHeight="-Infinity" minWidth="-Infinity" scaleShape="false" style="-fx-background-color: null;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <columns>
                     <TableColumn fx:id="unitCodeColumn" prefWidth="75.0" text="%unit.unitCode" />
                     <TableColumn fx:id="unitNameColumn" prefWidth="83.0" text="%unit.unitName" />

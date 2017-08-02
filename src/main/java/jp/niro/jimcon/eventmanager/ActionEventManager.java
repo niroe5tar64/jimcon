@@ -13,17 +13,17 @@ import java.util.Collection;
  */
 public class ActionEventManager extends BaseEventManager implements EventHandler<ActionEvent> {
 
-    private ActionEventManager(ActionBeen actionBeen, String methodName) {
-        super(actionBeen, methodName);
+    private ActionEventManager(ActionBean actionBean, String methodName) {
+        super(actionBean, methodName);
     }
 
-    public static ActionEventManager setOnAction(ActionBeen actionBeen) {
-        return new ActionEventManager(actionBeen, "setOnAction");
+    public static ActionEventManager setOnAction(ActionBean actionBean) {
+        return new ActionEventManager(actionBean, "setOnAction");
     }
 
     @Override
     public void handle(ActionEvent event) {
-        actionBeen.action();
+        actionBean.action();
         KeyState.offPressed();
         KeyState.onActionEvent();
     }

@@ -23,11 +23,11 @@ import jp.niro.jimcon.eventmanager.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
-//todo 登録処理
+
 /**
  * Created by niro on 2017/05/16.
  */
-public class ProductMasterEditController implements MasterEditController,UnitSearchable, TagSearchable {
+public class ProductMasterEditController implements MasterEditController, UnitSearchable, TagSearchable {
     public static final String FXML_NAME = "ProductMasterEdit.fxml";
     public static final String TITLE_NAME = "商品編集";
     public static final String INVALID_FIELDS = "Invalid Fields Error";
@@ -58,7 +58,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
         processedCheckBox.setSelected(product.isProcessed());
     }
 
-    public void setTagList(ObservableList<Tag> tagList){
+    public void setTagList(ObservableList<Tag> tagList) {
         this.tagList = tagList;
 
         tagListView.setItems(tagList);
@@ -110,7 +110,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
     @FXML
     private Label unitNameLabel;
     @FXML
-    private Button unitSearch;
+    private Button searchUnitButton;
     @FXML
     private TextField standardUnitPriceField;
     @FXML
@@ -124,7 +124,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
     @FXML
     private TextField tagSearchField;
     @FXML
-    private Button tagSearch;
+    private Button searchTagButton;
     @FXML
     private ListView<Tag> tagListView;
     @FXML
@@ -151,22 +151,27 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
                     }
                 }
         );
-
     }
 
-    public void setEvent(){
+    public void setEvent() {
         FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
 
         // フォーカス移動用アクション
-        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
+        ActionBean focusNext = new RobotKeyPress(robot, KeyCode.TAB);
         // ダイアログ用アクション
-        ActionBeen closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+        ActionBean closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+        // 検索ダイアログ表示用アクション
+        ActionBean showSearchTag = new ActionSearch(SearchType.TAG, this);
+        ActionBean showSearchUnit = new ActionSearch(SearchType.UNIT, this);
+        // [OK][Cancel]操作用アクション
+        ActionBean executeOK = new ActionMasterEdit(ActionType.OK, this);
+        ActionBean executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
 
         // 画面上の全てのTextFieldを取得して一括設定。
         NodePickUpper pickUpper = new NodePickUpper();
         Collection<Node> textFields = pickUpper.start(pane, TextField.class);
 
-        // KeyEvent
+        // キーイベント一括設定：フォーカス移動
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog)
                 .setEvent(textFields);
@@ -174,12 +179,15 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
         textFields.forEach(textField ->
                 ActionEventManager.setOnAction(focusNext).setEvent(textField));
 
+        // 検索ダイアログ設定
+        ActionEventManager.setOnAction(showSearchTag).setEvent(searchTagButton);
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, showSearchTag, true).setEvent(searchTagButton);
+        ActionEventManager.setOnAction(showSearchUnit).setEvent(searchUnitButton);
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, showSearchUnit, true).setEvent(searchUnitButton);
 
-        // [OK][Cancel]操作用アクション
-        ActionBeen executeOK = new ActionMasterEdit(ActionType.OK, this);
-        ActionBeen executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
-
-        // [OK][Cancel]ボタンの
+        // [OK][Cancel]ボタンの設定
         ActionEventManager.setOnAction(executeOK).setEvent(okButton);
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, executeOK).setEvent(okButton);
@@ -188,8 +196,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
                 .setOnKeyReleased(KeyCode.ENTER, executeCancel).setEvent(cancelButton);
     }
 
-    @FXML
-    private void handleSearchUnit() {
+    private void showSearchUnitDialog() {
         try {
             URL location = WindowManager.class.getResource(UnitSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
@@ -210,6 +217,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
             controller.setStage(dialogStage);
             // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
             controller.setUnitSearchable(this);
+            controller.setEvent();
 
             dialogStage.showAndWait();
         } catch (IOException e) {
@@ -217,8 +225,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
         }
     }
 
-    @FXML
-    private void handleSearchTag() {
+    private void showSearchTagDialog() {
         try {
             URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
@@ -240,6 +247,7 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
             // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
             controller.setTagSearchable(this);
             controller.setTagSearchField(getSearchValue());
+            controller.setEvent();
             controller.load();
 
             dialogStage.showAndWait();
@@ -356,5 +364,17 @@ public class ProductMasterEditController implements MasterEditController,UnitSea
     @Override
     public String getSearchValue() {
         return tagSearchField.getText().trim();
+    }
+
+    @Override
+    public void showSearchDialog(SearchType type) {
+        switch (type) {
+            case TAG:
+                showSearchTagDialog();
+                break;
+            case UNIT:
+                showSearchUnitDialog();
+                break;
+        }
     }
 }

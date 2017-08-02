@@ -5,7 +5,7 @@ import jp.niro.jimcon.ui.MasterEditController;
 /**
  * Created by niro on 2017/07/27.
  */
-public class ActionMasterEdit implements ActionBeen {
+public class ActionMasterEdit implements ActionBean {
     ActionType type;
     MasterEditController controller;
 

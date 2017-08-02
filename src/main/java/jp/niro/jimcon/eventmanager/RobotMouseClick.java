@@ -6,7 +6,7 @@ import javafx.scene.input.MouseButton;
 /**
  * Created by niro on 2017/07/24.
  */
-public class RobotMouseClick implements ActionBeen {
+public class RobotMouseClick implements ActionBean {
 
     private FXRobot robot;
     private MouseButton mouseButton;

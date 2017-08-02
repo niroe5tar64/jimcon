@@ -80,4 +80,8 @@ public class FlowListView<E extends FlowListViewItem> extends ScrollPane {
             items.add(item);
         }
     }
+
+    public void remove() {
+        this.getItems().remove(this.selectedItemProperty().get());
+    }
 }

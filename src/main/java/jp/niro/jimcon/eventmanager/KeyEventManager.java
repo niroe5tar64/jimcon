@@ -15,13 +15,13 @@ import static javafx.scene.input.KeyEvent.*;
  * Created by niro on 2017/07/27.
  */
 public class KeyEventManager extends BaseEventManager implements EventHandler<KeyEvent> {
-    private Collection<KeyEventBeen> keyPresses = new ArrayList<>();
-    private Collection<KeyEventBeen> keyReleases = new ArrayList<>();
-    private Collection<KeyEventBeen> keyTypes = new ArrayList<>();
+    private Collection<KeyEventBean> keyPresses = new ArrayList<>();
+    private Collection<KeyEventBean> keyTypes = new ArrayList<>();
+    private Collection<KeyEventBean> keyReleases = new ArrayList<>();
 
 
     private KeyEventManager() {
-        super(new ActionBeen() {
+        super(new ActionBean() {
             @Override
             public void action() {
 
@@ -33,22 +33,22 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
         return new KeyEventManager();
     }
 
-    public KeyEventManager setOnKeyPressed(KeyEventBeen element) {
+    public KeyEventManager setOnKeyPressed(KeyEventBean element) {
         keyPresses.add(element);
         return this;
     }
 
     public KeyEventManager setOnKeyPressed(
             KeyCode keyCode,
-            ActionBeen actionBeen) {
+            ActionBean actionBean) {
         keyPresses
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyPressed",
                         keyCode,
                         false,
                         false,
                         false,
-                        actionBeen,
+                        actionBean,
                         false));
         return this;
     }
@@ -58,35 +58,35 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
             boolean controlDown,
             boolean altDown,
             boolean shiftDown,
-            ActionBeen actionBeen) {
+            ActionBean actionBean) {
         keyPresses
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyPressed",
                         keyCode,
                         controlDown,
                         altDown,
                         shiftDown,
-                        actionBeen,
+                        actionBean,
                         false));
         return this;
     }
 
-    public KeyEventManager setOnKeyTyped(KeyEventBeen element) {
+    public KeyEventManager setOnKeyTyped(KeyEventBean element) {
         keyTypes.add(element);
         return this;
     }
 
     public KeyEventManager setOnKeyTyped(
             KeyCode keyCode,
-            ActionBeen actionBeen) {
+            ActionBean actionBean) {
         keyTypes
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyTyped",
                         keyCode,
                         false,
                         false,
                         false,
-                        actionBeen,
+                        actionBean,
                         false));
         return this;
     }
@@ -96,51 +96,51 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
             boolean controlDown,
             boolean altDown,
             boolean shiftDown,
-            ActionBeen actionBeen) {
+            ActionBean actionBean) {
         keyTypes
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyTyped",
                         keyCode,
                         controlDown,
                         altDown,
                         shiftDown,
-                        actionBeen,
+                        actionBean,
                         false));
         return this;
     }
 
-    public KeyEventManager setOnKeyReleased(KeyEventBeen element) {
+    public KeyEventManager setOnKeyReleased(KeyEventBean element) {
         keyReleases.add(element);
         return this;
     }
 
     public KeyEventManager setOnKeyReleased(
             KeyCode keyCode,
-            ActionBeen actionBeen) {
+            ActionBean actionBean) {
         keyReleases
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyReleased",
                         keyCode,
                         false,
                         false,
                         false,
-                        actionBeen,
+                        actionBean,
                         false));
         return this;
     }
 
     public KeyEventManager setOnKeyReleased(
             KeyCode keyCode,
-            ActionBeen actionBeen,
+            ActionBean actionBean,
             boolean withPressed) {
         keyReleases
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyReleased",
                         keyCode,
                         false,
                         false,
                         false,
-                        actionBeen,
+                        actionBean,
                         withPressed));
         return this;
     }
@@ -150,15 +150,15 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
             boolean controlDown,
             boolean altDown,
             boolean shiftDown,
-            ActionBeen actionBeen) {
+            ActionBean actionBean) {
         keyReleases
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyReleased",
                         keyCode,
                         controlDown,
                         altDown,
                         shiftDown,
-                        actionBeen,
+                        actionBean,
                         false));
         return this;
     }
@@ -168,16 +168,16 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
             boolean controlDown,
             boolean altDown,
             boolean shiftDown,
-            ActionBeen actionBeen,
+            ActionBean actionBean,
             boolean withPressed) {
         keyReleases
-                .add(new KeyEventBeen(
+                .add(new KeyEventBean(
                         "setOnKeyReleased",
                         keyCode,
                         controlDown,
                         altDown,
                         shiftDown,
-                        actionBeen,
+                        actionBean,
                         withPressed));
         return this;
     }
@@ -211,20 +211,20 @@ public class KeyEventManager extends BaseEventManager implements EventHandler<Ke
         }
     }
 
-    private void action(KeyEvent event, Collection<KeyEventBeen> beens) {
-        beens.forEach(been -> {
+    private void action(KeyEvent event, Collection<KeyEventBean> beens) {
+        beens.forEach(bean -> {
             if (
-                    been.keyCode == event.getCode()
-                            && been.controlDown == event.isControlDown()
-                            && been.altDown == event.isAltDown()
-                            && been.shiftDown == event.isShiftDown()) {
+                    bean.keyCode == event.getCode()
+                            && bean.controlDown == event.isControlDown()
+                            && bean.altDown == event.isAltDown()
+                            && bean.shiftDown == event.isShiftDown()) {
 
-                if (been.withPressed) {
+                if (bean.withPressed) {
                     if (KeyState.isPressed()) {
-                        been.actionBeen.action();
+                        bean.actionBean.action();
                     }
                 } else {
-                    been.actionBeen.action();
+                    bean.actionBean.action();
                 }
             }
         });

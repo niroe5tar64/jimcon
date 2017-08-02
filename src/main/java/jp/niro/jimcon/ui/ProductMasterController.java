@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import jp.niro.jimcon.commons.WarningAlert;
 import jp.niro.jimcon.customcomponents.ListTagCell;
+import jp.niro.jimcon.customcomponents.flowlistview.ActionFlowListView;
 import jp.niro.jimcon.customcomponents.flowlistview.FlowListView;
 import jp.niro.jimcon.datamodel.*;
 import jp.niro.jimcon.dbaccess.LoginInfo;
@@ -51,7 +52,11 @@ public class ProductMasterController implements MasterController,TagSearchable {
     @FXML
     private TextField tagSearchField;
     @FXML
+    private Button searchTagButton;
+    @FXML
     private FlowListView<Tag> tagFlowList;
+    @FXML
+    private Button searchProductButton;
 
     @FXML
     private TableView<Product> productTable;
@@ -103,33 +108,6 @@ public class ProductMasterController implements MasterController,TagSearchable {
     @FXML
     private Button deleteButton;
 
-    public void setEvent(){
-        // 各ダイアログ表示用アクション
-        ActionBeen showNew = new ActionMasterDialog(ActionType.NEW, this);
-        ActionBeen showEdit = new ActionMasterDialog(ActionType.EDIT, this);
-        ActionBeen showDelete = new ActionMasterDialog(ActionType.DELETE,this);
-        ActionBeen closeDialog = new ActionMasterDialog(ActionType.CLOSE, this);
-
-        // テーブルにフォーカスがある時のキーイベント
-        KeyEventManager.create()
-                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
-                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
-                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
-                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
-                .setEvent(productTable);
-
-        // ボタンが押された時
-        ActionEventManager.setOnAction(showNew).setEvent(newButton);
-        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
-        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
-
-        // その他にフォーカスがある時
-        KeyEventManager.create()
-                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
-                .setEvent(pane);
-
-    }
-
     @FXML
     private void initialize() {
         SQL sql = null;
@@ -157,44 +135,48 @@ public class ProductMasterController implements MasterController,TagSearchable {
             e.printStackTrace();
         }
         if (sql != null) sql.close(); // 接続切断
+    }
 
+    public void setEvent(){
+        // 各ダイアログ表示用アクション
+        ActionBean showNew = new ActionMaster(ActionType.NEW, this);
+        ActionBean showEdit = new ActionMaster(ActionType.EDIT, this);
+        ActionBean showDelete = new ActionMaster(ActionType.DELETE,this);
+        ActionBean closeDialog = new ActionMaster(ActionType.CLOSE, this);
+        // 商品検索用アクション
+        ActionBean searchProduct = new ActionMaster(ActionType.SEARCH, this);
+        // 検索ダイアログ表示用アクション
+        ActionBean showSearchTag = new ActionSearch(SearchType.TAG , this);
+        // 選択タグの削除用アクション
+        ActionBean removeTag = new ActionFlowListView(tagFlowList);
+
+        // テーブルにフォーカスがある時のキーイベント
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ENTER, true, false, true, showNew, true)
+                .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
+                .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(productTable);
+
+        // ボタンが押された時
+        ActionEventManager.setOnAction(showSearchTag).setEvent(searchTagButton);
+        ActionEventManager.setOnAction(searchProduct).setEvent(searchProductButton);
+        ActionEventManager.setOnAction(showNew).setEvent(newButton);
+        ActionEventManager.setOnAction(showEdit).setEvent(editButton);
+        ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
 
         // タグ検索用テキストボックス選択時のキー操作
-        tagSearchField.setOnKeyReleased(
-                event -> {
-                    // Enterキーを押した時
-                    if (event.getCode() == KeyCode.ENTER) {
-                        searchTag();
-                    }
-                }
-        );
+        ActionEventManager.setOnAction(showSearchTag).setEvent(tagSearchField);
+
         // FlowListView<Tag>選択時のキー操作
-        tagFlowList.setOnKeyReleased(
-                event -> {
-                    // Deleteキーを押した時
-                    if (event.getCode() == KeyCode.DELETE) {
-                        tagFlowList.getItems().remove(tagFlowList.selectedItemProperty().get());
-                    }
-                });
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.DELETE, removeTag, true)
+                .setEvent(tagFlowList);
 
-    }
-
-    @FXML
-    private void handleSearchTag() {
-        searchTag();
-    }
-
-    @FXML
-    private void handleSearchProduct() {
-        SQL sql = null;
-        try {
-            sql = SQL.create();
-            products.loadProducts(sql, tagFlowList.getItems());
-            productTable.setItems(products.getProducts());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (sql != null) sql.close(); // 接続切断
+        // その他にフォーカスがある時
+        KeyEventManager.create()
+                .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
+                .setEvent(pane);
     }
 
     @Override
@@ -358,6 +340,19 @@ public class ProductMasterController implements MasterController,TagSearchable {
         stage.close();
     }
 
+    @Override
+    public void handleSearch() {
+        SQL sql = null;
+        try {
+            sql = SQL.create();
+            products.loadProducts(sql, tagFlowList.getItems());
+            productTable.setItems(products.getProducts());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (sql != null) sql.close(); // 接続切断
+    }
+
     private void showProductDetails(Product product) {
         if (product != null) {
             productCodeLabel.setText(product.getProductCode());
@@ -443,7 +438,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
         return false;
     }
 
-    private void searchTag() {
+    private void showSearchTagDialog() {
         try {
             URL location = WindowManager.class.getResource(TagSearchDialogController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
@@ -465,6 +460,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
             // TagSearchDialogControllerとProductOverviewControllerの紐付け
             controller.setTagSearchable(this);
             controller.setTagSearchField(getSearchValue());
+            controller.setEvent();
             controller.load();
 
             dialogStage.showAndWait();
@@ -482,5 +478,14 @@ public class ProductMasterController implements MasterController,TagSearchable {
     @Override
     public String getSearchValue() {
         return tagSearchField.getText().trim();
+    }
+
+    @Override
+    public void showSearchDialog(SearchType type) {
+        switch (type) {
+            case TAG:
+                showSearchTagDialog();
+                break;
+        }
     }
 }

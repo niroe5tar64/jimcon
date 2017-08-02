@@ -11,11 +11,11 @@ import java.util.Collection;
  * Created by niro on 2017/07/22.
  */
 public class BaseEventManager {
-    ActionBeen actionBeen;
+    ActionBean actionBean;
     String methodName;
 
-    BaseEventManager(ActionBeen actionBeen, String methodName) {
-        this.actionBeen = actionBeen;
+    BaseEventManager(ActionBean actionBean, String methodName) {
+        this.actionBean = actionBean;
         this.methodName = methodName;
     }
 

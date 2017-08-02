@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jp.niro.jimcon.dbaccess.LoginInfo;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventmanager.ActionBeen;
+import jp.niro.jimcon.eventmanager.ActionBean;
 import jp.niro.jimcon.eventmanager.ActionEventManager;
 import jp.niro.jimcon.eventmanager.KeyEventManager;
 import jp.niro.jimcon.eventmanager.RobotKeyPress;
@@ -59,13 +59,13 @@ public class LoginController {
         FXRobot robot = FXRobotFactory.createRobot(stage.getScene());
 
         // フォーカス移動用アクション
-        ActionBeen focusNext = new RobotKeyPress(robot, KeyCode.TAB);
+        ActionBean focusNext = new RobotKeyPress(robot, KeyCode.TAB);
 
         ActionEventManager.setOnAction(focusNext)
                 .setEvent(userNameField);
 
         // ログイン処理実行用アクション
-        ActionBeen executeLogin = new ExecuteLogin(this);
+        ActionBean executeLogin = new ExecuteLogin(this);
 
         ActionEventManager.setOnAction(executeLogin)
                 .setEvent(passwordField)
@@ -128,7 +128,7 @@ public class LoginController {
     }
 
 
-    private static class ExecuteLogin implements ActionBeen {
+    private static class ExecuteLogin implements ActionBean {
         private ExecuteLogin() {
         }
 
