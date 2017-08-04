@@ -15,7 +15,7 @@ import java.util.Collection;
 public class TagMaps {
     private ObservableList<TagMap> tagMapData = FXCollections.observableArrayList();
 
-    public ObservableList<TagMap> getTagMaps() {
+    public ObservableList<TagMap> getData() {
         return tagMapData;
     }
 

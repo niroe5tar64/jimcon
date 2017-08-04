@@ -14,11 +14,11 @@ public class Suppliers {
 
     private ObservableList<Supplier> suppliersData = FXCollections.observableArrayList();
 
-    public ObservableList<Supplier> getSuppliers() {
+    public ObservableList<Supplier> getData() {
         return suppliersData;
     }
 
-    public void loadSuppliers(SQL sql) throws SQLException {
+    public void load(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Supplier.SUPPLIER_CODE)
                 .from(Supplier.TABLE_NAME)

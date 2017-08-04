@@ -59,8 +59,8 @@ public class InvoiceSearchDialogController implements SingleSearchDialog {
             sql = SQL.create();
 
             // invoiceTableの初期設定
-            invoices.loadInvoices(sql);
-            invoiceTable.setItems(invoices.getInvoices());
+            invoices.load(sql);
+            invoiceTable.setItems(invoices.getData());
             invoiceCodeColumn.setCellValueFactory(cellData -> cellData.getValue().invoiceCodeProperty().asObject());
             invoiceNameColumn.setCellValueFactory(cellData -> cellData.getValue().invoiceNameProperty());
         } catch (SQLException e) {

@@ -113,9 +113,9 @@ public class TagSearchDialogController implements SingleSearchDialog {
         try {
             sql = SQL.create();
             // タグロード
-            tags.loadTags(sql, tagSearchField.getText().trim());
-            tagTable.setItems(tags.getTags());
-            if (Validator.isNotEmpty(tags.getTags())) {
+            tags.load(sql, tagSearchField.getText().trim());
+            tagTable.setItems(tags.getData());
+            if (Validator.isNotEmpty(tags.getData())) {
                 tagTable.requestFocus();
                 tagTable.getSelectionModel().selectFirst();
             }

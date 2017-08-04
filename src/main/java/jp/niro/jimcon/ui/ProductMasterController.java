@@ -29,7 +29,7 @@ import java.sql.SQLException;
 /**
  * Created by niro on 2017/04/21.
  */
-public class ProductMasterController implements MasterController,TagSearchable {
+public class ProductMasterController implements MasterController, TagSearchable {
     public static final String FXML_NAME = "ProductMaster.fxml";
     public static final String TITLE_NAME = "商品一覧";
     public static final String NO_SELECTION_ERROR = "No Selection Error：商品コード";
@@ -115,8 +115,8 @@ public class ProductMasterController implements MasterController,TagSearchable {
             sql = SQL.create();
 
             // productTableの初期設定
-            products.loadProducts(sql);
-            productTable.setItems(products.getProducts());
+            products.load(sql);
+            productTable.setItems(products.getData());
             productCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productCodeProperty());
             productNameColumn.setCellValueFactory(cellData -> cellData.getValue().productNameProperty());
             sizeColorColumn.setCellValueFactory(cellData -> cellData.getValue().sizeColorProperty());
@@ -137,16 +137,16 @@ public class ProductMasterController implements MasterController,TagSearchable {
         if (sql != null) sql.close(); // 接続切断
     }
 
-    public void setEvent(){
+    public void setEvent() {
         // 各ダイアログ表示用アクション
         ActionBean showNew = new ActionMaster(ActionType.NEW, this);
         ActionBean showEdit = new ActionMaster(ActionType.EDIT, this);
-        ActionBean showDelete = new ActionMaster(ActionType.DELETE,this);
+        ActionBean showDelete = new ActionMaster(ActionType.DELETE, this);
         ActionBean closeDialog = new ActionMaster(ActionType.CLOSE, this);
         // 商品検索用アクション
         ActionBean searchProduct = new ActionMaster(ActionType.SEARCH, this);
         // 検索ダイアログ表示用アクション
-        ActionBean showSearchTag = new ActionSearch(SearchType.TAG , this);
+        ActionBean showSearchTag = new ActionSearch(SearchType.TAG, this);
         // 選択タグの削除用アクション
         ActionBean removeTag = new ActionFlowListView(tagFlowList);
 
@@ -209,7 +209,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
                     sql.commit();
 
                     // データテーブルをリロード
-                    products.loadProducts(sql);
+                    products.load(sql);
                     tagMapPool.loadTagMaps(sql);
                 } else {
                     isClosableDialog = true;
@@ -235,7 +235,8 @@ public class ProductMasterController implements MasterController,TagSearchable {
         // データベース操作
         SQL sql = null;
         try {
-            sql = SQL.create();;
+            sql = SQL.create();
+            ;
             boolean isClosableDialog = false;
             boolean successSaveProduct;
             boolean successSaveTagMap;
@@ -260,7 +261,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
                     sql.commit();
 
                     // データテーブルをリロード
-                    products.loadProducts(sql);
+                    products.load(sql);
                     tagMapPool.loadTagMaps(sql);
                 }
             } else {
@@ -270,8 +271,6 @@ public class ProductMasterController implements MasterController,TagSearchable {
                         Product.NO_SELECTION,
                         ""
                 ).showAndWait();
-                // ********** ロールバック **********
-                sql.rollback();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -291,7 +290,8 @@ public class ProductMasterController implements MasterController,TagSearchable {
         // データベース操作
         SQL sql = null;
         try {
-            sql = SQL.create();;
+            sql = SQL.create();
+            ;
             boolean isClosableDialog = false;
             boolean successDeleteProduct;
             boolean successDeleteTagMap;
@@ -313,7 +313,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
                 sql.commit();
 
                 // データテーブルをリロード
-                products.loadProducts(sql);
+                products.load(sql);
                 tagMapPool.loadTagMaps(sql);
             } else {
                 // Nothing selected.
@@ -345,8 +345,8 @@ public class ProductMasterController implements MasterController,TagSearchable {
         SQL sql = null;
         try {
             sql = SQL.create();
-            products.loadProducts(sql, tagFlowList.getItems());
-            productTable.setItems(products.getProducts());
+            products.load(sql, tagFlowList.getItems());
+            productTable.setItems(products.getData());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -426,7 +426,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
             controller.setEvent();
 
             // 新規の場合、商品コードを編集不可にする。
-            controller.getProductCodeField().editableProperty().set(isNew);
+            controller.setEditableForPKField(isNew);
 
             dialogStage.showAndWait();
 

@@ -107,8 +107,8 @@ public class SupplierMasterController implements MasterController {
             sql = SQL.create();
 
             // supplierTableの初期設定
-            suppliers.loadSuppliers(sql);
-            supplierTable.setItems(suppliers.getSuppliers());
+            suppliers.load(sql);
+            supplierTable.setItems(suppliers.getData());
             supplierCodeColumn.setCellValueFactory(cellData -> cellData.getValue().supplierCodeProperty());
             supplierNameColumn.setCellValueFactory(cellData -> cellData.getValue().supplierNameProperty());
 
@@ -165,7 +165,7 @@ public class SupplierMasterController implements MasterController {
                     // DBにデータ登録し、新規か否かの状態を取得する。
                     isClosableDialog = tempSupplier.saveNewData(sql);
                     // データテーブルをリロード
-                    suppliers.loadSuppliers(sql);
+                    suppliers.load(sql);
                 } else {
                     isClosableDialog = true;
                 }
@@ -188,7 +188,7 @@ public class SupplierMasterController implements MasterController {
                 boolean okClicked = showSupplierEditDialog(selectedSupplier, false);
                 if (okClicked) {
                     selectedSupplier.saveEditData(sql);
-                    suppliers.loadSuppliers(sql);
+                    suppliers.load(sql);
                 }
 
             } else {
@@ -280,7 +280,7 @@ public class SupplierMasterController implements MasterController {
             controller.setEvent();
 
             // 新規の場合、仕入先コードを編集不可にする。
-            controller.getSupplierCodeField().editableProperty().set(isNew);
+            controller.setEditableForPKField(isNew);
 
             dialogStage.showAndWait();
 

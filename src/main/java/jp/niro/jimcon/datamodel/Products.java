@@ -20,11 +20,11 @@ public class Products {
 
     private ObservableList<Product> productsData = FXCollections.observableArrayList();
 
-    public ObservableList<Product> getProducts() {
+    public ObservableList<Product> getData() {
         return productsData;
     }
 
-    public void loadProducts(SQL sql) throws SQLException {
+    public void load(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Product.PRODUCT_CODE)
                 .from(Product.TABLE_NAME)
@@ -43,7 +43,7 @@ public class Products {
         }
     }
 
-    public void loadProducts(SQL sql, List<Tag> searchedTags) throws SQLException {
+    public void load(SQL sql, List<Tag> searchedTags) throws SQLException {
         // タグが未入力ならアラート表示
         if (Validator.isEmpty(searchedTags)) {
             new WarningAlert(

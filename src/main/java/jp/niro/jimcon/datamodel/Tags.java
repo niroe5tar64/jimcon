@@ -22,11 +22,11 @@ public class Tags {
         this.tagsData = tagsData;
     }
 
-    public ObservableList<Tag> getTags() {
+    public ObservableList<Tag> getData() {
         return tagsData;
     }
 
-    public void loadTags(SQL sql) throws SQLException {
+    public void load(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Tag.TAG_ID)
                 .from(Tag.TABLE_NAME)
@@ -44,7 +44,7 @@ public class Tags {
         }
     }
 
-    public void loadTags(SQL sql, String tagName) throws SQLException {
+    public void load(SQL sql, String tagName) throws SQLException {
         // データリストを空にしてから、Selectの結果を追加する。
         tagsData.clear();
 

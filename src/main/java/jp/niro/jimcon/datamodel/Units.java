@@ -14,11 +14,11 @@ public class Units {
 
     private ObservableList<Unit> unitsData = FXCollections.observableArrayList();
 
-    public ObservableList<Unit> getUnits() {
+    public ObservableList<Unit> getData() {
         return unitsData;
     }
 
-    public void loadUnits(SQL sql) throws SQLException {
+    public void load(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Unit.UNIT_CODE)
                 .from(Unit.TABLE_NAME)

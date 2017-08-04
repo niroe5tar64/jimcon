@@ -14,11 +14,11 @@ public class Invoices {
 
     private ObservableList<Invoice> invoicesData = FXCollections.observableArrayList();
 
-    public ObservableList<Invoice> getInvoices() {
+    public ObservableList<Invoice> getData() {
         return invoicesData;
     }
 
-    public void loadInvoices(SQL sql) throws SQLException {
+    public void load(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Invoice.INVOICE_CODE)
                 .from(Invoice.TABLE_NAME)

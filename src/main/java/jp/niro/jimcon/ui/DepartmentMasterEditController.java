@@ -52,11 +52,6 @@ public class DepartmentMasterEditController implements MasterEditController {
         return okClicked;
     }
 
-    //todo:getDepartmentCodeField() ⇒ 変更
-    public TextField getDepartmentCodeField() {
-        return departmentCodeField;
-    }
-
     @FXML
     private AnchorPane pane;
 
@@ -107,6 +102,11 @@ public class DepartmentMasterEditController implements MasterEditController {
         ActionEventManager.setOnAction(executeCancel).setEvent(cancelButton);
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, executeCancel).setEvent(cancelButton);
+    }
+
+    @Override
+    public void setEditableForPKField(boolean editable) {
+        departmentCodeField.editableProperty().set(editable);
     }
 
     @Override

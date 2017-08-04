@@ -76,8 +76,8 @@ public class DepartmentMasterController implements MasterController {
             sql = SQL.create();
 
             // departmentTableの初期設定
-            departments.loadDepartments(sql);
-            departmentTable.setItems(departments.getDepartments());
+            departments.load(sql);
+            departmentTable.setItems(departments.getData());
             departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
             departmentNameColumn.setCellValueFactory(cellData -> cellData.getValue().departmentNameProperty());
 
@@ -133,7 +133,7 @@ public class DepartmentMasterController implements MasterController {
                     // DBにデータ登録し、新規か否かの状態を取得する。
                     isClosableDialog = tempDepartment.saveNewData(sql);
                     // データテーブルをリロード
-                    departments.loadDepartments(sql);
+                    departments.load(sql);
                 } else {
                     isClosableDialog = true;
                 }
@@ -156,7 +156,7 @@ public class DepartmentMasterController implements MasterController {
                 boolean okClicked = showDepartmentEditDialog(selectedDepartment, false);
                 if (okClicked) {
                     selectedDepartment.saveEditedData(sql);
-                    departments.loadDepartments(sql);
+                    departments.load(sql);
                 }
 
             } else {
@@ -237,7 +237,7 @@ public class DepartmentMasterController implements MasterController {
             controller.setEvent();
 
             // 新規の場合、単位コードを編集不可にする。
-            controller.getDepartmentCodeField().editableProperty().set(isNew);
+            controller.setEditableForPKField(isNew);
 
             dialogStage.showAndWait();
 

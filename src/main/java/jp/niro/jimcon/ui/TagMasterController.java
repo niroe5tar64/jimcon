@@ -69,8 +69,8 @@ public class TagMasterController implements MasterController {
             sql = SQL.create();
 
             // tagTableの初期設定
-            tags.loadTags(sql);
-            tagTable.setItems(tags.getTags());
+            tags.load(sql);
+            tagTable.setItems(tags.getData());
             tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
             tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
 
@@ -126,7 +126,7 @@ public class TagMasterController implements MasterController {
                     // DBにデータ登録し、新規か否かの状態を取得する。
                     isClosableDialog = tempTag.saveNewData(sql);
                     // データテーブルをリロード
-                    tags.loadTags(sql);
+                    tags.load(sql);
                 } else {
                     isClosableDialog = true;
                 }
@@ -149,7 +149,7 @@ public class TagMasterController implements MasterController {
                 boolean okClicked = showTagEditDialog(selectedTag, false);
                 if (okClicked) {
                     selectedTag.saveEditedData(sql);
-                    tags.loadTags(sql);
+                    tags.load(sql);
                 }
 
             } else {
@@ -219,7 +219,7 @@ public class TagMasterController implements MasterController {
             controller.setEvent();
 
             // 新規の場合、タグIDを編集不可にする。
-            controller.getTagIdField().editableProperty().set(isNew);
+            controller.setEditableForPKField(isNew);
 
             dialogStage.showAndWait();
 

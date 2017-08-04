@@ -14,11 +14,11 @@ import java.sql.SQLException;
 public class Departments {
     private ObservableList<Department> departmentsData = FXCollections.observableArrayList();
 
-    public ObservableList<Department> getDepartments() {
+    public ObservableList<Department> getData() {
         return departmentsData;
     }
 
-    public void loadDepartments(SQL sql) throws SQLException {
+    public void load(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(ColumnNameList.create()
                         .add(Department.DEPARTMENT_CODE)

@@ -55,8 +55,8 @@ public class UnitSearchDialogController implements SingleSearchDialog {
             sql = SQL.create();
 
             // unitTableの初期設定
-            units.loadUnits(sql);
-            unitTable.setItems(units.getUnits());
+            units.load(sql);
+            unitTable.setItems(units.getData());
             unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
             unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
 

@@ -76,10 +76,6 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
         return okClicked;
     }
 
-    public TextField getProductCodeField() {
-        return productCodeField;
-    }
-
     @FXML
     private AnchorPane pane;
 
@@ -244,6 +240,11 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setEditableForPKField(boolean editable) {
+        productCodeField.editableProperty().set(editable);
     }
 
     @Override

@@ -50,10 +50,6 @@ public class TagMasterEditController implements MasterEditController {
         return okClicked;
     }
 
-    public TextField getTagIdField() {
-        return tagIdField;
-    }
-
     @FXML
     private AnchorPane pane;
 
@@ -96,6 +92,11 @@ public class TagMasterEditController implements MasterEditController {
         ActionEventManager.setOnAction(executeCancel).setEvent(cancelButton);
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, executeCancel).setEvent(cancelButton);
+    }
+
+    @Override
+    public void setEditableForPKField(boolean editable) {
+        tagIdField.editableProperty().set(editable);
     }
 
     @Override

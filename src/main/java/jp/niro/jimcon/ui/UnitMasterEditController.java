@@ -48,10 +48,6 @@ public class UnitMasterEditController implements MasterEditController{
         return okClicked;
     }
 
-    public TextField getUnitCodeField() {
-        return unitCodeField;
-    }
-
     @FXML
     private AnchorPane pane;
 
@@ -94,6 +90,11 @@ public class UnitMasterEditController implements MasterEditController{
         ActionEventManager.setOnAction(executeCancel).setEvent(cancelButton);
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, executeCancel).setEvent(cancelButton);
+    }
+
+    @Override
+    public void setEditableForPKField(boolean editable) {
+        unitCodeField.editableProperty().set(editable);
     }
 
     @Override

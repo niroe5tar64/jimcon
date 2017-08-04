@@ -69,10 +69,6 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
         return okClicked;
     }
 
-    public TextField getSupplierCodeField() {
-        return supplierCodeField;
-    }
-
     @FXML
     private AnchorPane pane;
 
@@ -193,6 +189,11 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setEditableForPKField(boolean editable) {
+        supplierCodeField.editableProperty().set(editable);
     }
 
     @Override
