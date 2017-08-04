@@ -48,8 +48,8 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                             </rowConstraints>
                             <children>
-                                <Label text="%department.departmentName"/>
-                                <Label text="%department.departmentCode" GridPane.rowIndex="1"/>
+                                <Label text="%department.departmentCode"/>
+                                <Label text="%department.departmentName" GridPane.rowIndex="1"/>
                                 <Label text="%department.postcode" GridPane.rowIndex="2"/>
                                 <Label text="%department.address" GridPane.rowIndex="3"/>
                                 <Label text="%department.tel_number" GridPane.rowIndex="4"/>

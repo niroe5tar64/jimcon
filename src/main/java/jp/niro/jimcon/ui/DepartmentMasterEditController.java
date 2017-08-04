@@ -20,7 +20,7 @@ import java.util.Collection;
  * Created by niro on 2017/05/11.
  */
 public class DepartmentMasterEditController implements MasterEditController {
-    public static final String FXML_FILE = "DepartmentMasterEdit.fxml";
+    public static final String FXML_NAME = "DepartmentMasterEdit.fxml";
     public static final String TITLE_NAME = "部署編集";
     public static final String INVALID_FIELDS = "Invalid Fields Error";
     public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
@@ -52,6 +52,7 @@ public class DepartmentMasterEditController implements MasterEditController {
         return okClicked;
     }
 
+    //todo:getDepartmentCodeField() ⇒ 変更
     public TextField getDepartmentCodeField() {
         return departmentCodeField;
     }
@@ -83,12 +84,15 @@ public class DepartmentMasterEditController implements MasterEditController {
         ActionBean focusNext = new RobotKeyPress(robot, KeyCode.TAB);
         // ダイアログ用アクション
         ActionBean closeDialog = new ActionMasterEdit(ActionType.CLOSE, this);
+        // [OK][Cancel]操作用アクション
+        ActionBean executeOK = new ActionMasterEdit(ActionType.OK, this);
+        ActionBean executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
 
         // 画面上の全てのTextFieldを取得して一括設定。
         NodePickUpper pickUpper = new NodePickUpper();
         Collection<Node> textFields = pickUpper.start(pane, TextField.class);
 
-        // KeyEvent
+        // キーイベント一括設定：フォーカス移動
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog)
                 .setEvent(textFields);
@@ -96,12 +100,7 @@ public class DepartmentMasterEditController implements MasterEditController {
         textFields.forEach(textField ->
                 ActionEventManager.setOnAction(focusNext).setEvent(textField));
 
-
-        // [OK][Cancel]操作用アクション
-        ActionBean executeOK = new ActionMasterEdit(ActionType.OK, this);
-        ActionBean executeCancel = new ActionMasterEdit(ActionType.CANCEL, this);
-
-        // [OK][Cancel]ボタンの
+        // [OK][Cancel]ボタンの設定
         ActionEventManager.setOnAction(executeOK).setEvent(okButton);
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, executeOK).setEvent(okButton);

@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class Departments {
     private ObservableList<Department> departmentsData = FXCollections.observableArrayList();
 
-    public ObservableList<Department> getObservableList() {
+    public ObservableList<Department> getDepartments() {
         return departmentsData;
     }
 

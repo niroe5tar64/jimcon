@@ -82,7 +82,7 @@ public class Product {
                 "",
                 "",
                 0.00,
-                LoginInfo.getInstance(), 0,
+                0,
                 0.00,
                 0.00,
                 0.000,
@@ -93,19 +93,19 @@ public class Product {
     }
 
     public Product(String productCode,
-                   String productName,
-                   String sizeColor,
-                   String modelNumber,
-                   String anotherName,
-                   double catalogPrice,
-                   Unit unit,
-                   double standardUnitPrice,
-                   double stockQuantity,
-                   double cuttingConstant,
-                   double functionConstant,
-                   String memo,
-                   boolean processed,
-                   boolean deleted) {
+                    String productName,
+                    String sizeColor,
+                    String modelNumber,
+                    String anotherName,
+                    double catalogPrice,
+                    Unit unit,
+                    double standardUnitPrice,
+                    double stockQuantity,
+                    double cuttingConstant,
+                    double functionConstant,
+                    String memo,
+                    boolean processed,
+                    boolean deleted) {
         this.productCode = new SimpleStringProperty(productCode);
         this.productName = new SimpleStringProperty(productName);
         this.sizeColor = new SimpleStringProperty(sizeColor);
@@ -123,19 +123,19 @@ public class Product {
     }
 
     public Product(String productCode,
-                   String productName,
-                   String sizeColor,
-                   String modelNumber,
-                   String anotherName,
-                   double catalogPrice,
-                   LoginInfo login, int unitCode,
-                   double standardUnitPrice,
-                   double stockQuantity,
-                   double cuttingConstant,
-                   double functionConstant,
-                   String memo,
-                   boolean processed,
-                   boolean deleted) {
+                    String productName,
+                    String sizeColor,
+                    String modelNumber,
+                    String anotherName,
+                    double catalogPrice,
+                    int unitCode,
+                    double standardUnitPrice,
+                    double stockQuantity,
+                    double cuttingConstant,
+                    double functionConstant,
+                    String memo,
+                    boolean processed,
+                    boolean deleted) {
 
         this(
                 productCode,
@@ -157,7 +157,6 @@ public class Product {
     public static Product create(SQL sql, String productCodePK) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(ColumnNameList.create()
-                        .add(Product.PRODUCT_CODE)
                         .add(Product.PRODUCT_NAME)
                         .add(Product.SIZE_COLOR)
                         .add(Product.MODEL_NUMBER)
@@ -461,7 +460,7 @@ public class Product {
         return false;
     }
 
-    private Boolean isExisted(SQL sql) throws SQLException {
+    private boolean isExisted(SQL sql) throws SQLException {
         sql.preparedStatement(QueryBuilder.create()
                 .select(Product.PRODUCT_CODE)
                 .from(Product.TABLE_NAME)

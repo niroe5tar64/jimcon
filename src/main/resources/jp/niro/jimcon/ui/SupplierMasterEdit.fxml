@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.niro.jimcon.ui.SupplierMasterEditController">
+    <children>
+        <GridPane AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <Label text="%supplier.supplierCode" />
+                <Label text="%supplier.supplierName" GridPane.rowIndex="1" />
+                <Label text="%supplier.postcode" GridPane.rowIndex="2" />
+                <Label text="%supplier.address" GridPane.rowIndex="3" />
+                <Label text="%supplier.buildingEtAl" GridPane.rowIndex="4" />
+                <Label text="%supplier.printingName1" GridPane.rowIndex="5" />
+                <Label text="%supplier.printingName2" GridPane.rowIndex="6" />
+                <Label text="%supplier.tel_number" GridPane.rowIndex="7" />
+                <Label text="%supplier.fax_number" GridPane.rowIndex="8" />
+                <Label text="%supplier.invoice" GridPane.rowIndex="9" />
+                <Label text="%supplier.bankInformation" GridPane.rowIndex="10" />
+                <Label text="%supplier.bankTransferName" GridPane.rowIndex="11" />
+                <Label text="%supplier.remarks" GridPane.rowIndex="12" />
+                <Label text="%supplier.deleted" GridPane.rowIndex="13" />
+                <TextField fx:id="supplierCodeField" GridPane.columnIndex="1" />
+                <TextField fx:id="supplierNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="postcodeField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="buildingEtAlField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="printingName1Field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <TextField fx:id="printingName2Field" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <TextField fx:id="telNumberField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <TextField fx:id="faxNumberField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                    <children>
+                        <TextField fx:id="invoiceSearchField" prefWidth="60.0" />
+                        <Button fx:id="searchInvoiceButton" mnemonicParsing="false" text="%search" />
+                        <Label fx:id="invoiceNameLabel" prefWidth="40.0" />
+                        <Label fx:id="cutoffDateLabel" prefWidth="40.0" />
+                    </children>
+                </HBox>
+                <TextField fx:id="bankInformationField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                <TextField fx:id="bankTransferNameField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                <TextField fx:id="remarksField" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                <CheckBox fx:id="deletedCheckBox" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.0" minWidth="10.0" prefWidth="197.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="416.0" minWidth="10.0" prefWidth="393.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+        <HBox layoutX="150.0" layoutY="272.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <children>
+                <Button fx:id="okButton" mnemonicParsing="false" prefWidth="80.0" text="%ok">
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="cancelButton" mnemonicParsing="false" prefWidth="80.0" text="%cancel">
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

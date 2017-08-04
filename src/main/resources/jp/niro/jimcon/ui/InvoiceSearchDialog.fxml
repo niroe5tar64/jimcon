@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jp.niro.jimcon.ui.UnitSearchDialogController">
+            fx:controller="jp.niro.jimcon.ui.InvoiceSearchDialogController">
     <children>
-        <TableView fx:id="unitTable" minHeight="-Infinity" minWidth="-Infinity" scaleShape="false"
+        <TableView fx:id="invoiceTable" minHeight="-Infinity" minWidth="-Infinity" scaleShape="false"
                    style="-fx-background-color: null;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columns>
-                <TableColumn fx:id="unitCodeColumn" prefWidth="75.0" text="%unit.unitCode"/>
-                <TableColumn fx:id="unitNameColumn" prefWidth="83.0" text="%unit.unitName"/>
+                <TableColumn fx:id="invoiceCodeColumn" prefWidth="75.0" text="%invoice.invoiceCode"/>
+                <TableColumn fx:id="invoiceNameColumn" prefWidth="83.0" text="%invoice.invoiceName"/>
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

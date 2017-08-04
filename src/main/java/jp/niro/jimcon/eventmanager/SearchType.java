@@ -6,5 +6,6 @@ package jp.niro.jimcon.eventmanager;
 public enum SearchType {
     PRODUCT,
     TAG,
-    UNIT
+    UNIT,
+    INVOICE
 }

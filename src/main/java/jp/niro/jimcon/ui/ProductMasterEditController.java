@@ -80,16 +80,6 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
         return productCodeField;
     }
 
-    @Override
-    public void updateDisplay(Unit unit) {
-        if (Validator.isNotNull(unit)) {
-            unitSearchField.setText(String.valueOf(unit.getUnitCode()));
-            unitNameLabel.setText(unit.getUnitName());
-        } else {
-            updateDisplay(new Unit());
-        }
-    }
-
     @FXML
     private AnchorPane pane;
 
@@ -215,7 +205,7 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
             // Set the Product into the controller.
             UnitSearchDialogController controller = loader.getController();
             controller.setStage(dialogStage);
-            // UnitSearchDialogControllerとProductEditDialogControllerの紐付け
+            // TagSearchDialogControllerとProductEditDialogControllerの紐付け
             controller.setUnitSearchable(this);
             controller.setEvent();
 
@@ -248,7 +238,7 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
             controller.setTagSearchable(this);
             controller.setTagSearchField(getSearchValue());
             controller.setEvent();
-            controller.load();
+            controller.handleSearch();
 
             dialogStage.showAndWait();
         } catch (IOException e) {
@@ -298,7 +288,7 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
         }
 
         try {
-            int productCode = Integer.parseInt(productCodeField.getText());
+            long productCode = Long.parseLong(productCodeField.getText());
             if (Validator.isNotEqual(productCodeField.getLength(), Product.PRODUCT_CODE_DIGITS)) {
                 errorMessage.append(Product.PRODUCT_CODE_IS_INVALID_NUMBER_OF_DIGITS);
             }
@@ -346,8 +336,19 @@ public class ProductMasterEditController implements MasterEditController, UnitSe
                     PLEASE_INPUT_CORRECT_VALUE,
                     errorMessage.toString()
             ).showAndWait();
+            return UnitFactory.getInstance().getUnit(0);
         }
         return tempUnit;
+    }
+
+    @Override
+    public void updateDisplay(Unit unit) {
+        if (Validator.isNotNull(unit)) {
+            unitSearchField.setText(String.valueOf(unit.getUnitCode()));
+            unitNameLabel.setText(unit.getUnitName());
+        } else {
+            updateDisplay(new Unit());
+        }
     }
 
     @Override

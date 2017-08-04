@@ -7,30 +7,33 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
-import jp.niro.jimcon.datamodel.Unit;
-import jp.niro.jimcon.datamodel.Units;
+import jp.niro.jimcon.datamodel.Invoice;
+import jp.niro.jimcon.datamodel.Invoices;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventmanager.*;
+import jp.niro.jimcon.eventmanager.ActionBean;
+import jp.niro.jimcon.eventmanager.ActionSearchDetermine;
+import jp.niro.jimcon.eventmanager.KeyEventManager;
+import jp.niro.jimcon.eventmanager.MouseEventManager;
 
 import java.sql.SQLException;
 
 /**
- * Created by niro on 2017/05/01.
+ * Created by niro on 2017/08/03.
  */
-public class UnitSearchDialogController implements SingleSearchDialog {
-    public static final String FXML_NAME = "UnitSearchDialog.fxml";
-    public static final String TITLE_NAME = "単位検索";
+public class InvoiceSearchDialogController implements SingleSearchDialog {
+    public static final String FXML_NAME = "InvoiceSearchDialog.fxml";
+    public static final String TITLE_NAME = "請求書分類検索";
 
-    private Units units = new Units();
-    private UnitSearchable unitSearchable;
+    private Invoices invoices = new Invoices();
+    private InvoiceSearchable invoiceSearchable;
     private Stage stage;
 
-    void setUnitSearchable(UnitSearchable unitSearchable) {
-        this.unitSearchable = unitSearchable;
+    void setInvoiceSearchable(InvoiceSearchable invoiceSearchable) {
+        this.invoiceSearchable = invoiceSearchable;
     }
 
-    UnitSearchable getUnitSearchable() {
-        return unitSearchable;
+    InvoiceSearchable getInvoiceSearchable() {
+        return invoiceSearchable;
     }
 
     public Stage getStage() {
@@ -42,24 +45,24 @@ public class UnitSearchDialogController implements SingleSearchDialog {
     }
 
     @FXML
-    private TableView<Unit> unitTable;
+    private TableView<Invoice> invoiceTable;
     @FXML
-    private TableColumn<Unit, Integer> unitCodeColumn;
+    private TableColumn<Invoice, Integer> invoiceCodeColumn;
     @FXML
-    private TableColumn<Unit, String> unitNameColumn;
+    private TableColumn<Invoice, String> invoiceNameColumn;
 
     @FXML
     private void initialize() {
         SQL sql = null;
+
         try {
             sql = SQL.create();
 
-            // unitTableの初期設定
-            units.loadUnits(sql);
-            unitTable.setItems(units.getUnits());
-            unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
-            unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
-
+            // invoiceTableの初期設定
+            invoices.loadInvoices(sql);
+            invoiceTable.setItems(invoices.getInvoices());
+            invoiceCodeColumn.setCellValueFactory(cellData -> cellData.getValue().invoiceCodeProperty().asObject());
+            invoiceNameColumn.setCellValueFactory(cellData -> cellData.getValue().invoiceNameProperty());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,16 +80,16 @@ public class UnitSearchDialogController implements SingleSearchDialog {
             }
         };
 
-        // 単位テーブル選択時のキー操作
+        // 請求書分類テーブル選択時のキー操作
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, searchDetermine, true)
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
-                .setEvent(unitTable);
+                .setEvent(invoiceTable);
 
-        // 単位テーブル選択時のマウス操作
+        // 請求書分類テーブル選択時のマウス操作
         MouseEventManager.create()
                 .setOnMouseClicked(MouseButton.PRIMARY, Constant.System.CLICK_COUNT_DOUBLE, searchDetermine)
-                .setEvent(unitTable);
+                .setEvent(invoiceTable);
     }
 
     @Override
@@ -96,7 +99,7 @@ public class UnitSearchDialogController implements SingleSearchDialog {
 
     @Override
     public void determine() {
-        unitSearchable.updateDisplay(unitTable.getSelectionModel().getSelectedItem());
+        invoiceSearchable.updateDisplay(invoiceTable.getSelectionModel().getSelectedItem());
         stage.close();
     }
 }

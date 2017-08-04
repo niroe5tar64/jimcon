@@ -7,26 +7,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by niro on 2017/05/11.
+ * Created by niro on 2017/08/02.
  */
-public class DepartmentFactory {
-    private Map<Integer, Department> pool = new HashMap<>();
+public class SupplierFactory {
+    private Map<String, Supplier> pool = new HashMap<>();
 
-    private static DepartmentFactory singleton = new DepartmentFactory();
+    private static SupplierFactory singleton = new SupplierFactory();
 
-    private DepartmentFactory() {
+    private SupplierFactory(){
     }
 
-    public static DepartmentFactory getInstance() {
+    public static SupplierFactory getInstance() {
         return singleton;
     }
 
-    public synchronized Department getDepartment(int departmentCode) {
+    public synchronized Supplier getSupplier(String supplierCode) {
         // poolにインスタンスがなければインスタンス生成してpoolに追加
-        return pool.computeIfAbsent(departmentCode,
+        return pool.computeIfAbsent(supplierCode,
                 k -> {
                     try {
-                        return Department.create(SQL.create(), departmentCode);
+                        return Supplier.create(SQL.create(), supplierCode);
                     } catch (SQLException e) {
                         e.printStackTrace();
                         return null;

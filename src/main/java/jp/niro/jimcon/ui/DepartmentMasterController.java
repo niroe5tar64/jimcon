@@ -77,7 +77,7 @@ public class DepartmentMasterController implements MasterController {
 
             // departmentTableの初期設定
             departments.loadDepartments(sql);
-            departmentTable.setItems(departments.getObservableList());
+            departmentTable.setItems(departments.getDepartments());
             departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
             departmentNameColumn.setCellValueFactory(cellData -> cellData.getValue().departmentNameProperty());
 
@@ -216,7 +216,7 @@ public class DepartmentMasterController implements MasterController {
     private boolean showDepartmentEditDialog(Department department, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
-            URL location = WindowManager.class.getResource(DepartmentMasterEditController.FXML_FILE);
+            URL location = WindowManager.class.getResource(DepartmentMasterEditController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();

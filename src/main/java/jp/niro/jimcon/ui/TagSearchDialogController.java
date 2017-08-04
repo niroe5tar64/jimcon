@@ -1,6 +1,7 @@
 package jp.niro.jimcon.ui;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -12,10 +13,7 @@ import jp.niro.jimcon.commons.Validator;
 import jp.niro.jimcon.datamodel.Tag;
 import jp.niro.jimcon.datamodel.Tags;
 import jp.niro.jimcon.dbaccess.SQL;
-import jp.niro.jimcon.eventmanager.ActionBean;
-import jp.niro.jimcon.eventmanager.ActionSearchDetermine;
-import jp.niro.jimcon.eventmanager.KeyEventManager;
-import jp.niro.jimcon.eventmanager.MouseEventManager;
+import jp.niro.jimcon.eventmanager.*;
 
 import java.sql.SQLException;
 
@@ -49,6 +47,8 @@ public class TagSearchDialogController implements SingleSearchDialog {
     @FXML
     private TextField tagSearchField;
     @FXML
+    private Button tagSearchButton;
+    @FXML
     private TableView<Tag> tagTable;
     @FXML
     private TableColumn<Tag, Long> tagIdColumn;
@@ -76,7 +76,7 @@ public class TagSearchDialogController implements SingleSearchDialog {
         ActionBean loadTags = new ActionBean() {
             @Override
             public void action() {
-                load();
+                handleSearch();
             }
         };
         // ダイアログを閉じるアクション
@@ -92,68 +92,23 @@ public class TagSearchDialogController implements SingleSearchDialog {
                 .setOnKeyReleased(KeyCode.ENTER,loadTags,true)
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog,true)
                 .setEvent(tagSearchField);
-        /*tagSearchField.setOnKeyReleased(
-                event -> {
-                    // Enterキーを押した時
-                    if (event.getCode() == KeyCode.ENTER) {
-                        load();
-                    }
-                    // Escapeキーを押した時
-                    else if (event.getCode() == KeyCode.ESCAPE) {
-                        stage.close();
-                    }
-                }
-        );*/
+        // 検索ボタン実行時
+        ActionEventManager.setOnAction(loadTags).setEvent(tagSearchButton);
+
         // タグテーブル選択時のキー操作
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, searchDetermine, true)
                 .setOnKeyReleased(KeyCode.ESCAPE, focusOnTagSearchField, true)
                 .setEvent(tagTable);
-        /*tagTable.setOnKeyReleased(
-                event -> {
-                    // Enterキーを押した時
-                    if (event.getCode() == KeyCode.ENTER) {
-                        determine();
-                        stage.close();
-                    }
-                    // Escapeキーを押した時
-                    else if (event.getCode() == KeyCode.ESCAPE) {
-                        tagSearchField.requestFocus();
-                    }
-                }
-        );*/
+
         // タグテーブル選択時のマウス操作
         MouseEventManager.create()
                 .setOnMouseClicked(MouseButton.PRIMARY,Constant.System.CLICK_COUNT_DOUBLE,searchDetermine)
                 .setEvent(tagTable);
-        /*tagTable.setOnMouseClicked(
-                event -> {
-                    final boolean primaryButtonClicked = event.getButton().equals(MouseButton.PRIMARY);
-                    final int clickCount = event.getClickCount();
-                    if (primaryButtonClicked) {
-                        // ダブルクリックした時
-                        if (clickCount == Constant.System.CLICK_COUNT_DOUBLE) {
-                            determine();
-                            stage.close();
-                        }
-                    }
-                }
-        );*/
-    }
-
-    @FXML
-    private void handleSearchTag() {
-        load();
     }
 
     @Override
-    public void determine() {
-        Tag tag = tagTable.getSelectionModel().getSelectedItem();
-        if (Validator.isNotNull(tag)) tagSearchable.updateDisplay(tag);
-        stage.close();
-    }
-
-    public void load() {
+    public void handleSearch() {
         SQL sql = null;
         try {
             sql = SQL.create();
@@ -168,6 +123,13 @@ public class TagSearchDialogController implements SingleSearchDialog {
             e.printStackTrace();
         }
         if (sql != null) sql.close(); // 接続切断
+    }
+
+    @Override
+    public void determine() {
+        Tag tag = tagTable.getSelectionModel().getSelectedItem();
+        if (Validator.isNotNull(tag)) tagSearchable.updateDisplay(tag);
+        stage.close();
     }
 
     public void setTagSearchField(String searchValue) {

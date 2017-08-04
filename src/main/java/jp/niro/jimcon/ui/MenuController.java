@@ -43,6 +43,8 @@ public class MenuController {
     @FXML
     private Button departmentMasterButton;
     @FXML
+    private Button supplierMasterButton;
+    @FXML
     private Button unitMasterButton;
     @FXML
     private Button productMasterButton;
@@ -89,6 +91,36 @@ public class MenuController {
             controller.setStage(dialogStage);
             controller.setEvent();
             dialogStage.setResizable(false);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showSupplierMaster() {
+        try {
+            // FXMLファイルをPaneにロードする。
+            URL location = WindowManager.class.getResource(SupplierMasterController.FXML_NAME);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
+            Pane pane = loader.load();
+
+            // Stageを新たに生成する。
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(SupplierMasterController.TITLE_NAME);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(stage);
+            dialogStage.setResizable(false);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // コントローラーをセットする。
+            SupplierMasterController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setEvent();
 
             dialogStage.showAndWait();
 
@@ -201,6 +233,8 @@ public class MenuController {
         public void action() {
             if (Validator.isEqual(node, controller.departmentMasterButton)) {
                 controller.showDepartmentMaster();
+            } else if (Validator.isEqual(node, controller.supplierMasterButton)) {
+                controller.showSupplierMaster();
             } else if (Validator.isEqual(node, controller.unitMasterButton)) {
                 controller.showUnitMaster();
             } else if (Validator.isEqual(node, controller.productMasterButton)) {

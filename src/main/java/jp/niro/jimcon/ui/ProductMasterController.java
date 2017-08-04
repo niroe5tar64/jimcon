@@ -461,7 +461,7 @@ public class ProductMasterController implements MasterController,TagSearchable {
             controller.setTagSearchable(this);
             controller.setTagSearchField(getSearchValue());
             controller.setEvent();
-            controller.load();
+            controller.handleSearch();
 
             dialogStage.showAndWait();
         } catch (IOException e) {

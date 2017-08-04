@@ -13,6 +13,8 @@
             <children>
                 <Button fx:id="departmentMasterButton" mnemonicParsing="false"
                         prefHeight="35.0" prefWidth="150.0" text="%department.departmentMaster"/>
+                <Button fx:id="supplierMasterButton" mnemonicParsing="false"
+                        prefHeight="35.0" prefWidth="150.0" text="%supplier.supplierMaster"/>
                 <Button fx:id="unitMasterButton" mnemonicParsing="false"
                         prefHeight="35.0" prefWidth="150.0" text="%unit.unitMaster"/>
                 <Button fx:id="productMasterButton" mnemonicParsing="false"
