@@ -142,27 +142,27 @@ public class Supplier {
                     Double thisMonthBilling,
                     Double fixThisMonthBilling) {
         this.supplierCode = new SimpleStringProperty(supplierCode);
-        this.supplierName = new SimpleStringProperty();
-        this.postcode = new SimpleStringProperty();
-        this.address = new SimpleStringProperty();
-        this.buildingEtAl = new SimpleStringProperty();
-        this.printingName1 = new SimpleStringProperty();
-        this.printingName2 = new SimpleStringProperty();
-        this.telNumber = new SimpleStringProperty();
-        this.faxNumber = new SimpleStringProperty();
+        this.supplierName = new SimpleStringProperty(supplierName);
+        this.postcode = new SimpleStringProperty(postcode);
+        this.address = new SimpleStringProperty(address);
+        this.buildingEtAl = new SimpleStringProperty(buildingEtAl);
+        this.printingName1 = new SimpleStringProperty(printingName1);
+        this.printingName2 = new SimpleStringProperty(printingName2);
+        this.telNumber = new SimpleStringProperty(telNumber);
+        this.faxNumber = new SimpleStringProperty(faxNumber);
         this.invoice = new SimpleObjectProperty<Invoice>(invoice);
-        this.bankInformation = new SimpleStringProperty();
-        this.bankTransferName = new SimpleStringProperty();
-        this.remarks = new SimpleStringProperty();
-        this.deleted = new SimpleBooleanProperty();
-        this.previousBilling = new SimpleDoubleProperty();
-        this.purchaseAmount = new SimpleDoubleProperty();
-        this.consumptionTax = new SimpleDoubleProperty();
-        this.payOutAmount = new SimpleDoubleProperty();
-        this.payOutDiscount = new SimpleDoubleProperty();
-        this.carryForward = new SimpleDoubleProperty();
-        this.thisMonthBilling = new SimpleDoubleProperty();
-        this.fixThisMonthBilling = new SimpleDoubleProperty();
+        this.bankInformation = new SimpleStringProperty(bankInformation);
+        this.bankTransferName = new SimpleStringProperty(bankTransferName);
+        this.remarks = new SimpleStringProperty(remarks);
+        this.deleted = new SimpleBooleanProperty(deleted);
+        this.previousBilling = new SimpleDoubleProperty(previousBilling);
+        this.purchaseAmount = new SimpleDoubleProperty(purchaseAmount);
+        this.consumptionTax = new SimpleDoubleProperty(consumptionTax);
+        this.payOutAmount = new SimpleDoubleProperty(payOutAmount);
+        this.payOutDiscount = new SimpleDoubleProperty(payOutDiscount);
+        this.carryForward = new SimpleDoubleProperty(carryForward);
+        this.thisMonthBilling = new SimpleDoubleProperty(thisMonthBilling);
+        this.fixThisMonthBilling = new SimpleDoubleProperty(fixThisMonthBilling);
     }
 
     public Supplier(String supplierCode,
@@ -485,31 +485,79 @@ public class Supplier {
     }
 
     // The getter and setter of "consumptionTax"
+    public double getConsumptionTax() {
+        return consumptionTax.get();
+    }
+
+    public void setConsumptionTax(double consumptionTax) {
+        this.consumptionTax.set(consumptionTax);
+    }
+
     public DoubleProperty consumptionTaxProperty() {
         return consumptionTax;
     }
 
     // The getter and setter of "payOutAmount"
+    public double getPayOutAmount() {
+        return payOutAmount.get();
+    }
+
+    public void setPayOutAmount(double payOutAmount) {
+        this.payOutAmount.set(payOutAmount);
+    }
+
     public DoubleProperty payOutAmountProperty() {
         return payOutAmount;
     }
 
     // The getter and setter of "payOutDiscount"
+    public double getPayOutDiscount() {
+        return payOutDiscount.get();
+    }
+
+    public void setPayOutDiscount(double payOutDiscount) {
+        this.payOutDiscount.set(payOutDiscount);
+    }
+
     public DoubleProperty payOutDiscountProperty() {
         return payOutDiscount;
     }
 
     // The getter and setter of "carryForward"
+    public double getCarryForward() {
+        return carryForward.get();
+    }
+
+    public void setCarryForward(double carryForward) {
+        this.carryForward.set(carryForward);
+    }
+
     public DoubleProperty carryForwardProperty() {
         return carryForward;
     }
 
     // The getter and setter of "thisMonthBilling"
+    public double getThisMonthBilling() {
+        return thisMonthBilling.get();
+    }
+
+    public void setThisMonthBilling(double thisMonthBilling) {
+        this.thisMonthBilling.set(thisMonthBilling);
+    }
+
     public DoubleProperty thisMonthBillingProperty() {
         return thisMonthBilling;
     }
 
     // The getter and setter of "fixThisMonthBilling"
+    public double getFixThisMonthBilling() {
+        return fixThisMonthBilling.get();
+    }
+
+    public void setFixThisMonthBilling(double fixThisMonthBilling) {
+        this.fixThisMonthBilling.set(fixThisMonthBilling);
+    }
+
     public DoubleProperty fixThisMonthBillingProperty() {
         return fixThisMonthBilling;
     }

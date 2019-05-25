@@ -43,6 +43,8 @@ public class MenuController {
     @FXML
     private Button departmentMasterButton;
     @FXML
+    private Button customerMasterButton;
+    @FXML
     private Button supplierMasterButton;
     @FXML
     private Button unitMasterButton;
@@ -50,6 +52,9 @@ public class MenuController {
     private Button productMasterButton;
     @FXML
     private Button tagMasterButton;
+
+    @FXML
+    private Button purchaseSlipRegistryButton;
 
     public void setEvent() {
         // 画面上の全てのButtonを取得して一括設定。
@@ -91,6 +96,36 @@ public class MenuController {
             controller.setStage(dialogStage);
             controller.setEvent();
             dialogStage.setResizable(false);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showCustomerMaster() {
+        try {
+            // FXMLファイルをPaneにロードする。
+            URL location = WindowManager.class.getResource(CustomerMasterController.FXML_NAME);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
+            Pane pane = loader.load();
+
+            // Stageを新たに生成する。
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(CustomerMasterController.TITLE_NAME);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(stage);
+            dialogStage.setResizable(false);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // コントローラーをセットする。
+            CustomerMasterController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setEvent();
 
             dialogStage.showAndWait();
 
@@ -209,6 +244,37 @@ public class MenuController {
             // コントローラーをセットする。
             TagMasterController controller = loader.getController();
             controller.setStage(dialogStage);
+            controller.setEvent();
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showPurchaseSlipRegistry() {
+        try {
+            // FXMLファイルをPaneにロードする。
+            URL location = WindowManager.class.getResource(PurchaseSlipRegistryController.FXML_NAME);
+            FXMLLoader loader = new FXMLLoader(
+                    location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
+            Pane pane = loader.load();
+
+            // Stageを新たに生成する。
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(PurchaseSlipRegistryController.TITLE_NAME);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(stage);
+            dialogStage.setResizable(false);
+
+            Scene scene = new Scene(pane);
+            dialogStage.setScene(scene);
+
+            // コントローラーをセットする。
+            PurchaseSlipRegistryController controller = loader.getController();
+            controller.setStage(dialogStage);
+            controller.setEvent();
 
             dialogStage.showAndWait();
 
@@ -233,6 +299,8 @@ public class MenuController {
         public void action() {
             if (Validator.isEqual(node, controller.departmentMasterButton)) {
                 controller.showDepartmentMaster();
+            } else if (Validator.isEqual(node, controller.customerMasterButton)) {
+                controller.showCustomerMaster();
             } else if (Validator.isEqual(node, controller.supplierMasterButton)) {
                 controller.showSupplierMaster();
             } else if (Validator.isEqual(node, controller.unitMasterButton)) {
@@ -241,6 +309,8 @@ public class MenuController {
                 controller.showProductMaster();
             } else if (Validator.isEqual(node, controller.tagMasterButton)) {
                 controller.showTagMaster();
+            } else if (Validator.isEqual(node, controller.purchaseSlipRegistryButton)) {
+                controller.showPurchaseSlipRegistry();
             }
         }
     }

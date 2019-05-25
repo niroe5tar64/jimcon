@@ -13,6 +13,8 @@
             <children>
                 <Button fx:id="departmentMasterButton" mnemonicParsing="false"
                         prefHeight="35.0" prefWidth="150.0" text="%department.departmentMaster"/>
+                <Button fx:id="customerMasterButton" mnemonicParsing="false"
+                        prefHeight="35.0" prefWidth="150.0" text="%customer.customerMaster"/>
                 <Button fx:id="supplierMasterButton" mnemonicParsing="false"
                         prefHeight="35.0" prefWidth="150.0" text="%supplier.supplierMaster"/>
                 <Button fx:id="unitMasterButton" mnemonicParsing="false"
@@ -21,6 +23,8 @@
                         prefHeight="35.0" prefWidth="150.0" text="%product.productMaster"/>
                 <Button fx:id="tagMasterButton" mnemonicParsing="false"
                         prefHeight="35.0" prefWidth="150.0" text="%tag.tagMaster"/>
+                <Button fx:id="purchaseSlipRegistryButton" mnemonicParsing="false"
+                        prefHeight="35.0" prefWidth="150.0" text="%purchaseSlip.purchaseSlipRegistry"/>
             </children>
         </VBox>
     </center>

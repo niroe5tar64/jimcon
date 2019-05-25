@@ -81,9 +81,9 @@ public class DepartmentMasterController implements MasterController {
             departmentCodeColumn.setCellValueFactory(cellData -> cellData.getValue().departmentCodeProperty().asObject());
             departmentNameColumn.setCellValueFactory(cellData -> cellData.getValue().departmentNameProperty());
 
-            showDepartmentDetails(null);
+            showDetails(null);
             departmentTable.getSelectionModel().selectedItemProperty().addListener(
-                    ((observable, oldValue, newValue) -> showDepartmentDetails(newValue))
+                    ((observable, oldValue, newValue) -> showDetails(newValue))
             );
 
         } catch (SQLException e) {
@@ -128,7 +128,7 @@ public class DepartmentMasterController implements MasterController {
             sql = SQL.create();
             boolean isClosableDialog = false;
             while (!isClosableDialog) {
-                boolean okClicked = showDepartmentEditDialog(tempDepartment, true);
+                boolean okClicked = showEditDialog(tempDepartment, true);
                 if (okClicked) {
                     // DBにデータ登録し、新規か否かの状態を取得する。
                     isClosableDialog = tempDepartment.saveNewData(sql);
@@ -143,7 +143,7 @@ public class DepartmentMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
+        showDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -153,7 +153,7 @@ public class DepartmentMasterController implements MasterController {
         try {
             sql = SQL.create();
             if (selectedDepartment != null) {
-                boolean okClicked = showDepartmentEditDialog(selectedDepartment, false);
+                boolean okClicked = showEditDialog(selectedDepartment, false);
                 if (okClicked) {
                     selectedDepartment.saveEditedData(sql);
                     departments.load(sql);
@@ -172,7 +172,7 @@ public class DepartmentMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showDepartmentDetails(departmentTable.getSelectionModel().getSelectedItem());
+        showDetails(departmentTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -195,7 +195,7 @@ public class DepartmentMasterController implements MasterController {
         System.out.println("未実装");
     }
 
-    private void showDepartmentDetails(Department department) {
+    private void showDetails(Department department) {
         if (department != null) {
             departmentCodeLabel.setText(Integer.toString(department.getDepartmentCode()));
             departmentNameLabel.setText(department.getDepartmentName());
@@ -213,7 +213,7 @@ public class DepartmentMasterController implements MasterController {
         }
     }
 
-    private boolean showDepartmentEditDialog(Department department, boolean isNew) {
+    private boolean showEditDialog(Department department, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(DepartmentMasterEditController.FXML_NAME);

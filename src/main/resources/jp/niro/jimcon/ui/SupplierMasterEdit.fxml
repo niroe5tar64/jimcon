@@ -40,7 +40,7 @@
                 <TextField fx:id="faxNumberField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                 <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                     <children>
-                        <TextField fx:id="invoiceSearchField" prefWidth="60.0" />
+                        <TextField fx:id="searchInvoiceField" prefWidth="60.0" />
                         <Button fx:id="searchInvoiceButton" mnemonicParsing="false" text="%search" />
                         <Label fx:id="invoiceNameLabel" prefWidth="40.0" />
                         <Label fx:id="cutoffDateLabel" prefWidth="40.0" />

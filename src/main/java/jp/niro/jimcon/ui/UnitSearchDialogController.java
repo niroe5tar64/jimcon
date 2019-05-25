@@ -25,12 +25,12 @@ public class UnitSearchDialogController implements SingleSearchDialog {
     private UnitSearchable unitSearchable;
     private Stage stage;
 
-    void setUnitSearchable(UnitSearchable unitSearchable) {
-        this.unitSearchable = unitSearchable;
-    }
-
     UnitSearchable getUnitSearchable() {
         return unitSearchable;
+    }
+
+    void setUnitSearchable(UnitSearchable unitSearchable) {
+        this.unitSearchable = unitSearchable;
     }
 
     public Stage getStage() {

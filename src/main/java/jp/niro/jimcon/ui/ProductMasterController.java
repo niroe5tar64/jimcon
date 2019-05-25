@@ -50,7 +50,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
     Pane pane;
 
     @FXML
-    private TextField tagSearchField;
+    private TextField searchTagField;
     @FXML
     private Button searchTagButton;
     @FXML
@@ -123,9 +123,9 @@ public class ProductMasterController implements MasterController, TagSearchable 
             modelNumberColumn.setCellValueFactory(cellData -> cellData.getValue().modelNumberProperty());
             anotherNameColumn.setCellValueFactory(cellData -> cellData.getValue().anotherNameProperty());
 
-            showProductDetails(null);
+            showDetails(null);
             productTable.getSelectionModel().selectedItemProperty().addListener(
-                    ((observable, oldValue, newValue) -> showProductDetails(newValue))
+                    ((observable, oldValue, newValue) -> showDetails(newValue))
             );
 
             // tagMapPoolの初期設定
@@ -166,7 +166,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
         ActionEventManager.setOnAction(showDelete).setEvent(deleteButton);
 
         // タグ検索用テキストボックス選択時のキー操作
-        ActionEventManager.setOnAction(showSearchTag).setEvent(tagSearchField);
+        ActionEventManager.setOnAction(showSearchTag).setEvent(searchTagField);
 
         // FlowListView<Tag>選択時のキー操作
         KeyEventManager.create()
@@ -191,7 +191,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
             boolean successSaveTagMap;
             while (!isClosableDialog) {
                 // 編集ダイアログ表示
-                boolean okClicked = showProductEditDialog(tempProduct, tempTagList, true);
+                boolean okClicked = showEditDialog(tempProduct, tempTagList, true);
                 if (okClicked) {
                     // ****** トランザクション開始 ******
                     sql.beginTransaction();
@@ -224,7 +224,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showProductDetails(productTable.getSelectionModel().getSelectedItem());
+        showDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -242,7 +242,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
             boolean successSaveTagMap;
             if (selectedProduct != null) {
                 // 編集ダイアログ表示
-                boolean okClicked = showProductEditDialog(selectedProduct, selectedTagList, false);
+                boolean okClicked = showEditDialog(selectedProduct, selectedTagList, false);
                 if (okClicked) {
                     // ****** トランザクション開始 ******
                     sql.beginTransaction();
@@ -279,7 +279,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showProductDetails(productTable.getSelectionModel().getSelectedItem());
+        showDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -332,7 +332,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showProductDetails(productTable.getSelectionModel().getSelectedItem());
+        showDetails(productTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -353,7 +353,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
         if (sql != null) sql.close(); // 接続切断
     }
 
-    private void showProductDetails(Product product) {
+    private void showDetails(Product product) {
         if (product != null) {
             productCodeLabel.setText(product.getProductCode());
             productNameLabel.setText(product.getProductName());
@@ -401,7 +401,7 @@ public class ProductMasterController implements MasterController, TagSearchable 
         }
     }
 
-    private boolean showProductEditDialog(Product product, ObservableList<Tag> tagList, boolean isNew) {
+    private boolean showEditDialog(Product product, ObservableList<Tag> tagList, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pup-up dialog.
             URL location = WindowManager.class.getResource(ProductMasterEditController.FXML_NAME);
@@ -472,12 +472,12 @@ public class ProductMasterController implements MasterController, TagSearchable 
     @Override
     public void updateDisplay(Tag tag) {
         tagFlowList.addNonDuplication(tag);
-        tagSearchField.clear();
+        searchTagField.clear();
     }
 
     @Override
     public String getSearchValue() {
-        return tagSearchField.getText().trim();
+        return searchTagField.getText().trim();
     }
 
     @Override

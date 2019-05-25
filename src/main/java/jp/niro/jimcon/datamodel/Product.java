@@ -50,7 +50,7 @@ public class Product {
     static final String SEARCHER = "m300_searcher";
     static final String CATALOG_PRICE = "m300_catalog_price";
     static final String UNIT_CODE = "m300_unit_code";
-    static final String STANDARD_UNIT_PRICE = "m300_standard_unitprice";
+    static final String STANDARD_UNIT_PRICE = "m300_standard_unit_price";
     static final String STOCK_QUANTITY = "m300_stock_quantity";
     static final String CUTTING_CONSTANT = "m300_cutting_constant";
     static final String FUNCTION_CONSTANT = "m300_function_constant";

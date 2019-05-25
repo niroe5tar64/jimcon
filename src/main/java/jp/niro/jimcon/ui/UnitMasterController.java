@@ -72,9 +72,9 @@ public class UnitMasterController implements MasterController {
             unitCodeColumn.setCellValueFactory(cellData -> cellData.getValue().unitCodeProperty().asObject());
             unitNameColumn.setCellValueFactory(cellData -> cellData.getValue().unitNameProperty());
 
-            showUnitDetails(null);
+            showDetails(null);
             unitTable.getSelectionModel().selectedItemProperty().addListener(
-                    ((observable, oldValue, newValue) -> showUnitDetails(newValue))
+                    ((observable, oldValue, newValue) -> showDetails(newValue))
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class UnitMasterController implements MasterController {
         try {
             sql = SQL.create();
             while (!isClosableDialog) {
-                boolean okClicked = showUnitEditDialog(tempUnit, true);
+                boolean okClicked = showEditDialog(tempUnit, true);
                 if (okClicked) {
                     // DBにデータ登録し、新規か否かの状態を取得する。
                     isClosableDialog = tempUnit.saveNewData(sql);
@@ -131,7 +131,7 @@ public class UnitMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
+        showDetails(unitTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -141,7 +141,7 @@ public class UnitMasterController implements MasterController {
         try {
             sql = SQL.create();
             if (selectedUnit != null) {
-                boolean okClicked = showUnitEditDialog(selectedUnit, false);
+                boolean okClicked = showEditDialog(selectedUnit, false);
                 if (okClicked) {
                     selectedUnit.saveEditedData(sql);
                     units.load(sql);
@@ -160,7 +160,7 @@ public class UnitMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showUnitDetails(unitTable.getSelectionModel().getSelectedItem());
+        showDetails(unitTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -183,7 +183,7 @@ public class UnitMasterController implements MasterController {
         System.out.println("未実装");
     }
 
-    private void showUnitDetails(Unit unit) {
+    private void showDetails(Unit unit) {
         if (unit != null) {
             unitCodeLabel.setText(Integer.toString(unit.getUnitCode()));
             unitNameLabel.setText(unit.getUnitName());
@@ -193,7 +193,7 @@ public class UnitMasterController implements MasterController {
         }
     }
 
-    private boolean showUnitEditDialog(Unit unit, boolean isNew) {
+    private boolean showEditDialog(Unit unit, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(UnitMasterEditController.FXML_NAME);

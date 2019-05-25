@@ -36,4 +36,24 @@ public class Suppliers {
             suppliersData.add(supplier);
         }
     }
+
+    public void load(SQL sql, String supplierCode) throws SQLException {
+        sql.preparedStatement(QueryBuilder.create()
+                .select(Supplier.SUPPLIER_CODE)
+                .from(Supplier.TABLE_NAME)
+                .where(Supplier.DELETED).isFalse()
+                .and(Supplier.SUPPLIER_CODE).isLikeForwardMatch(supplierCode)
+                .orderByASC(Supplier.SUPPLIER_CODE)
+                .terminate());
+        sql.executeQuery();
+
+        // データリストを空にしてから、Selectの結果を追加する。
+        suppliersData.clear();
+        Supplier supplier = null;
+        while (sql.next()) {
+            supplier = SupplierFactory.getInstance().getSupplier(
+                    sql.getString(Supplier.SUPPLIER_CODE));
+            suppliersData.add(supplier);
+        }
+    }
 }

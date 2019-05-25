@@ -16,9 +16,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.ErrorAlert;
 import jp.niro.jimcon.commons.Validator;
+import jp.niro.jimcon.datamodel.Customer;
 import jp.niro.jimcon.datamodel.Invoice;
 import jp.niro.jimcon.datamodel.InvoiceFactory;
-import jp.niro.jimcon.datamodel.Supplier;
 import jp.niro.jimcon.eventmanager.*;
 
 import java.io.IOException;
@@ -26,36 +26,36 @@ import java.net.URL;
 import java.util.Collection;
 
 /**
- * Created by niro on 2017/08/03.
+ * Created by niro on 2017/08/04.
  */
-public class SupplierMasterEditController implements MasterEditController, InvoiceSearchable {
-    public static final String FXML_NAME = "SupplierMasterEdit.fxml";
-    public static final String TITLE_NAME = "仕入先編集";
+public class CustomerMasterEditController implements MasterEditController, InvoiceSearchable {
+    public static final String FXML_NAME = "CustomerMasterEdit.fxml";
+    public static final String TITLE_NAME = "得意先編集";
     public static final String INVALID_FIELDS = "Invalid Fields Error";
     public static final String PLEASE_INPUT_CORRECT_VALUE = "適切な値を入力して下さい。";
 
-    private Supplier supplier;
+    private Customer customer;
     private Stage stage;
     private boolean okClicked;
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
 
-        supplierCodeField.setText(supplier.getSupplierCode());
-        supplierNameField.setText(supplier.getSupplierName());
-        postcodeField.setText(supplier.getPostcode());
-        addressField.setText(supplier.getAddress());
-        buildingEtAlField.setText(supplier.getBuildingEtAl());
-        printingName1Field.setText(supplier.getPrintingName1());
-        printingName2Field.setText(supplier.getPrintingName2());
-        telNumberField.setText(supplier.getTelNumber());
-        faxNumberField.setText(supplier.getFaxNumber());
-        searchInvoiceField.setText(Integer.toString(supplier.getInvoice().getInvoiceCode()));
-        invoiceNameLabel.setText(supplier.getInvoice().getInvoiceName());
-        cutoffDateLabel.setText(Integer.toString(supplier.getInvoice().getCutoffDate()));
-        bankInformationField.setText(supplier.getBankInformation());
-        bankTransferNameField.setText(supplier.getBankTransferName());
-        deletedCheckBox.setSelected(supplier.isDeleted());
+        customerCodeField.setText(customer.getCustomerCode());
+        customerNameField.setText(customer.getCustomerName());
+        postcodeField.setText(customer.getPostcode());
+        addressField.setText(customer.getAddress());
+        buildingEtAlField.setText(customer.getBuildingEtAl());
+        printingName1Field.setText(customer.getPrintingName1());
+        printingName2Field.setText(customer.getPrintingName2());
+        telNumberField.setText(customer.getTelNumber());
+        faxNumberField.setText(customer.getFaxNumber());
+        invoiceSearchField.setText(Integer.toString(customer.getInvoice().getInvoiceCode()));
+        invoiceNameLabel.setText(customer.getInvoice().getInvoiceName());
+        cutoffDateLabel.setText(Integer.toString(customer.getInvoice().getCutoffDate()));
+        bankInformationField.setText(customer.getBankInformation());
+        bankTransferNameField.setText(customer.getBankTransferName());
+        deletedCheckBox.setSelected(customer.isDeleted());
     }
 
     public Stage getStage() {
@@ -74,9 +74,9 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
     private AnchorPane pane;
 
     @FXML
-    private TextField supplierCodeField;
+    private TextField customerCodeField;
     @FXML
-    private TextField supplierNameField;
+    private TextField customerNameField;
     @FXML
     private TextField postcodeField;
     @FXML
@@ -92,7 +92,7 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
     @FXML
     private TextField faxNumberField;
     @FXML
-    private TextField searchInvoiceField;
+    private TextField invoiceSearchField;
     @FXML
     private Button searchInvoiceButton;
     @FXML
@@ -103,6 +103,8 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
     private TextField bankInformationField;
     @FXML
     private TextField bankTransferNameField;
+    @FXML
+    private TextField presidentField;
     @FXML
     private TextField remarksField;
     @FXML
@@ -115,7 +117,7 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
     @FXML
     private void initialize() {
         // 単位コードフィールドのフォーカス喪失時、
-        searchInvoiceField.focusedProperty().addListener(
+        invoiceSearchField.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (!newValue) {
                         updateDisplay(getInvoiceWithInputValid());
@@ -179,6 +181,7 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
+            // Set the Product into the controller.
             InvoiceSearchDialogController controller = loader.getController();
             controller.setStage(dialogStage);
             // InvoiceSearchDialogControllerとSupplierEditDialogControllerの紐付け
@@ -193,29 +196,30 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
 
     @Override
     public void setEditableForPKField(boolean editable) {
-        supplierCodeField.editableProperty().set(editable);
+        customerCodeField.editableProperty().set(editable);
     }
 
     @Override
     public void handleOK() {
         if (isInputValid()) {
-            supplier.setSupplierCode(supplierCodeField.getText());
-            supplier.setSupplierName(supplierNameField.getText());
-            supplier.setPostcode(postcodeField.getText());
-            supplier.setAddress(addressField.getText());
-            supplier.setBuildingEtAl(buildingEtAlField.getText());
-            supplier.setPrintingName1(printingName1Field.getText());
-            supplier.setPrintingName2(printingName2Field.getText());
-            supplier.setTelNumber(telNumberField.getText());
-            supplier.setFaxNumber(faxNumberField.getText());
-            supplier.setInvoice(
-                    Integer.parseInt(searchInvoiceField.getText()),
+            customer.setCustomerCode(customerCodeField.getText());
+            customer.setCustomerName(customerNameField.getText());
+            customer.setPostcode(postcodeField.getText());
+            customer.setAddress(addressField.getText());
+            customer.setBuildingEtAl(buildingEtAlField.getText());
+            customer.setPrintingName1(printingName1Field.getText());
+            customer.setPrintingName2(printingName2Field.getText());
+            customer.setTelNumber(telNumberField.getText());
+            customer.setFaxNumber(faxNumberField.getText());
+            customer.setInvoice(
+                    Integer.parseInt(invoiceSearchField.getText()),
                     invoiceNameLabel.getText(),
                     Integer.parseInt(cutoffDateLabel.getText()));
-            supplier.setBankInformation(bankInformationField.getText());
-            supplier.setBankTransferName(bankTransferNameField.getText());
-            supplier.setRemarks(remarksField.getText());
-            supplier.setDeleted(deletedCheckBox.isSelected());
+            customer.setBankInformation(bankInformationField.getText());
+            customer.setBankTransferName(bankTransferNameField.getText());
+            customer.setPresident(presidentField.getText());
+            customer.setRemarks(remarksField.getText());
+            customer.setDeleted(deletedCheckBox.isSelected());
 
             okClicked = true;
             stage.close();
@@ -235,33 +239,8 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
     private boolean isInputValid() {
         StringBuilder errorMessage = new StringBuilder();
 
-        if (Validator.isEmpty(supplierCodeField.getText())) {
-            errorMessage.append(Supplier.SUPPLIER_CODE_IS_EMPTY);
-        }
 
-        try {
-            long supplierCode = Long.parseLong(supplierCodeField.getText());
-            if (Validator.isNotEqual(supplierCodeField.getLength(), Supplier.SUPPLIER_CODE_DIGITS)) {
-                errorMessage.append(Supplier.SUPPLIER_CODE_IS_INVALID_NUMBER_OF_DIGITS);
-            }
-        } catch (NumberFormatException e) {
-            errorMessage.append(Supplier.SUPPLIER_CODE_IS_NOT_INTEGER);
-        }
-
-        if (Validator.isEmpty(supplierNameField.getText())) {
-            errorMessage.append(Supplier.SUPPLIER_NAME_IS_EMPTY);
-        }
-
-        try {
-            int postcode = Integer.parseInt(addressField.getText());
-            if (Validator.isNotEqual(postcodeField.getLength(), Supplier.POSTCODE_LENGTH)) {
-                errorMessage.append(Supplier.POSTCODE_IS_INVALID_NUMBER_OF_DIGITS);
-            }
-        } catch (NumberFormatException e) {
-            if (Validator.isNotEmpty(postcodeField.getText())) {
-                errorMessage.append(Supplier.POSTCODE_IS_NOT_NUMBER);
-            }
-        }
+        //TODO:実装する。
 
         if (Validator.isEmpty(errorMessage.toString())) {
             return true;
@@ -279,7 +258,7 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
         StringBuilder errorMessage = new StringBuilder();
         Invoice tempInvoice = null;
         try {
-            int invoiceCodePK = Integer.parseInt(searchInvoiceField.getText());
+            int invoiceCodePK = Integer.parseInt(invoiceSearchField.getText());
             // invoiceCodeFieldに入力されたデータがDBに保存されているかどうか
             tempInvoice = InvoiceFactory.getInstance().getInvoice(invoiceCodePK);
             if (Validator.isNull(tempInvoice)) {
@@ -303,10 +282,11 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
         return tempInvoice;
     }
 
+
     @Override
     public void updateDisplay(Invoice invoice) {
         if (Validator.isNotNull(invoice)) {
-            searchInvoiceField.setText(String.valueOf(invoice.getInvoiceCode()));
+            invoiceSearchField.setText(String.valueOf(invoice.getInvoiceCode()));
             invoiceNameLabel.setText(invoice.getInvoiceName());
             cutoffDateLabel.setText(String.valueOf(invoice.getCutoffDate()));
         } else {
@@ -316,7 +296,7 @@ public class SupplierMasterEditController implements MasterEditController, Invoi
 
     @Override
     public String getSearchValue() {
-        return searchInvoiceField.getText().trim();
+        return invoiceSearchField.getText().trim();
     }
 
     @Override

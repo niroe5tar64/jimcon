@@ -74,9 +74,9 @@ public class TagMasterController implements MasterController {
             tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
             tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
 
-            showTagDetails(null);
+            showDetails(null);
             tagTable.getSelectionModel().selectedItemProperty().addListener(
-                    ((observable, oldValue, newValue) -> showTagDetails(newValue))
+                    ((observable, oldValue, newValue) -> showDetails(newValue))
             );
 
         } catch (SQLException e) {
@@ -121,7 +121,7 @@ public class TagMasterController implements MasterController {
             sql = SQL.create();
             while (!isClosableDialog) {
                 // 編集ダイアログ表示
-                boolean okClicked = showTagEditDialog(tempTag, true);
+                boolean okClicked = showEditDialog(tempTag, true);
                 if (okClicked) {
                     // DBにデータ登録し、新規か否かの状態を取得する。
                     isClosableDialog = tempTag.saveNewData(sql);
@@ -136,7 +136,7 @@ public class TagMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showTagDetails(tagTable.getSelectionModel().getSelectedItem());
+        showDetails(tagTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -146,7 +146,7 @@ public class TagMasterController implements MasterController {
         try {
             sql = SQL.create();
             if (selectedTag != null) {
-                boolean okClicked = showTagEditDialog(selectedTag, false);
+                boolean okClicked = showEditDialog(selectedTag, false);
                 if (okClicked) {
                     selectedTag.saveEditedData(sql);
                     tags.load(sql);
@@ -186,7 +186,7 @@ public class TagMasterController implements MasterController {
         System.out.println("未実装");
     }
 
-    private void showTagDetails(Tag tag) {
+    private void showDetails(Tag tag) {
         if (Validator.isNotNull(tag)) {
             tagIdLabel.setText(Long.toString(tag.getTagId()));
             tagNameLabel.setText(tag.getTagName());
@@ -196,7 +196,7 @@ public class TagMasterController implements MasterController {
         }
     }
 
-    private boolean showTagEditDialog(Tag tag, boolean isNew) {
+    private boolean showEditDialog(Tag tag, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pop-up dialog.
             URL location = WindowManager.class.getResource(TagMasterEditController.FXML_NAME);

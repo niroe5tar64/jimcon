@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import jp.niro.jimcon.customcomponents.flowlistview.FlowListView?>
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.102"
+            fx:id="pane"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.niro.jimcon.ui.PurchaseSlipRegistryController">
+    <children>
+        <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <Label text="%purchaseSlip.purchaseIssueDate"/>
+                <TextField fx:id="purchaseIssueDateField"/>
+                <Label text="%slip.slipNumber"/>
+                <TextField fx:id="slipNumberFild"/>
+                <Label text="%supplier.supplierCode"/>
+                <TextField fx:id="searchSupplierField"/>
+                <Label fx:id="supplierNameLabel" text="Label"/>
+                <Button fx:id="searchSupplierButton" mnemonicParsing="false" text="Button"/>
+            </children>
+        </HBox>
+        <BorderPane layoutY="14.0" AnchorPane.topAnchor="70.0">
+            <top>
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                      BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
+                              maxWidth="1.7976931348623157E308" spacing="20.0">
+                            <children>
+                                <TextField fx:id="searchTagField"/>
+                                <Button fx:id="searchTagButton" mnemonicParsing="false" text="%searchTag"/>
+                                <FlowListView fx:id="tagFlowList" maxHeight="1.7976931348623157E308"
+                                              maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="400.0"/>
+                                <Button fx:id="searchProductButton" mnemonicParsing="false" text="%searchProduct"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets left="25.0" top="10.0"/>
+                            </VBox.margin>
+                        </HBox>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER"
+                                                vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER"
+                                                vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label text="%product.productName"/>
+                                <Label text="%product.sizeColor" GridPane.columnIndex="1"/>
+                                <Label text="%product.modelNumber" GridPane.columnIndex="2"/>
+                                <Label text="%slip.purchaseAmount" GridPane.columnIndex="3"/>
+                                <Label text="%product.unitName" GridPane.columnIndex="4"/>
+                                <Label text="%slip.subtotal" GridPane.columnIndex="5"/>
+                                <Label text="%slip.remarks" GridPane.columnIndex="6"/>
+                                <TextField fx:id="productNameField" GridPane.rowIndex="1"/>
+                                <TextField fx:id="sizeColorField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <TextField fx:id="modelNumberField" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <TextField fx:id="purchaseAmountField" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                <TextField fx:id="unitNameField" text="label" GridPane.columnIndex="4"
+                                           GridPane.rowIndex="1"/>
+                                <TextField fx:id="subtotalField" GridPane.columnIndex="5" GridPane.rowIndex="1"/>
+                                <TextField fx:id="remarksField" GridPane.columnIndex="6" GridPane.rowIndex="1"/>
+                                <Button fx:id="addPurchaseDetailsButton" mnemonicParsing="false" text="Button" GridPane.columnIndex="7"
+                                        GridPane.rowIndex="1"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="30.0"/>
+                            </VBox.margin>
+                        </GridPane>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets/>
+                    </BorderPane.margin>
+                </VBox>
+            </top>
+            <center>
+                <TableView fx:id="purchaseDetailTable" BorderPane.alignment="CENTER">
+                    <columns>
+                        <TableColumn fx:id="purchaseNameColumn" prefWidth="75.0" text="%product.productName"/>
+                        <TableColumn fx:id="sizeColorColumn" prefWidth="75.0" text="%product.sizeColor"/>
+                        <TableColumn fx:id="modelNumberColumn" prefWidth="75.0" text="%product.modelNumber"/>
+                        <TableColumn fx:id="purchaseAmountColumn" prefWidth="75.0" text="%slip.purchaseAmount"/>
+                        <TableColumn fx:id="unitNameColumn" prefWidth="75.0" text="%product.unitName"/>
+                        <TableColumn fx:id="subtotalColumn" prefWidth="75.0" text="%slip.subtotal"/>
+                        <TableColumn fx:id="remarksColumn" prefWidth="75.0" text="%slip.remarks"/>
+                    </columns>
+                    <BorderPane.margin>
+                        <Insets top="10.0"/>
+                    </BorderPane.margin>
+                </TableView>
+            </center>
+            <bottom>
+                <VBox BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                            <children>
+                                <Label text="%slip.total"/>
+                                <Label text="Label"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets right="100.0"/>
+                            </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                            <children>
+                                <Button fx:id="okButton" mnemonicParsing="false" prefWidth="70.0" text="%ok"/>
+                                <Button fx:id="cancelButton" mnemonicParsing="false" prefWidth="70.0" text="%cancel"/>
+                                <Button fx:id="deleteButton" mnemonicParsing="false" prefWidth="70.0" text="%delete"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="20.0" right="20.0" top="10.0"/>
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                </VBox>
+            </bottom>
+            <padding>
+                <Insets left="10.0" right="10.0"/>
+            </padding>
+        </BorderPane>
+    </children>
+</AnchorPane>

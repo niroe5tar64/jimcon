@@ -145,4 +145,9 @@ public class QueryComparisonOperation {
         String xx = "'%" + x + "%'";
         return set(LIKE, xx);
     }
+
+    public QueryBuilder isLikeForwardMatch(String x) {
+        String xx = "'" + x + "%'";
+        return set(LIKE, xx);
+    }
 }

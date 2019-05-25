@@ -66,6 +66,14 @@ public class SQL {
         return this.resultSet.getBoolean(columnIndex);
     }
 
+    public Date getDate(String columnName) throws SQLException {
+        return this.resultSet.getDate(columnName);
+    }
+
+    public Date getDate(int columnIndex) throws SQLException {
+        return this.resultSet.getDate(columnIndex);
+    }
+
     public void setString(int parameterIndex, String x) throws SQLException {
         preparedStatement.setString(parameterIndex, x);
     }

@@ -10,30 +10,30 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.Constant;
 import jp.niro.jimcon.commons.Validator;
-import jp.niro.jimcon.datamodel.Tag;
-import jp.niro.jimcon.datamodel.Tags;
+import jp.niro.jimcon.datamodel.Supplier;
+import jp.niro.jimcon.datamodel.Suppliers;
 import jp.niro.jimcon.dbaccess.SQL;
 import jp.niro.jimcon.eventmanager.*;
 
 import java.sql.SQLException;
 
 /**
- * Created by niro on 2017/05/01.
+ * Created by niro on 2017/08/10.
  */
-public class TagSearchDialogController implements SingleSearchDialog {
-    public static final String FXML_NAME = "TagSearchDialog.fxml";
-    public static final String TITLE_NAME = "タグ検索";
+public class SupplierSearchDialogController implements SingleSearchDialog {
+    public static final String FXML_NAME = "SupplierSearchDialog.fxml";
+    public static final String TITLE_NAME = "仕入先検索";
 
-    private Tags tags = new Tags();
-    private TagSearchable tagSearchable;
+    private Suppliers suppliers = new Suppliers();
+    private SupplierSearchable supplierSearchable;
     private Stage stage;
 
-    void setTagSearchable(TagSearchable tagSearchable) {
-        this.tagSearchable = tagSearchable;
+    SupplierSearchable getSupplierSearchable() {
+        return supplierSearchable;
     }
 
-    TagSearchable getTagSearchable() {
-        return tagSearchable;
+    void setSupplierSearchable(SupplierSearchable supplierSearchable) {
+        this.supplierSearchable = supplierSearchable;
     }
 
     public Stage getStage() {
@@ -45,21 +45,21 @@ public class TagSearchDialogController implements SingleSearchDialog {
     }
 
     @FXML
-    private TextField tagSearchField;
+    private TextField supplierSearchField;
     @FXML
-    private Button tagSearchButton;
+    private Button supplierSearchButton;
     @FXML
-    private TableView<Tag> tagTable;
+    private TableView<Supplier> supplierTable;
     @FXML
-    private TableColumn<Tag, Long> tagIdColumn;
+    private TableColumn<Supplier, String> supplierCodeColumn;
     @FXML
-    private TableColumn<Tag, String> tagNameColumn;
+    private TableColumn<Supplier, String> supplierNameColumn;
 
     @FXML
     private void initialize() {
-        //テーブルカラムにセット
-        tagIdColumn.setCellValueFactory(cellData -> cellData.getValue().tagIdProperty().asObject());
-        tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().tagNameProperty());
+        // テーブルカラムにセット
+        supplierCodeColumn.setCellValueFactory(cellData -> cellData.getValue().supplierCodeProperty());
+        supplierNameColumn.setCellValueFactory(cellData -> cellData.getValue().supplierNameProperty());
     }
 
     public void setEvent() {
@@ -69,7 +69,7 @@ public class TagSearchDialogController implements SingleSearchDialog {
         ActionBean focusOnSearchField = new ActionBean() {
             @Override
             public void action() {
-                tagSearchField.requestFocus();
+                supplierSearchField.requestFocus();
             }
         };
         // 検索実行
@@ -91,20 +91,20 @@ public class TagSearchDialogController implements SingleSearchDialog {
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER,loadItems,true)
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog,true)
-                .setEvent(tagSearchField);
+                .setEvent(supplierSearchField);
         // 検索ボタン実行時
-        ActionEventManager.setOnAction(loadItems).setEvent(tagSearchButton);
+        ActionEventManager.setOnAction(loadItems).setEvent(supplierSearchButton);
 
-        // タグテーブル選択時のキー操作
+        // 仕入先テーブル選択時のキー操作
         KeyEventManager.create()
                 .setOnKeyReleased(KeyCode.ENTER, searchDetermine, true)
                 .setOnKeyReleased(KeyCode.ESCAPE, focusOnSearchField, true)
-                .setEvent(tagTable);
+                .setEvent(supplierTable);
 
-        // タグテーブル選択時のマウス操作
+        // 仕入先テーブル選択時のマウス操作
         MouseEventManager.create()
-                .setOnMouseClicked(MouseButton.PRIMARY,Constant.System.CLICK_COUNT_DOUBLE,searchDetermine)
-                .setEvent(tagTable);
+                .setOnMouseClicked(MouseButton.PRIMARY, Constant.System.CLICK_COUNT_DOUBLE,searchDetermine)
+                .setEvent(supplierTable);
     }
 
     @Override
@@ -112,12 +112,13 @@ public class TagSearchDialogController implements SingleSearchDialog {
         SQL sql = null;
         try {
             sql = SQL.create();
-            // タグロード
-            tags.load(sql, tagSearchField.getText().trim());
-            tagTable.setItems(tags.getData());
-            if (Validator.isNotEmpty(tags.getData())) {
-                tagTable.requestFocus();
-                tagTable.getSelectionModel().selectFirst();
+
+            // supplierTableの初期設定
+            suppliers.load(sql, supplierSearchField.getText().trim());
+            supplierTable.setItems(suppliers.getData());
+            if (Validator.isNotEmpty(suppliers.getData())) {
+                supplierTable.requestFocus();
+                supplierTable.getSelectionModel().selectFirst();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,12 +128,12 @@ public class TagSearchDialogController implements SingleSearchDialog {
 
     @Override
     public void determine() {
-        Tag tag = tagTable.getSelectionModel().getSelectedItem();
-        if (Validator.isNotNull(tag)) tagSearchable.updateDisplay(tag);
+        Supplier supplier = supplierTable.getSelectionModel().getSelectedItem();
+        if (Validator.isNotNull(supplier)) supplierSearchable.updateDisplay(supplier);
         stage.close();
     }
 
-    public void setTagSearchField(String searchValue) {
-        tagSearchField.setText(searchValue);
+    public void setSupplierSearchField(String searchValue) {
+        supplierSearchField.setText(searchValue);
     }
 }

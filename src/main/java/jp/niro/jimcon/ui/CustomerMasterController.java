@@ -9,9 +9,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jp.niro.jimcon.commons.WarningAlert;
-import jp.niro.jimcon.datamodel.Supplier;
-import jp.niro.jimcon.datamodel.SupplierFactory;
-import jp.niro.jimcon.datamodel.Suppliers;
+import jp.niro.jimcon.datamodel.Customer;
+import jp.niro.jimcon.datamodel.CustomerFactory;
+import jp.niro.jimcon.datamodel.Customers;
 import jp.niro.jimcon.dbaccess.SQL;
 import jp.niro.jimcon.eventmanager.*;
 
@@ -20,14 +20,14 @@ import java.net.URL;
 import java.sql.SQLException;
 
 /**
- * Created by niro on 2017/08/03.
+ * Created by niro on 2017/08/04.
  */
-public class SupplierMasterController implements MasterController {
-    public static final String FXML_NAME = "SupplierMaster.fxml";
-    public static final String TITLE_NAME = "仕入先一覧";
+public class CustomerMasterController implements MasterController {
+    public static final String FXML_NAME = "CustomerMaster.fxml";
+    public static final String TITLE_NAME = "得意先一覧";
 
-    private SupplierFactory supplierFactory = SupplierFactory.getInstance();
-    private Suppliers suppliers = new Suppliers();
+    private CustomerFactory customerFactory = CustomerFactory.getInstance();
+    private Customers customers = new Customers();
     private Stage stage;
 
     public Stage getStage() {
@@ -42,15 +42,15 @@ public class SupplierMasterController implements MasterController {
     private AnchorPane pane;
 
     @FXML
-    private TableView<Supplier> supplierTable;
+    private TableView<Customer> customerTable;
     @FXML
-    private TableColumn<Supplier, String> supplierCodeColumn;
+    private TableColumn<Customer, String> customerCodeColumn;
     @FXML
-    private TableColumn<Supplier, String> supplierNameColumn;
+    private TableColumn<Customer, String> customerNameColumn;
     @FXML
-    private Label supplierCodeLabel;
+    private Label customerCodeLabel;
     @FXML
-    private Label supplierNameLabel;
+    private Label customerNameLabel;
     @FXML
     private Label postcodeLabel;
     @FXML
@@ -72,27 +72,12 @@ public class SupplierMasterController implements MasterController {
     @FXML
     private Label bankTransferNameLabel;
     @FXML
+    private Label president;
+    @FXML
     private Label remarksLabel;
     @FXML
     private CheckBox deletedCheckBox;
-    /*
-    @FXML
-    private Label previousBillingLabel;
-    @FXML
-    private Label purchaseAmountLabel;
-    @FXML
-    private Label consumptionTaxLabel;
-    @FXML
-    private Label payOutAmountLabel;
-    @FXML
-    private Label payOutDiscountLabel;
-    @FXML
-    private Label carryForwardLabel;
-    @FXML
-    private Label thisMonthBillingLabel;
-    @FXML
-    private Label fixThisMonthBillingLabel;
-    */
+
     @FXML
     private Button newButton;
     @FXML
@@ -106,14 +91,14 @@ public class SupplierMasterController implements MasterController {
         try {
             sql = SQL.create();
 
-            // supplierTableの初期設定
-            suppliers.load(sql);
-            supplierTable.setItems(suppliers.getData());
-            supplierCodeColumn.setCellValueFactory(cellData -> cellData.getValue().supplierCodeProperty());
-            supplierNameColumn.setCellValueFactory(cellData -> cellData.getValue().supplierNameProperty());
+            // customerTableの初期設定
+            customers.load(sql);
+            customerTable.setItems(customers.getData());
+            customerCodeColumn.setCellValueFactory(cellData -> cellData.getValue().customerCodeProperty());
+            customerNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
 
             showDetails(null);
-            supplierTable.getSelectionModel().selectedItemProperty().addListener(
+            customerTable.getSelectionModel().selectedItemProperty().addListener(
                     ((observable, oldValue, newValue) -> showDetails(newValue))
             );
 
@@ -138,7 +123,7 @@ public class SupplierMasterController implements MasterController {
                 .setOnKeyReleased(KeyCode.ENTER, showEdit, true)
                 .setOnKeyReleased(KeyCode.DELETE, showDelete, true)
                 .setOnKeyReleased(KeyCode.ESCAPE, closeDialog, true)
-                .setEvent(supplierTable);
+                .setEvent(customerTable);
 
         // ボタンが押された時
         ActionEventManager.setOnAction(showNew).setEvent(newButton);
@@ -154,18 +139,18 @@ public class SupplierMasterController implements MasterController {
 
     @Override
     public void handleNew() {
-        Supplier tempSupplier = new Supplier();
+        Customer tempCustomer = new Customer();
         boolean isClosableDialog = false;
         SQL sql = null;
         try {
             sql = SQL.create();
             while (!isClosableDialog) {
-                boolean okClicked = showEditDialog(tempSupplier, true);
+                boolean okClicked = showEditDialog(tempCustomer, true);
                 if (okClicked) {
                     // DBにデータ登録し、新規か否かの状態を取得する。
-                    isClosableDialog = tempSupplier.saveNewData(sql);
+                    isClosableDialog = tempCustomer.saveNewData(sql);
                     // データテーブルをリロード
-                    suppliers.load(sql);
+                    customers.load(sql);
                 } else {
                     isClosableDialog = true;
                 }
@@ -175,27 +160,27 @@ public class SupplierMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showDetails(supplierTable.getSelectionModel().getSelectedItem());
+        showDetails(customerTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
     public void handleEdit() {
-        Supplier selectedSupplier = supplierTable.getSelectionModel().getSelectedItem();
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         SQL sql = null;
         try {
             sql = SQL.create();
-            if (selectedSupplier != null) {
-                boolean okClicked = showEditDialog(selectedSupplier, false);
+            if (selectedCustomer != null) {
+                boolean okClicked = showEditDialog(selectedCustomer, false);
                 if (okClicked) {
-                    selectedSupplier.saveEditData(sql);
-                    suppliers.load(sql);
+                    selectedCustomer.saveEditData(sql);
+                    customers.load(sql);
                 }
 
             } else {
                 // Nothing selected.
                 new WarningAlert(
-                        Supplier.NO_SELECTION_ERROR,
-                        Supplier.NO_SELECTION,
+                        Customer.NO_SELECTION_ERROR,
+                        Customer.NO_SELECTION,
                         ""
                 ).showAndWait();
             }
@@ -204,7 +189,7 @@ public class SupplierMasterController implements MasterController {
         }
         if (sql != null) sql.close(); // 接続切断
 
-        showDetails(supplierTable.getSelectionModel().getSelectedItem());
+        showDetails(customerTable.getSelectionModel().getSelectedItem());
     }
 
     @Override
@@ -222,25 +207,26 @@ public class SupplierMasterController implements MasterController {
         System.out.println("未実装");
     }
 
-    private void showDetails(Supplier supplier) {
-        if (supplier != null) {
-            supplierCodeLabel.setText(supplier.getSupplierCode());
-            supplierNameLabel.setText(supplier.getSupplierName());
-            postcodeLabel.setText(supplier.getPostcode());
-            addressLabel.setText(supplier.getAddress());
-            buildingEtAlLabel.setText(supplier.getBuildingEtAl());
-            printingName1Label.setText(supplier.getPrintingName1());
-            printingName2Label.setText(supplier.getPrintingName2());
-            telNumberLabel.setText(supplier.getTelNumber());
-            faxNumberLabel.setText(supplier.getFaxNumber());
-            invoiceLabel.setText(supplier.getInvoice().getInvoiceName());
-            bankInformationLabel.setText(supplier.getBankInformation());
-            bankTransferNameLabel.setText(supplier.getBankTransferName());
-            remarksLabel.setText(supplier.getRemarks());
-            deletedCheckBox.setSelected(supplier.isDeleted());
+    private void showDetails(Customer customer) {
+        if (customer != null) {
+            customerCodeLabel.setText(customer.getCustomerCode());
+            customerNameLabel.setText(customer.getCustomerName());
+            postcodeLabel.setText(customer.getPostcode());
+            addressLabel.setText(customer.getAddress());
+            buildingEtAlLabel.setText(customer.getBuildingEtAl());
+            printingName1Label.setText(customer.getPrintingName1());
+            printingName2Label.setText(customer.getPrintingName2());
+            telNumberLabel.setText(customer.getTelNumber());
+            faxNumberLabel.setText(customer.getFaxNumber());
+            invoiceLabel.setText(customer.getInvoice().getInvoiceName());
+            bankInformationLabel.setText(customer.getBankInformation());
+            bankTransferNameLabel.setText(customer.getBankTransferName());
+            president.setText(customer.getPresident());
+            remarksLabel.setText(customer.getRemarks());
+            deletedCheckBox.setSelected(customer.isDeleted());
         } else {
-            supplierCodeLabel.setText("");
-            supplierNameLabel.setText("");
+            customerCodeLabel.setText("");
+            customerNameLabel.setText("");
             postcodeLabel.setText("");
             addressLabel.setText("");
             buildingEtAlLabel.setText("");
@@ -251,35 +237,36 @@ public class SupplierMasterController implements MasterController {
             invoiceLabel.setText("");
             bankInformationLabel.setText("");
             bankTransferNameLabel.setText("");
+            president.setText("");
             remarksLabel.setText("");
             deletedCheckBox.setSelected(false);
         }
     }
 
-    private boolean showEditDialog(Supplier supplier, boolean isNew) {
+    private boolean showEditDialog(Customer customer, boolean isNew) {
         try {
             // load the fxml file and getInstance a new stage for the pup-up dialog.
-            URL location = WindowManager.class.getResource(SupplierMasterEditController.FXML_NAME);
+            URL location = WindowManager.class.getResource(CustomerMasterEditController.FXML_NAME);
             FXMLLoader loader = new FXMLLoader(
                     location, ResourceBundleWithUtf8.create(ResourceBundleWithUtf8.TEXT_NAME));
             AnchorPane pane = loader.load();
 
             // Create the dialog stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(SupplierMasterEditController.TITLE_NAME);
+            dialogStage.setTitle(CustomerMasterEditController.TITLE_NAME);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(stage);
 
             Scene scene = new Scene(pane);
             dialogStage.setScene(scene);
 
-            // Set the Supplier into the controller.
-            SupplierMasterEditController controller = loader.getController();
+            // Set the Customer into the controller.
+            CustomerMasterEditController controller = loader.getController();
             controller.setStage(dialogStage);
-            controller.setSupplier(supplier);
+            controller.setCustomer(customer);
             controller.setEvent();
 
-            // 新規の場合、仕入先コードを編集不可にする。
+            // 新規の場合、得意先コードを編集不可にする。
             controller.setEditableForPKField(isNew);
 
             dialogStage.showAndWait();
